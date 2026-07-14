@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "a1e6085c-97a2-4664-8b24-6e61d6ca0f84"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -30,8 +31,17 @@
               }
             ],
             "styles": [
+              "node_modules/swiper/swiper-bundle.min.css",
+              "public/aos.css",
+              "node_modules/flatpickr/dist/flatpickr.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "node_modules/font-awesome/css/font-awesome.css",
+
+              "node_modules/aos/dist/aos.css",
+              "src/scss/theme.scss",
               "src/styles.scss"
-            ]
+            ],
+            "polyfills": ["zone.js"]
           },
           "configurations": {
             "production": {

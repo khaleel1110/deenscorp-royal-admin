@@ -1,1 +1,186 @@
+.badge-tone-danger{
+  background-color: #FF3636;
+  color: white;
+}
+
 /* You can add global styles to this file, and also import other style files */
+.pe-1 {
+  color: red; /* Change this to your desired color */
+}
+
+
+.gm-style-iw {
+  background: rgba(0, 0, 0, 0.5); /* Black with 50% transparency */
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 200px;
+}
+
+/* Remove default close button */
+.gm-style-iw button.gm-ui-hover-effect {
+  display: none !important;
+}
+
+/* Optional: Custom arrow */
+.gm-style-iw::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top: 10px solid rgba(0, 0, 0, 0.5);
+}
+
+
+.backdrop-class {
+  z-index: 100;
+}
+
+.window-class {
+  z-index: 1685;
+}
+.window-class2 {
+  z-index: 1695;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+
+.highlight {
+  background-color: #ffdd46;
+  font-weight: bold;
+}
+
+
+.shapes-photo-full-view {
+  border-radius: 50%;
+  transition: border-radius 0.3s ease, height 1s ease;
+  object-fit: cover;
+  height: 15rem; width: 15rem
+}
+
+.shapes-photo-full-view:hover {
+  border-radius: 1rem;
+  object-fit: cover; height:25rem; width: 15rem
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; /* Adjust the duration and timing function as needed */
+}
+
+.fade-in[src] {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
+.progress, .progress-stacked {
+  --yex-progress-height: 0.5rem;
+  --yex-progress-font-size: 0.63375rem;
+  --yex-progress-bg: #bbbbbb38;
+  --yex-progress-border-radius: var(--yex-border-radius)
+  1rem
+;
+  --yex-progress-box-shadow: var(--yex-box-shadow-inset);
+  --yex-progress-bar-color: #fff;
+  --yex-progress-bar-bg: #29845A;
+  --yex-progress-bar-transition: width 0.6s ease;
+  display: flex
+;
+  height: var(--yex-progress-height);
+  overflow: hidden;
+  font-size: var(--yex-progress-font-size);
+  background-color: var(--yex-progress-bg);
+  border-radius: var(--yex-progress-border-radius);
+}
+
+:root {
+  --yex-table-hover-bg: #fffef6; /* your new value */
+
+  --mdc-linear-progress-active-indicator-color:  #29845a;
+}
+
+
+.mdc-linear-progress__bar-inner {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  animation: none;
+  border-top-style: solid;
+  border-color: #29845a;
+  border-top-width: var(--mdc-linear-progress-active-indicator-height);
+}
+
+
+/*
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+
+
+!* Fix for modal backdrop click issues *!
+
+!* Ensure modals are above other content *!
+.modal,
+.modal-backdrop {
+  z-index: 9999 !important;
+}
+
+*/
+
+// Add these modal fixes at the end of your styles.scss file
+
+/* Fix for modal backdrop and z-index issues */
+.modal-open {
+  overflow: hidden !important;
+}
+
+.modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1060 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+
+/* Fix body scroll when modal is open */
+.modal-open {
+  overflow: hidden !important;
+  padding-right: 15px !important;
+}
+.form-select:hover {
+  border-color: #198754; /* Bootstrap success green */
+}
+
+.form-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.form-select:focus-visible {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}

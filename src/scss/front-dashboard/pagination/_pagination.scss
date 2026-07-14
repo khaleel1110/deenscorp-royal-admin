@@ -1,0 +1,27 @@
+/*------------------------------------
+  Pagination
+------------------------------------*/
+
+.page-item {
+  &:not(:last-child) {
+    margin-right: $pagination-item-margin-x;
+  }
+}
+
+.page-link {
+  min-width: $pagination-link-min-width;
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+  @include border-radius($pagination-border-radius);
+}
+
+
+
+.page-link-shadow{
+  box-shadow: 0rem -0.0625rem 0rem 0rem #b5b5b5 inset, 0rem 0rem 0rem 0.0625rem rgba(0, 0, 0, .1) inset, 0rem 0.03125rem 0rem 0.09375rem #fff inset;
+}
+
+.page-link-shadow:hover{
+  box-shadow:0rem 0.0625rem 0rem 0rem #ebebeb inset, -0.0625rem 0rem 0rem 0rem #ebebeb inset, 0.0625rem 0rem 0rem 0rem #ebebeb inset, 0rem -0.0625rem 0rem 0rem #ccc inset;
+}
