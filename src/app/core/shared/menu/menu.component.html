@@ -1,0 +1,97 @@
+<div class="dropdown">
+  <button  (click)="open(contenth)" type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" data-bs-toggle="dropdown"
+          aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+    <img src="/polaris-icons/MobileHamburgerMajor.svg" style="height: 1.82rem"/>
+  </button>
+
+</div>
+
+
+<ng-template #contenth let-offcanvas>
+  <div class="p-2 offcanvas-header">
+    <a class="" href="/index.html" aria-label="Front">
+      <img class="" src="/DCR_1.svg"  height="50" alt="Logo" >
+    </a>
+    <button type="button" class="btn-close me-3" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="p-2 pt-3 offcanvas-body">
+    <div class="navbar-vertical-container">
+      <div class="navbar-vertical-footer-offset">
+
+        <!-- End Logo -->
+
+        <!-- Navbar Vertical Toggle -->
+       <!-- <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+          <i class="bi-arrow-bar-left navbar-toggler-short-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+          <i class="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+        </button>-->
+
+        <!-- End Navbar Vertical Toggle -->
+
+        <!-- Content -->
+        <div class="navbar-vertical-content">
+          <div id="navbarVerticalMenu" class="pt-0 nav nav-pills nav-vertical card-navbar-nav">
+              @for (navItem of mainNavigation; track navItem.label) {
+                  <div class="nav-item">
+
+
+                      @if (navItem.subNavigationItems) {
+                          <a class="nav-link  dropdown-toggle lh-xl cursor-pointer"
+                             (click)="navItem.collapsedSubNavigationItems = !navItem.collapsedSubNavigationItems"
+                             [attr.aria-expanded]="navItem.collapsedSubNavigationItems"
+                             routerLinkActive="active">
+                <span class="nav-icon">
+                      <img [src]="'/polaris-icons/aside/light/'+navItem.icon+'.svg'" class="pe-1"/>
+                </span>
+                              <span class="nav-link-title">{{ navItem.label }}</span>
+                          </a>
+
+                          <div id="navbarVerticalMenuPagesUsersMenu"
+                               class="nav-collapse collapse  "
+                               [ngClass]="{'show':navItem.collapsedSubNavigationItems}"
+                               data-bs-parent="#navbarVerticalMenuPagesMenu">
+
+                              @for (subItem of navItem.subNavigationItems; track subItem.label) {
+                                  <a [routerLink]="[subItem.matches]" routerLinkActive="active" class="nav-link ">
+                                      {{ subItem.label }}</a>
+                              }
+                          </div>
+
+                      } @else {
+                          <a class="nav-link lh-xl" [routerLink]="[navItem.matches]" routerLinkActive="active">
+              <span class="nav-icon">
+                    <img [src]="'/polaris-icons/aside/light/'+navItem.icon+'.svg'" class="pe-1"/>
+              </span>
+                              <span class="nav-link-title">{{ navItem.label }}</span>
+                          </a>
+                      }
+
+                  </div>
+              }
+
+              <hr class="mt-5" />
+            <div class="nav-item">
+
+              <a class="nav-link lh-xl" [href]="'https://mail.zoho.com'" target="_blank">
+              <span class="nav-icon">
+                    <img src="/zoho.svg" class="pe-1"/>
+              </span>
+                <span class="nav-link-title">Zoho Mail</span>
+              </a>
+              <a class="nav-link lh-xl" [href]="'https://drive.google.com'" target="_blank">
+              <span class="nav-icon">
+                    <img src="/google-drive.svg" class="pe-1"/>
+              </span>
+                <span class="nav-link-title">Google Drive</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <!-- End Content -->
+
+
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,52 @@
+
+
+
+<!-- Account -->
+<div ngbDropdown #myDrop="ngbDropdown"  class="dropdown">
+  <a
+     (click)="myDrop.open()" class="navbar-dropdown-account-wrapper" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+      <div class="d-flex align-items-center pe-2">
+          <div class="avatar ">
+            <div>  <img style="height: 2.6rem ; border-radius: 2rem;  object-fit: cover"  [src]="userX?.photoURL??'/placeholder-sm.svg'" alt="Image Description">
+            </div>
+          </div>
+          <div class="d-none d-md-inline-block  flex-grow-1 ms-3" >
+              <h5 class="mb-0">{{userX?.displayName}} </h5>
+              <p class="card-text text-body">{{userX?.email }}</p>
+          </div>
+      </div>
+  </a>
+
+<div ngbDropdownMenu class= "dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account"
+  aria-labelledby="accountNavbarDropdown" style="width: 18rem;" >
+<!--
+  <div
+        class="dropdown-item-text"  >
+    <div class="d-flex align-items-center">
+      <div class="avatar avatar-sm avatar-circle">
+        <img style="height: 3rem ; width: 3rem; object-fit: cover"  class="" [src]="company()?.logo" alt="Image Description">
+        <p>
+
+        </p>
+      </div>
+      <div class="flex-grow-1 ms-3" >
+        <h5 class="mb-0">{{company()?.name}} </h5>
+        <p class="card-text text-body">{{company()?.email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown-divider"></div>
+
+-->
+
+
+
+  <a (click)="logOut()" class="dropdown-item" href="#">Sign out</a>
+</div>
+
+
+
+
+</div>
+<!-- End Account -->

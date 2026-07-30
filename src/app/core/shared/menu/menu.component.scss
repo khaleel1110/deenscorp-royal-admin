@@ -1,0 +1,39 @@
+.nav-link-title{
+  margin-top: 0.2rem;
+}
+
+.nav-vertical.nav-pills .nav-link {
+  padding: 0.2rem 0.275rem !important;
+  margin-bottom: 0.8rem;
+}
+
+.nav-vertical.nav-pills .nav-link img{
+
+}
+.nav-vertical.nav-pills .nav-link .nav-link-title{
+
+  font-size: 0.9rem;
+}
+
+
+@media (min-width: 1200px) {
+  .navbar-vertical-aside-show-xl .navbar:not(.navbar-vertical) {
+    margin-left: 0rem;
+  }
+}
+
+.navbar.navbar-container {
+  padding-right: 0.2rem;
+  z-index: 100;
+  padding-top:0.2rem;
+  padding-bottom:0.2rem;
+  padding-left: 0rem;
+}
+
+@media (min-width: 1200px) {
+  .navbar-vertical-aside-show-xl .navbar-vertical-aside {
+    margin-left: 0;
+    z-index: 50;
+    margin-top:0rem;
+  }
+}

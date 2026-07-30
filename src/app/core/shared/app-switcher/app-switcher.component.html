@@ -1,0 +1,93 @@
+
+<div ngbDropdown #myDrop="ngbDropdown"  class="dropdown">
+
+<button (click)="myDrop.open()" type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+        id="navbarNotificationsDropdown"
+        data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+  <img src="/polaris-icons/apps_major.svg" style="height: 1.3rem"/>
+
+</button>
+
+
+
+  <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless"
+       aria-labelledby="navbarNotificationsDropdown" style="width: 24rem;">
+  <!--  <div class="card">
+      &lt;!&ndash; Header &ndash;&gt;
+
+
+      &lt;!&ndash; Body &ndash;&gt;
+      <div class="card-body">
+        <span class="h3">Switch between apps</span>
+        <div class="d-flex mt-4 flex-wrap gap-2">
+
+          <a href="/gms"  class="border text-center rounded p-3" style="width: 10rem;">
+            <img src="/polaris-icons/app-switcher/gms.svg" height="40"/>
+            <span class="text-cap mb-0 mt-1" style="font-size: 0.75rem;">Grower Management System</span>
+          </a>
+          <a href="org"  class="border text-center  rounded p-3" style="width: 10rem;">
+            <img src="/polaris-icons/app-switcher/org-settings.svg" height="40"/>
+            <span class="text-cap mb-0 mt-1" style="font-size: 0.75rem;">Organisation settings</span>
+          </a>
+          <a href="ivm"   class="border text-center 0 rounded p-3" style="width: 10rem;">
+            <img class="" src="/polaris-icons/app-switcher/inventory.svg" height="40"/>
+            <span class="text-cap mb-0 mt-1" style="font-size: 0.75rem;">Inventory management &lt;!&ndash; <span class="badge rounded-pill bg-warning text-dark" >Coming soon</span>&ndash;&gt;</span>
+          </a>
+
+
+
+          <a href="mnm"  class="border text-center rounded p-3" style="width: 10rem;">
+            <img class=""  src="/polaris-icons/app-switcher/meetings.svg" height="40"/>
+            <span class="text-cap mb-0 mt-1" style="font-size: 0.75rem;">Minutes & Action Points </span>
+
+          </a>
+
+          <a href="yieldex-identity"  class="border text-center rounded p-3" style="width: 10rem;">
+            <img src="/polaris-icons/app-switcher/yieldex-identity.svg" height="40"/>
+            <span class="text-cap mb-0 mt-1" style="font-size: 0.75rem;">Identity Verification Service</span>
+          </a>
+
+        </div>
+      </div>
+
+    </div>-->
+
+    <div class="card shadow-none">
+      <div class="card-body">
+<!--        <table class="table table-hover  ">
+          <thead>
+          <tr>
+
+            <th scope="col">Switch between products</th>
+
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of productList; track item.id) {
+              <tr>
+
+                <td class="">
+
+                  <a [href]="item.link" style="cursor: pointer" class="d-flex flex-row gap-1 justify-content-start align-items-start">
+                    <img [src]="item.logoUrl" style="width: 2.5rem"/>
+                    <div>
+                      <h5>
+                        {{ item.productTitle }}
+                      </h5>
+                      <p class="text-muted my-0 py-0">{{ tenantService.currentTenantName()}}</p>
+                    </div>
+
+
+                  </a>
+
+
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>-->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<!-- side-bar-navigation-item.html -->
+<div class="navbar-vertical-content">
+  <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+    <div id="navbarVerticalMenuPagesMenu">
+
+      @for (item of sideNavData; track item.route) {
+        <div class="nav-item">
+          <a class="nav-link" [routerLink]="item.route" [routerLinkActive]="'active border'"
+             data-placement="left">
+            <span class="nav-icon">
+              <img [src]="'/assets/icons/polaris_icons_new/'+item.icon" class=""/>
+            </span>
+            <span class="nav-link-title">{{ item.title }}</span>
+          </a>
+        </div>
+      }
+
+      <ng-content select="more-template"></ng-content>
+    </div>
+  </div>
+</div>
+
+<div class="navbar-vertical-content">
+  <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+    <div id="navbarVerticalMenuPagesMenu">
+
+      @for (navItem of mainNavigation; track navItem.label) {
+        <div class="nav-item">
+          @if (navItem.subNavigationItems) {
+            <a class="nav-link lh-xl cursor-pointer"
+               (click)="navItem.collapsedSubNavigationItems = !navItem.collapsedSubNavigationItems"
+               [attr.aria-expanded]="navItem.collapsedSubNavigationItems"
+               [routerLink]="[navItem.matches]"
+               routerLinkActive="active">
+              <span class="nav-icon">
+                <img [src]="'/polaris-icons/aside/light/' + navItem.icon + '.svg'"
+                     class="pe-1 zi-5"
+                     [ngClass]="{'hide-on-active': true, 'show-on-active': false}"/>
+                <img [src]="'/polaris-icons/aside/dark/' + navItem.icon + '.svg'"
+                     class="pe-1"
+                     [ngClass]="{'show-on-active': true, 'hide-on-active': false}"/>
+              </span>
+              <span class="nav-link-title">{{ navItem.label }}</span>
+              @if (navItem.badge) {
+                <div class="ms-auto">
+                  @if (showAside()) {
+                    <span [ngClass]="navItem.badge.tone"
+                          class="badge rounded-pill">{{ navItem.badge.text }}</span>
+                  } @else {
+                    <span [ngClass]="navItem.badge.tone"
+                          class="badge rounded-pill">{{ " " }}</span>
+                  }
+                </div>
+              }
+            </a>
+
+            <div id="navbarVerticalMenuPagesUsersMenu"
+                 class="nav-collapse collapse"
+                 [ngClass]="{'show':navItem.collapsedSubNavigationItems}"
+                 data-bs-parent="#navbarVerticalMenuPagesMenu">
+              @for (subItem of navItem.subNavigationItems; track subItem.label) {
+                <a [routerLink]="[subItem.matches]" routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: subItem.matchExact??true }" class="nav-link">
+                  {{ subItem.label }}
+                </a>
+              }
+            </div>
+
+          } @else {
+            <a class="nav-link lh-xl" [routerLink]="[navItem.matches]" routerLinkActive="active">
+              <span class="nav-icon">
+                <img [src]="'/polaris-icons/aside/light/' + navItem.icon + '.svg'"
+                     class="pe-1 zi-5"
+                     [ngClass]="{'hide-on-active': true, 'show-on-active': false}"/>
+                <img [src]="'/polaris-icons/aside/dark/' + navItem.icon + '.svg'"
+                     class="pe-1"
+                     [ngClass]="{'show-on-active': true, 'hide-on-active': false}"/>
+              </span>
+              <span class="nav-link-title">{{ navItem.label }}</span>
+              @if (navItem.badge) {
+                <div class="ms-auto">
+                  <span [ngClass]="navItem.badge.tone"
+                        class="badge rounded-pill">{{ navItem.badge.text }}</span>
+                </div>
+              }
+            </a>
+          }
+        </div>
+      }
+
+      @if (subNavigationList) {
+        <hr class="mt-4"/>
+        @if (showAside()) {
+          <h5 class="text-dark opacity-75">{{ subNavigationTitle }}</h5>
+        }
+
+        <div class="nav-item">
+          @for (item of subNavigationList; track item) {
+            @if (item.href) {
+              <a class="nav-link lh-xl" [href]="item.href" target="_blank">
+                <span class="nav-icon">
+                  <img [src]="item.iconUrl" class="pe-1"/>
+                </span>
+                <span class="nav-link-title">{{ item.label }}</span>
+              </a>
+            } @else if (item.routerLink) {
+              <a class="nav-link lh-xl" [routerLink]="item.routerLink">
+                <span class="nav-icon">
+                  <img [src]="item.iconUrl" class="pe-1"/>
+                </span>
+                <span class="nav-link-title">{{ item.label }}</span>
+              </a>
+            } @else {
+              <a class="nav-link lh-xl">
+                <span class="nav-icon">
+                  <img [src]="item.iconUrl" class="pe-1"/>
+                </span>
+                <span class="nav-link-title">{{ item.label }}</span>
+              </a>
+            }
+          }
+        </div>
+      }
+
+      <ng-content select="more-template"></ng-content>
+    </div>
+  </div>
+</div>

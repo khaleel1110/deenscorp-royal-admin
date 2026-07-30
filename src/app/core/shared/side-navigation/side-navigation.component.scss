@@ -1,0 +1,147 @@
+.nav-link-title{
+  margin-top: 0.2rem;
+
+}
+
+.nav-link-title.active{
+  margin-top: 0.2rem;
+  color: white;
+}
+.nav-vertical.nav-pills .nav-link {
+  padding: 0.2rem 0.275rem !important;
+  margin-bottom: 0.4rem;
+}
+
+.nav-vertical.nav-pills .nav-link img{
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  height: 0.9rem;
+  margin-left: 0.4rem;
+}
+.nav-vertical.nav-pills .nav-link .nav-link-title{
+  color: #202223;
+  font-size: 0.9rem;
+  font-weight: 600;
+}.nav-vertical.nav-pills .nav-link.active .nav-link-title{
+  color:white;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.nav-vertical.nav-pills .nav-link.active {
+  background-color: #29845A;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #ffffff;
+  background-color: var(--yex-nav-pills-link-active-bg);
+}
+
+.nav-pills .nav-link {
+  border-radius: 0.2rem;
+}
+@media (min-width: 1200px) {
+  .navbar-vertical-aside-show-xl .navbar:not(.navbar-vertical) {
+    margin-left: 0rem;
+  }
+}
+
+.navbar.navbar-container {
+  padding-right: 0.2rem;
+  z-index: 100;
+  padding-top:0.2rem;
+  padding-bottom:0.2rem;
+  padding-left: 0rem;
+}
+
+@media (min-width: 1200px) {
+  .navbar-vertical-aside-show-xl .navbar-vertical-aside {
+    margin-left: 0;
+    z-index: 50;
+    margin-top:0rem;
+  }
+}
+.pe-1 {
+  color: red; /* Change this to your desired color */
+}
+
+
+
+/* Hide the first image when the link is active */
+a.active .hide-on-active {
+  display: none;
+}
+
+/* Show the second image when the link is active */
+a.active .show-on-active {
+  display: inline-block; /* or whatever display value you prefer */
+}
+
+/* Hide the second image by default */
+.show-on-active {
+  display: none;
+}
+
+/* Show the first image by default */
+.hide-on-active {
+  display: inline-block; /* or whatever display value you prefer */
+}
+
+/*
+
+.nav-vertical.nav-pills .nav-item .nav-collapse.show .nav-link.active {
+  color: #ffffff;
+  background-color: #29845a;
+}
+
+
+.nav-vertical.nav-pills .nav-item .nav-collapse.show .nav-link {
+  color: #606162;
+  background-color: rgb(141 141 141 / 20%);
+}
+*/
+
+
+.nav-vertical.nav-pills .nav-item .nav-collapse.show .nav-link.active {
+  color:  #29845a;
+  font-weight: bold;
+  background-color: #F6F6F7;
+}
+
+
+.nav-vertical.nav-pills .nav-item .nav-collapse.show .nav-link {
+  color: #606162;
+  background-color: #F6F6F7;
+}
+
+
+
+
+
+
+
+
+.badge-tone-secondary{
+  background-color:#E4E5E7;
+  color: #202223;
+}
+
+
+.badge-tone-danger{
+  background-color:#FF3636;
+  color: white;
+}
+
+
+.nav-icon {
+  margin-top: 0.1rem;
+   opacity: 1;
+  flex: 0 0 1.9375rem;
+}
+
+
+.nav-vertical.nav-pills .nav-collapse::before {
+  background-color: #afafaf;
+}
+
+

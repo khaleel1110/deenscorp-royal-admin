@@ -1,0 +1,33 @@
+.card-body-height {
+  height: 40.25rem;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+
+.btn.rounded-circle .btn-status {
+  top: -0.1rem;
+  right: -0.2916666667rem;
+}
+.badge-tone-danger
+{
+  background-color: #FF3636;
+  color: white;
+}
+
+.btn-status {
+  position: absolute;
+  top: -0.4375rem;
+  right: -0.4375rem;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.63375rem;
+  font-weight: 600;
+  width: 1.3090625rem;
+  height: 1.3090625rem;
+  border: 0.125rem solid #fff;
+  padding: 2px;
+  border-radius: 50%;
+}

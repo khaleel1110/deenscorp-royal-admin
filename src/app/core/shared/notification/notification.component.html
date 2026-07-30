@@ -1,0 +1,191 @@
+<div ngbDropdown #myDrop="ngbDropdown" class="dropdown">
+  <button (click)="myDrop.open()" type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+          id="navbarNotificationsDropdown"
+          data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
+    <img src="/polaris-icons/NotificationMajor.svg" style="height: 1.82rem"/>
+    <!-- <span style="  background-color:#FF3636;" class="btn-status btn-sm-status "></span>-->
+    @if (notificationCount > 0) {
+  <!--    <span
+        [gmsCountUp]="notificationCount"
+        class="btn-status badge-tone-danger rounded-pill">1</span>-->
+    }
+  </button>
+
+  <div ngbDropdownMenu
+       class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless"
+       aria-labelledby="navbarNotificationsDropdown" style="width: 25rem;">
+    <div class="card">
+      <!-- Header -->
+      <div class="card-header card-header-content-between">
+        <h4 class="card-title mb-0">Notifications</h4>
+
+        <!-- Unfold -->
+        <!--   <div ngbDropdown #dropdown class="dropdown">
+             <button ngbDropdownToggle type="button" class="btn btn-icon btn-sm btn-ghost-secondary rounded-circle"
+                     id="navbarNotificationsDropdownSettings" data-bs-toggle="dropdown" aria-expanded="false">
+               <i class="bi-three-dots-vertical"></i>
+             </button>
+
+             <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless"
+                  aria-labelledby="navbarNotificationsDropdownSettings">
+               <span class="dropdown-header">Settings</span>
+               <a class="dropdown-item" href="#">
+                 <i class="bi-archive dropdown-item-icon"></i> Archive all
+               </a>
+               <a class="dropdown-item" href="#">
+                 <i class="bi-check2-all dropdown-item-icon"></i> Mark all as read
+               </a>
+               <a class="dropdown-item" href="#">
+                 <i class="bi-toggle-off dropdown-item-icon"></i> Disable notifications
+               </a>
+               <a class="dropdown-item" href="#">
+                 <i class="bi-gift dropdown-item-icon"></i> What's new?
+               </a>
+               <div class="dropdown-divider"></div>
+               <span class="dropdown-header">Feedback</span>
+               <a class="dropdown-item" href="#">
+                 <i class="bi-chat-left-dots dropdown-item-icon"></i> Report
+               </a>
+             </div>
+           </div>-->
+        <!-- End Unfold -->
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div class="card-body-height">
+        <!-- Tab Content -->
+
+        @if (notifications.length > 0) {
+          <div class="tab-content" id="notificationTabContent">
+            <div class="tab-pane fade show active" id="notificationNavOne" role="tabpanel"
+                 aria-labelledby="notificationNavOne-tab">
+              <ul class="list-group list-group-flush navbar-card-list-group">
+                <li class="list-group-item form-check-select" *ngFor="let notification of notifications">
+                  <div class="row">
+                    <div class="col-auto">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                 [id]="'notificationCheck' + notification.notificationId"
+                                 [checked]="!notification.isViewed">
+                          <label class="form-check-label"
+                                 [for]="'notificationCheck' + notification.notificationId"></label>
+                          <span class="form-check-stretched-bg"></span>
+                        </div>
+
+                        <!--<ng-container [ngSwitch]="notification.avatar.type">
+                          <img *ngSwitchCase="'image'" class="avatar avatar-sm avatar-circle"
+                               [src]="notification.avatar.value" alt="Image Description">
+                          <div *ngSwitchCase="'initials'" class="avatar avatar-sm avatar-circle"
+                               [ngClass]="notification.avatar.class">
+                            <span class="avatar-initials">{{ notification.avatar.value }}</span>
+                          </div>
+                          <div *ngSwitchCase="'icon'" class="avatar avatar-sm avatar-circle">
+                            <img class="avatar-img" [src]="notification.avatar.value" alt="Image Description">
+                          </div>
+                        </ng-container>-->
+                      </div>
+                    </div>
+
+                    <div class="col ms-n2">
+                      <h5 class="mb-1">{{ notification.textLead }}</h5>
+                      <p class="text-body fs-5">{{ notification.textSub }}
+                      </p>
+
+                    </div>
+
+            <!--        <small class="col-auto text-muted text-cap">{{ notification.createdOn|isoTimeAgo }}</small>
+                  --></div>
+                  <a class="stretched-link" href="#"></a>
+                </li>
+                <li class="list-group-item form-check-select">
+                  <div class="row">
+                    <div class="col-auto">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="notificationCheck6">
+                          <label class="form-check-label" for="notificationCheck6"></label>
+                          <span class="form-check-stretched-bg"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="col ms-n2">
+                      <h5 class="mb-1">Anne Richard: accepted your invitation to join Notion</h5>
+                      <p class="text-body fs-5">7 hours ago</p>
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="col-auto text-muted text-cap"><img
+                      src="https://firebasestorage.googleapis.com/v0/b/yieldex-gms-sass-456112.firebasestorage.app/o/app-submissions%2Finput-distribution%2F35bfca8b-5203-484e-bcc0-95840d176a50_1749401573579.jpg?alt=media&amp;token=3d16708a-23af-49bf-8fe8-c06c120f848f"
+                      style="width: 70px; height: 70px; border-radius: 8px; "></div>
+                    <!-- End Col -->
+                  </div>
+                  <!-- End Row -->
+
+                  <a class="stretched-link" href="#"></a>
+                </li>
+                <!-- End Item -->
+                <li class="list-group-item form-check-select">
+                  <div class="row">
+                    <div class="col-auto">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" [value]="false" id="notificationCheck6">
+                          <label class="form-check-label" for="notificationCheck6"></label>
+                          <span class="form-check-stretched-bg"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="col ms-n2">
+                      <h5 class="mb-1">Anne Richard: accepted your invitation to join Notion</h5>
+                      <p class="text-body fs-5">7 hours ago</p>
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="col-auto text-muted text-cap"><img
+                      src="https://firebasestorage.googleapis.com/v0/b/yieldex-gms-sass-456112.firebasestorage.app/o/app-submissions%2Finput-distribution%2F35bfca8b-5203-484e-bcc0-95840d176a50_1749401573579.jpg?alt=media&amp;token=3d16708a-23af-49bf-8fe8-c06c120f848f"
+                      style="width: 70px; height: 70px; border-radius: 8px; "></div>
+                    <!-- End Col -->
+                  </div>
+                  <!-- End Row -->
+
+                  <a class="stretched-link" href="#"></a>
+                </li>
+
+              </ul>
+            </div>
+
+          </div>
+        } @else {
+      <span class="list-group-item p-12" style="min-height: 20vh">
+        <div class="row justify-content-center mt-3 mb-3 py-12">
+          <div class="col-12 text-center align-middle">
+          <div class="icon icon-shape">
+              <i class="bi bi-bell-slash display-1"></i>
+          </div>
+          <br>
+          <div class=" text-center py-5 mt-2">
+            <small>You don't have notifications</small>
+
+          </div>
+          </div>
+        </div>
+      </span>
+        }
+        <!-- End Tab Content -->
+      </div>
+      <!-- End Body -->
+
+      <!-- Card Footer -->
+      <!--   <a class="card-footer text-center" routerLink="/gms/notifications">
+           View all notifications <i class="bi-chevron-right"></i>
+         </a>-->
+      <!-- End Card Footer -->
+    </div>
+  </div>
+</div>
