@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ToastService } from '../../../core/services/toast.service';
-import { toastMotion } from '../../animations/motion.animations';
+import { ToastService } from '../../../services/notification/toast.service';
+
 
 @Component({
   selector: 'app-toast-host',
   template: `
-    <div class="toast-container" aria-live="polite" aria-atomic="true">
+<!--    <div class="toast-container" aria-live="polite" aria-atomic="true">
       @for (toast of toasts.messages(); track toast.id) {
         <div class="wf-toast" @toastMotion>
           <span class="stat-icon {{ toast.tone === 'danger' ? 'danger' : toast.tone === 'warning' ? 'warning' : toast.tone === 'success' ? 'success' : '' }}">
@@ -15,9 +15,11 @@ import { toastMotion } from '../../animations/motion.animations';
           <button class="btn-close" type="button" aria-label="Dismiss" (click)="toasts.dismiss(toast.id)"></button>
         </div>
       }
-    </div>
+    </div>-->
   `,
-  animations: [toastMotion],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToastHostComponent { readonly toasts = inject(ToastService); }
+export class ToastHostComponent {
+
+  readonly toasts = inject(ToastService); }

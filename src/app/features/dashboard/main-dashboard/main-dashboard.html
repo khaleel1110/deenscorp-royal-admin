@@ -1,1211 +1,444 @@
-<main id="content" role="main" class="main">
+<main
+  id="content"
+  role="main"
+  class="main"
+>
 
-<div class="container">
-<h1>mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</h1>
+  <div class="container">
 
-  <!-- Stats -->
-  <div class="row">
-    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-      <!-- Card -->
-      <a class="card card-hover-shadow h-100" href="#">
-        <div class="card-body">
-          <h6 class="card-subtitle">Total Courses</h6>
+    <!-- ============================= -->
+    <!-- STATISTICS -->
+    <!-- ============================= -->
 
-          <div class="row align-items-center gx-2 mb-1">
-            <div class="col-6">
-              <h2 class="card-title text-inherit">72,540</h2>
-            </div>
-            <!-- End Col -->
+    <div class="row">
 
-            <div class="col-6">
-              <!-- Chart -->
-              <div class="chartjs-custom" style="height: 3rem;">
-                <canvas class="js-chart"
-                        data-hs-chartjs-options='{
-                              "type": "line",
-                              "data": {
-                                 "labels": ["1 May","2 May","3 May","4 May","5 May","6 May","7 May","8 May","9 May","10 May","11 May","12 May","13 May","14 May","15 May","16 May","17 May","18 May","19 May","20 May","21 May","22 May","23 May","24 May","25 May","26 May","27 May","28 May","29 May","30 May","31 May"],
-                                 "datasets": [{
-                                  "data": [21,20,24,20,18,17,15,17,18,30,31,30,30,35,25,35,35,40,60,90,90,90,85,70,75,70,30,30,30,50,72],
-                                  "backgroundColor": ["rgba(55, 125, 255, 0)", "rgba(255, 255, 255, 0)"],
-                                  "borderColor": "@@themeAppearance.styles.colors.primary",
-                                  "borderWidth": 2,
-                                  "pointRadius": 0,
-                                  "pointHoverRadius": 0
-                                }]
-                              },
-                              "options": {
-                                 "scales": {
-                                   "yAxes": [{
-                                     "display": false
-                                   }],
-                                   "xAxes": [{
-                                     "display": false
-                                   }]
-                                 },
-                                "hover": {
-                                  "mode": "nearest",
-                                  "intersect": false
-                                },
-                                "tooltips": {
-                                  "postfix": "k",
-                                  "hasIndicator": true,
-                                  "intersect": false
-                                }
-                              }
-                            }'>
-                </canvas>
-              </div>
-              <!-- End Chart -->
-            </div>
-            <!-- End Col -->
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+
+        <app-dashboard-stat
+          label="Total Courses"
+          value="72,540"
+          icon="bi-book"
+          tone="primary"
+          trend="12.5%"
+          helper="from 70,104"
+        />
+
+      </div>
+
+
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+
+        <app-dashboard-stat
+          label="Sessions"
+          value="29.4%"
+          icon="bi-people"
+          tone="success"
+          trend="1.7%"
+          helper="from 29.1%"
+        />
+
+      </div>
+
+
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+
+        <app-dashboard-stat
+          label="Training Centers"
+          value="56.8%"
+          icon="bi-building"
+          tone="warning"
+          trend="4.4%"
+          [trendDown]="true"
+          helper="from 61.2%"
+        />
+
+      </div>
+
+
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+
+        <app-dashboard-stat
+          label="Pageviews"
+          value="92,913"
+          icon="bi-eye"
+          tone="purple"
+          trend="0.0%"
+          helper="from 2,913"
+        />
+
+      </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- CHARTS -->
+    <!-- ============================= -->
+
+    <div class="row">
+
+      <!-- Pie Chart -->
+
+      <div class="col-lg-6 mb-3 mb-lg-5">
+
+        <app-pie-chart-dashboard />
+
+      </div>
+
+
+      <!-- Grouped Bar Chart -->
+
+      <div class="col-lg-6 mb-3 mb-lg-5">
+
+        <div class="card h-100">
+
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Fees collection summary
+            </h4>
+
           </div>
-          <!-- End Row -->
 
-          <span class="badge bg-soft-success text-success">
-                <i class="bi-graph-up"></i> 12.5%
+
+          <div class="card-body">
+
+            <div class="d-flex gap-3 small-muted mb-3">
+
+              <span>
+                <i class="bi bi-square-fill text-success me-1"></i>
+                Management
               </span>
-          <span class="text-body fs-6 ms-1">from 70,104</span>
-        </div>
-      </a>
-      <!-- End Card -->
-    </div>
 
-    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-      <!-- Card -->
-      <a class="card card-hover-shadow h-100" href="#">
-        <div class="card-body">
-          <h6 class="card-subtitle">Sessions</h6>
-
-          <div class="row align-items-center gx-2 mb-1">
-            <div class="col-6">
-              <h2 class="card-title text-inherit">29.4%</h2>
-            </div>
-            <!-- End Col -->
-
-            <div class="col-6">
-              <!-- Chart -->
-              <div class="chartjs-custom" style="height: 3rem;">
-                <canvas class="js-chart"
-                        data-hs-chartjs-options='{
-                              "type": "line",
-                              "data": {
-                                 "labels": ["1 May","2 May","3 May","4 May","5 May","6 May","7 May","8 May","9 May","10 May","11 May","12 May","13 May","14 May","15 May","16 May","17 May","18 May","19 May","20 May","21 May","22 May","23 May","24 May","25 May","26 May","27 May","28 May","29 May","30 May","31 May"],
-                                 "datasets": [{
-                                  "data": [21,20,24,20,18,17,15,17,30,30,35,25,18,30,31,35,35,90,90,90,85,100,120,120,120,100,90,75,75,75,90],
-                                  "backgroundColor": ["rgba(55, 125, 255, 0)", "rgba(255, 255, 255, 0)"],
-                                  "borderColor": "@@themeAppearance.styles.colors.primary",
-                                  "borderWidth": 2,
-                                  "pointRadius": 0,
-                                  "pointHoverRadius": 0
-                                }]
-                              },
-                              "options": {
-                                 "scales": {
-                                   "yAxes": [{
-                                     "display": false
-                                   }],
-                                   "xAxes": [{
-                                     "display": false
-                                   }]
-                                 },
-                                "hover": {
-                                  "mode": "nearest",
-                                  "intersect": false
-                                },
-                                "tooltips": {
-                                  "postfix": "%",
-                                  "hasIndicator": true,
-                                  "intersect": false
-                                }
-                              }
-                            }'>
-                </canvas>
-              </div>
-              <!-- End Chart -->
-            </div>
-            <!-- End Col -->
-          </div>
-          <!-- End Row -->
-
-          <span class="badge bg-soft-success text-success">
-                <i class="bi-graph-up"></i> 1.7%
+              <span>
+                <i class="bi bi-square-fill text-primary me-1"></i>
+                Inspection
               </span>
-          <span class="text-body fs-6 ms-1">from 29.1%</span>
-        </div>
-      </a>
-      <!-- End Card -->
-    </div>
 
-    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-      <!-- Card -->
-      <a class="card card-hover-shadow h-100" href="#">
-        <div class="card-body">
-          <h6 class="card-subtitle">Training Center</h6>
-
-          <div class="row align-items-center gx-2 mb-1">
-            <div class="col-6">
-              <h2 class="card-title text-inherit">56.8%</h2>
             </div>
-            <!-- End Col -->
 
-            <div class="col-6">
-              <!-- Chart -->
-              <div class="chartjs-custom" style="height: 3rem;">
-                <canvas class="js-chart"
-                        data-hs-chartjs-options='{
-                              "type": "line",
-                              "data": {
-                                 "labels": ["1 May","2 May","3 May","4 May","5 May","6 May","7 May","8 May","9 May","10 May","11 May","12 May","13 May","14 May","15 May","16 May","17 May","18 May","19 May","20 May","21 May","22 May","23 May","24 May","25 May","26 May","27 May","28 May","29 May","30 May","31 May"],
-                                 "datasets": [{
-                                  "data": [25,18,30,31,35,35,60,60,60,75,21,20,24,20,18,17,15,17,30,120,120,120,100,90,75,90,90,90,75,70,60],
-                                  "backgroundColor": ["rgba(55, 125, 255, 0)", "rgba(255, 255, 255, 0)"],
-                                  "borderColor": "@@themeAppearance.styles.colors.primary",
-                                  "borderWidth": 2,
-                                  "pointRadius": 0,
-                                  "pointHoverRadius": 0
-                                }]
-                              },
-                              "options": {
-                                 "scales": {
-                                   "yAxes": [{
-                                     "display": false
-                                   }],
-                                   "xAxes": [{
-                                     "display": false
-                                   }]
-                                 },
-                                "hover": {
-                                  "mode": "nearest",
-                                  "intersect": false
-                                },
-                                "tooltips": {
-                                  "postfix": "%",
-                                  "hasIndicator": true,
-                                  "intersect": false
-                                }
-                              }
-                            }'>
-                </canvas>
-              </div>
-              <!-- End Chart -->
-            </div>
-            <!-- End Col -->
+
+            <app-grouped-bar-chart
+              [labels]="feeCollectionLabels"
+              [datasets]="feeCollectionDatasets"
+              [height]="230"
+              ariaLabel="Fees collection summary"
+            />
+
           </div>
-          <!-- End Row -->
 
-          <span class="badge bg-soft-danger text-danger">
-                <i class="bi-graph-down"></i> 4.4%
+        </div>
+
+      </div>
+
+
+
+    </div>
+    <div class="row">
+
+      <div class="col-lg-8 mb-3 mb-lg-5">
+
+        <app-course-performance
+          [items]="coursePerformance"
+          title="Course performance"
+          viewAllText="View all"
+        />
+
+      </div>
+
+
+      <!-- Course Categories -->
+
+      <div class="col-lg-4 mb-3 mb-lg-5">
+
+        <div class="card h-100">
+
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Course categories
+            </h4>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span>
+                Technology
               </span>
-          <span class="text-body fs-6 ms-1">from 61.2%</span>
-        </div>
-      </a>
-      <!-- End Card -->
-    </div>
 
-    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-      <!-- Card -->
-      <a class="card card-hover-shadow h-100" href="#">
-        <div class="card-body">
-          <h6 class="card-subtitle">Pageviews</h6>
+              <strong>
+                42%
+              </strong>
 
-          <div class="row align-items-center gx-2 mb-1">
-            <div class="col-6">
-              <h2 class="card-title text-inherit">92,913</h2>
             </div>
-            <!-- End Col -->
 
-            <div class="col-6">
-              <!-- Chart -->
-              <div class="chartjs-custom" style="height: 3rem;">
-                <canvas class="js-chart"
-                        data-hs-chartjs-options='{
-                              "type": "line",
-                              "data": {
-                                 "labels": ["1 May","2 May","3 May","4 May","5 May","6 May","7 May","8 May","9 May","10 May","11 May","12 May","13 May","14 May","15 May","16 May","17 May","18 May","19 May","20 May","21 May","22 May","23 May","24 May","25 May","26 May","27 May","28 May","29 May","30 May","31 May"],
-                                 "datasets": [{
-                                  "data": [21,20,24,15,17,30,30,35,35,35,40,60,12,90,90,85,70,75,43,75,90,22,120,120,90,85,100,92,92,92,92],
-                                  "backgroundColor": ["rgba(55, 125, 255, 0)", "rgba(255, 255, 255, 0)"],
-                                  "borderColor": "@@themeAppearance.styles.colors.primary",
-                                  "borderWidth": 2,
-                                  "pointRadius": 0,
-                                  "pointHoverRadius": 0
-                                }]
-                              },
-                              "options": {
-                                 "scales": {
-                                   "yAxes": [{
-                                     "display": false
-                                   }],
-                                   "xAxes": [{
-                                     "display": false
-                                   }]
-                                 },
-                                "hover": {
-                                  "mode": "nearest",
-                                  "intersect": false
-                                },
-                                "tooltips": {
-                                  "postfix": "k",
-                                  "hasIndicator": true,
-                                  "intersect": false
-                                }
-                              }
-                            }'>
-                </canvas>
-              </div>
-              <!-- End Chart -->
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span>
+                Business
+              </span>
+
+              <strong>
+                26%
+              </strong>
+
             </div>
-            <!-- End Col -->
+
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span>
+                Agriculture
+              </span>
+
+              <strong>
+                18%
+              </strong>
+
+            </div>
+
+
+            <div class="d-flex justify-content-between">
+
+              <span>
+                Other
+              </span>
+
+              <strong>
+                14%
+              </strong>
+
+            </div>
+
           </div>
-          <!-- End Row -->
 
-          <span class="badge bg-soft-secondary text-body">0.0%</span>
-          <span class="text-body fs-6 ms-1">from 2,913</span>
         </div>
-      </a>
-      <!-- End Card -->
+
+      </div>
+
     </div>
+
+
+      <app-page-footer />
+
   </div>
-  <!-- End Stats -->
-
-
-  @for (_ of [0, 1, 2, 3, 4]; track $index) {
-    <p>My name is Ib</p>
-  }
-
-  <h2>Categories</h2>
 
 
 
-  <hr>
+</main>
+<!--
+<main
+  id="content"
+  role="main"
+  class="main"
+>
 
-  <h2>Courses</h2>
-
-  <pre>{{ course() | json }}</pre>
-
-  <h2>Categories</h2>
-
-
-
-  <h2>Courses</h2>
-
-  @for (course of course(); track course.id) {
-
-    <div style="margin-bottom:30px">
-
-      <p>ID: {{ course.id }}</p>
-
-      <p>Name: {{ course.name }}</p>
-
-      <p>Category: {{ course.categoryId }}</p>
-
-      <p>Duration: {{ course.duration }}</p>
-
-      <p>Language: {{ course.language }}</p>
-
-      <p>Featured: {{ course.featured }}</p>
-
-      <p>Rating: {{ course.rating }}</p>
-
-      <p>Description:</p>
-
-      <p>{{ course.shortDescription }}</p>
-
-      <hr>
-
-    </div>
-
-  }
-</div>
+  <div class="container">
 
 
-<!--  &lt;!&ndash; End Row &ndash;&gt;
+    &lt;!&ndash; ================================= &ndash;&gt;
+    &lt;!&ndash; STATISTICS &ndash;&gt;
+    &lt;!&ndash; ================================= &ndash;&gt;
 
-  &lt;!&ndash; Card &ndash;&gt;
-  <div class="card mb-3 mb-lg-5">
-    &lt;!&ndash; Header &ndash;&gt;
-    <div class="card-header">
-      <div class="row justify-content-between align-items-center flex-grow-1">
-        <div class="col-md">
-          <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-header-title">Users</h4>
+    <div class="row">
 
-            &lt;!&ndash; Datatable Info &ndash;&gt;
-            <div id="datatableCounterInfo" style="display: none;">
-              <div class="d-flex align-items-center">
-                    <span class="fs-6 me-3">
-                      <span id="datatableCounter">0</span>
-                      Selected
-                    </span>
-                <a class="btn btn-outline-danger btn-sm" href="javascript:;">
-                  <i class="tio-delete-outlined"></i> Delete
-                </a>
-              </div>
-            </div>
-            &lt;!&ndash; End Datatable Info &ndash;&gt;
-          </div>
-        </div>
-        &lt;!&ndash; End Col &ndash;&gt;
+      &lt;!&ndash; Total Courses &ndash;&gt;
 
-        <div class="col-auto">
-          &lt;!&ndash; Filter &ndash;&gt;
-          <div class="row align-items-sm-center">
-            <div class="col-sm-auto">
-              <div class="row align-items-center gx-0">
-                <div class="col">
-                  <span class="text-secondary me-2">Status:</span>
-                </div>
-                &lt;!&ndash; End Col &ndash;&gt;
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
 
-                <div class="col-auto">
-                  &lt;!&ndash; Select &ndash;&gt;
-                  <div class="tom-select-custom">
-                    <select class="js-select js-datatable-filter form-select form-select-sm form-select-borderless" data-target-column-index="2" data-target-table="datatable" autocomplete="off"
-                            data-hs-tom-select-options='{
-                                  "searchInDropdown": false,
-                                  "hideSearch": true,
-                                  "dropdownWidth": "10rem"
-                                }'>
-                      <option value="null" selected>All</option>
-                      <option value="successful">Successful</option>
-                      <option value="overdue">Overdue</option>
-                      <option value="pending">Pending</option>
-                    </select>
-                  </div>
-                  &lt;!&ndash; End Select &ndash;&gt;
-                </div>
-                &lt;!&ndash; End Col &ndash;&gt;
-              </div>
-              &lt;!&ndash; End Row &ndash;&gt;
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
+        <app-dashboard-stat
+          label="Total Courses"
+          value="248"
+          icon="bi-book"
+          tone="primary"
+          trend="12.5%"
+          helper="from 220"
+        />
 
-            <div class="col-sm-auto">
-              <div class="row align-items-center gx-0">
-                <div class="col">
-                  <span class="text-secondary me-2">Signed up:</span>
-                </div>
-                &lt;!&ndash; End Col &ndash;&gt;
-
-                <div class="col-auto">
-                  &lt;!&ndash; Select &ndash;&gt;
-                  <div class="tom-select-custom">
-                    <select class="js-select js-datatable-filter form-select form-select-sm form-select-borderless" data-target-column-index="5" data-target-table="datatable" autocomplete="off"
-                            data-hs-tom-select-options='{
-                                  "searchInDropdown": false,
-                                  "hideSearch": true,
-                                  "dropdownWidth": "10rem"
-                                }'>
-                      <option value="null" selected>All</option>
-                      <option value="1 year ago">1 year ago</option>
-                      <option value="6 months ago">6 months ago</option>
-                    </select>
-                  </div>
-                  &lt;!&ndash; End Select &ndash;&gt;
-                </div>
-                &lt;!&ndash; End Col &ndash;&gt;
-              </div>
-              &lt;!&ndash; End Row &ndash;&gt;
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
-
-            <div class="col-md">
-              <form>
-                &lt;!&ndash; Search &ndash;&gt;
-                <div class="input-group input-group-merge input-group-flush">
-                  <div class="input-group-prepend input-group-text">
-                    <i class="bi-search"></i>
-                  </div>
-                  <input id="datatableSearch" type="search" class="form-control" placeholder="Search users" aria-label="Search users">
-                </div>
-                &lt;!&ndash; End Search &ndash;&gt;
-              </form>
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
-          </div>
-          &lt;!&ndash; End Filter &ndash;&gt;
-        </div>
-        &lt;!&ndash; End Col &ndash;&gt;
       </div>
-      &lt;!&ndash; End Row &ndash;&gt;
-    </div>
-    &lt;!&ndash; End Header &ndash;&gt;
 
-    &lt;!&ndash; Table &ndash;&gt;
-    <div class="table-responsive datatable-custom">
-      <table id="datatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
-             data-hs-datatables-options='{
-                   "columnDefs": [{
-                      "targets": [0, 1, 4],
-                      "orderable": false
-                    }],
-                   "order": [],
-                   "info": {
-                     "totalQty": "#datatableWithPaginationInfoTotalQty"
-                   },
-                   "search": "#datatableSearch",
-                   "entries": "#datatableEntries",
-                   "pageLength": 8,
-                   "isResponsive": false,
-                   "isShowPaging": false,
-                   "pagination": "datatablePagination"
-                 }'>
-        <thead class="thead-light">
-        <tr>
-          <th scope="col" class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
-              <label class="form-check-label" for="datatableCheckAll"></label>
-            </div>
-          </th>
-          <th class="table-column-ps-0">Full name</th>
-          <th>Status</th>
-          <th>Type</th>
-          <th>Email</th>
-          <th>Signed up</th>
-          <th>User ID</th>
-        </tr>
-        </thead>
 
-        <tbody>
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck2">
-              <label class="form-check-label" for="usersDataCheck2"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img10.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Amanda Harvey <i class="bi-patch-check-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Top endorsed"></i></h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Unassigned</td>
-          <td>amanda&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>67989</td>
-        </tr>
+      &lt;!&ndash; Total Students &ndash;&gt;
 
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck3">
-              <label class="form-check-label" for="usersDataCheck3"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-primary avatar-circle">
-                  <span class="avatar-initials">A</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Anne Richard</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Subscription</td>
-          <td>anne&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>67326</td>
-        </tr>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
 
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck4">
-              <label class="form-check-label" for="usersDataCheck4"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img3.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">David Harrison</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-danger"></span>Overdue
-          </td>
-          <td>Non-subscription</td>
-          <td>david&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>55821</td>
-        </tr>
+        <app-dashboard-stat
+          label="Total Students"
+          value="12,540"
+          icon="bi-people"
+          tone="success"
+          trend="8.7%"
+          helper="from 11,530"
+        />
 
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck5">
-              <label class="form-check-label" for="usersDataCheck5"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img5.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Finch Hoot</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>finch&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>85214</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck6">
-              <label class="form-check-label" for="usersDataCheck6"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                  <span class="avatar-initials">B</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Bob Dean</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Subscription</td>
-          <td>bob&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>75470</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck7">
-              <label class="form-check-label" for="usersDataCheck7"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img9.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Ella Lauda <i class="bi-patch-check-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Top endorsed"></i></h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>Ella&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>37534</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck8">
-              <label class="form-check-label" for="usersDataCheck8"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img4.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Sam Kart</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Non-subscription</td>
-          <td>sam&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>57300</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck9">
-              <label class="form-check-label" for="usersDataCheck9"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img6.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Costa Quinn</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-danger"></span>Overdue
-          </td>
-          <td>Unassigned</td>
-          <td>costa&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>71288</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck10">
-              <label class="form-check-label" for="usersDataCheck10"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-primary avatar-circle">
-                  <span class="avatar-initials">R</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Rachel Doe</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Unassigned</td>
-          <td>rachel&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>95211</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck11">
-              <label class="form-check-label" for="usersDataCheck11"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                  <span class="avatar-initials">B</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Brian Halligan</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>brian&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>58643</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck12">
-              <label class="form-check-label" for="usersDataCheck12"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img8.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Linda Bates</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>linda&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>44414</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck13">
-              <label class="form-check-label" for="usersDataCheck13"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-info avatar-circle">
-                  <span class="avatar-initials">C</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Chris Mathew <i class="bi-patch-check-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Top endorsed"></i></h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Non-subscription</td>
-          <td>chris&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>12569</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck14">
-              <label class="form-check-label" for="usersDataCheck14"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                  <span class="avatar-initials">L</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Lewis Clarke</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-danger"></span>Overdue
-          </td>
-          <td>Non-subscription</td>
-          <td>lewis&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>54621</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck15">
-              <label class="form-check-label" for="usersDataCheck15"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="@@autopath/assets/img/160x160/img7.jpg" alt="Image Description">
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Clarice Boone <i class="bi-patch-check-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Top endorsed"></i></h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Non-subscription</td>
-          <td>clarice&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>23485</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck16">
-              <label class="form-check-label" for="usersDataCheck16"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-danger avatar-circle">
-                  <span class="avatar-initials">M</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Mark Colbert</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-success"></span>Successful
-          </td>
-          <td>Subscription</td>
-          <td>mark&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>78463</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck17">
-              <label class="form-check-label" for="usersDataCheck17"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-info avatar-circle">
-                  <span class="avatar-initials">J</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Johnny Appleseed</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>johnny&#64;site.com</td>
-          <td>1 year ago</td>
-          <td>23564</td>
-        </tr>
-
-        <tr>
-          <td class="table-column-pe-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="usersDataCheck18">
-              <label class="form-check-label" for="usersDataCheck18"></label>
-            </div>
-          </td>
-          <td class="table-column-ps-0">
-            <a class="d-flex align-items-center" href="@@autopath/user-profile.html">
-              <div class="flex-shrink-0">
-                <div class="avatar avatar-sm avatar-soft-primary avatar-circle">
-                  <span class="avatar-initials">P</span>
-                </div>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="text-inherit mb-0">Phileas Fogg</h5>
-              </div>
-            </a>
-          </td>
-          <td>
-            <span class="legend-indicator bg-warning"></span>Pending
-          </td>
-          <td>Subscription</td>
-          <td>phileas&#64;site.com</td>
-          <td>6 months ago</td>
-          <td>39199</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    &lt;!&ndash; End Table &ndash;&gt;
-
-    &lt;!&ndash; Footer &ndash;&gt;
-    <div class="card-footer">
-      &lt;!&ndash; Pagination &ndash;&gt;
-      <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-        <div class="col-sm mb-2 mb-sm-0">
-          <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-            <span class="me-2">Showing:</span>
-
-            &lt;!&ndash; Select &ndash;&gt;
-            <div class="tom-select-custom">
-              <select id="datatableEntries" class="js-select form-select form-select-borderless w-auto" autocomplete="off"
-                      data-hs-tom-select-options='{
-                            "searchInDropdown": false,
-                            "hideSearch": true
-                          }'>
-                <option value="4">4</option>
-                <option value="6">6</option>
-                <option value="8" selected>8</option>
-                <option value="12">12</option>
-              </select>
-            </div>
-            &lt;!&ndash; End Select &ndash;&gt;
-
-            <span class="text-secondary me-2">of</span>
-
-            &lt;!&ndash; Pagination Quantity &ndash;&gt;
-            <span id="datatableWithPaginationInfoTotalQty"></span>
-          </div>
-        </div>
-        &lt;!&ndash; End Col &ndash;&gt;
-
-        <div class="col-sm-auto">
-          <div class="d-flex justify-content-center justify-content-sm-end">
-            &lt;!&ndash; Pagination &ndash;&gt;
-            <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-          </div>
-        </div>
-        &lt;!&ndash; End Col &ndash;&gt;
       </div>
-      &lt;!&ndash; End Pagination &ndash;&gt;
-    </div>
-    &lt;!&ndash; End Footer &ndash;&gt;
-  </div>
-  &lt;!&ndash; End Card &ndash;&gt;
 
-  <div class="row">
-    <div class="col-lg-6 mb-3 mb-lg-0">
-      &lt;!&ndash; Card &ndash;&gt;
-      <div class="card h-100">
-        &lt;!&ndash; Header &ndash;&gt;
-        <div class="card-header card-header-content-between">
-          <h4 class="card-header-title">Transactions</h4>
 
-          &lt;!&ndash; Daterangepicker &ndash;&gt;
-          <button id="js-daterangepicker-predefined" class="btn btn-ghost-secondary btn-sm dropdown-toggle">
-            <i class="bi-calendar-week"></i>
-            <span class="js-daterangepicker-predefined-preview ms-1"></span>
-          </button>
-          &lt;!&ndash; End Daterangepicker &ndash;&gt;
-        </div>
-        &lt;!&ndash; End Header &ndash;&gt;
+      &lt;!&ndash; Active Enrollments &ndash;&gt;
 
-        &lt;!&ndash; Body &ndash;&gt;
-        <div class="card-body">
-          &lt;!&ndash; Chart &ndash;&gt;
-          <div class="chartjs-custom mx-auto" style="height: 20rem;">
-            <canvas class="js-chart-datalabels"
-                    data-hs-chartjs-options='{
-                              "type": "bubble",
-                              "data": {
-                                "datasets": [
-                                  {
-                                    "label": "Label 1",
-                                    "data": [
-                                      {"x": 55, "y": 65, "r": 99}
-                                    ],
-                                    "color": "#fff",
-                                    "backgroundColor": "rgba(55, 125, 255, 0.9)",
-                                    "borderColor": "transparent"
-                                  },
-                                  {
-                                    "label": "Label 2",
-                                    "data": [
-                                      {"x": 33, "y": 42, "r": 65}
-                                    ],
-                                    "color": "#fff",
-                                    "backgroundColor": "rgba(100, 0, 214, 0.8)",
-                                    "borderColor": "transparent"
-                                  },
-                                  {
-                                    "label": "Label 3",
-                                    "data": [
-                                      {"x": 46, "y": 26, "r": 38}
-                                    ],
-                                    "color": "#fff",
-                                    "backgroundColor": "#00c9db",
-                                    "borderColor": "transparent"
-                                  }
-                                ]
-                              },
-                              "options": {
-                                "scales": {
-                                  "yAxes": [{
-                                    "gridLines": {
-                                      "display": false
-                                    },
-                                    "ticks": {
-                                      "display": false,
-                                      "max": 100,
-                                      "beginAtZero": true
-                                    }
-                                  }],
-                                  "xAxes": [{
-                                  "gridLines": {
-                                      "display": false
-                                    },
-                                    "ticks": {
-                                      "display": false,
-                                      "max": 100,
-                                      "beginAtZero": true
-                                    }
-                                  }]
-                                },
-                                "tooltips": false
-                              }
-                            }'></canvas>
-          </div>
-          &lt;!&ndash; End Chart &ndash;&gt;
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
 
-          <div class="row justify-content-center">
-            <div class="col-auto">
-              <span class="legend-indicator bg-primary"></span> New
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
+        <app-dashboard-stat
+          label="Active Enrollments"
+          value="8,426"
+          icon="bi-person-check"
+          tone="warning"
+          trend="5.4%"
+          helper="from 7,994"
+        />
 
-            <div class="col-auto">
-              <span class="legend-indicator" style="background-color: #7000f2;"></span> Pending
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
-
-            <div class="col-auto">
-              <span class="legend-indicator bg-info"></span> Failed
-            </div>
-            &lt;!&ndash; End Col &ndash;&gt;
-          </div>
-          &lt;!&ndash; End Row &ndash;&gt;
-        </div>
-        &lt;!&ndash; End Body &ndash;&gt;
       </div>
-      &lt;!&ndash; End Card &ndash;&gt;
+
+
+      &lt;!&ndash; Course Completion &ndash;&gt;
+
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+
+        <app-dashboard-stat
+          label="Course Completion"
+          value="72.4%"
+          icon="bi-bar-chart"
+          tone="purple"
+          trend="4.2%"
+          helper="from 69.5%"
+        />
+
+      </div>
+
     </div>
 
-    <div class="col-lg-6">
-      &lt;!&ndash; Card &ndash;&gt;
-      <div class="card h-100">
-        &lt;!&ndash; Header &ndash;&gt;
-        <div class="card-header card-header-content-between">
-          <h4 class="card-header-title">Reports overview</h4>
 
-          &lt;!&ndash; Dropdown &ndash;&gt;
-          <div class="dropdown">
-            <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm rounded-circle" id="reportsOverviewDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi-three-dots-vertical"></i>
+    &lt;!&ndash; ================================= &ndash;&gt;
+    &lt;!&ndash; CHARTS &ndash;&gt;
+    &lt;!&ndash; ================================= &ndash;&gt;
+
+    <div class="row">
+
+
+      &lt;!&ndash; Course Status &ndash;&gt;
+
+      <div class="col-lg-6 mb-3 mb-lg-5">
+
+        <div class="card h-100">
+
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Course status overview
+            </h4>
+
+            <button
+              class="btn btn-sm btn-outline-secondary"
+            >
+              All courses
+
+              <i class="bi bi-chevron-down ms-1"></i>
+
             </button>
 
-            <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="reportsOverviewDropdown1">
-              <span class="dropdown-header">Settings</span>
-
-              <a class="dropdown-item" href="#">
-                <i class="bi-share-fill dropdown-item-icon"></i> Share reports
-              </a>
-              <a class="dropdown-item" href="#">
-                <i class="bi-download dropdown-item-icon"></i> Download
-              </a>
-              <a class="dropdown-item" href="#">
-                <i class="bi-alt dropdown-item-icon"></i> Connect other apps
-              </a>
-
-              <div class="dropdown-divider"></div>
-
-              <span class="dropdown-header">Feedback</span>
-
-              <a class="dropdown-item" href="#">
-                <i class="bi-chat-left-dots dropdown-item-icon"></i> Report
-              </a>
-            </div>
           </div>
-          &lt;!&ndash; End Dropdown &ndash;&gt;
+
+
+          <div class="card-body">
+
+            <app-donut-chart
+              [total]="totalCourses"
+              caption="Courses"
+              [items]="courseStatusItems"
+            />
+
+          </div>
+
         </div>
-        &lt;!&ndash; End Header &ndash;&gt;
 
-        &lt;!&ndash; Body &ndash;&gt;
-        <div class="card-body">
-          <span class="h1 d-block mb-4">$7,431.14 USD</span>
-
-          &lt;!&ndash; Progress &ndash;&gt;
-          <div class="progress rounded-pill mb-2">
-            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" data-bs-toggle="tooltip" data-bs-placement="top" title="Gross value"></div>
-            <div class="progress-bar opacity-50" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" data-bs-toggle="tooltip" data-bs-placement="top" title="Net volume from sales"></div>
-            <div class="progress-bar opacity-25" role="progressbar" style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100" data-bs-toggle="tooltip" data-bs-placement="top" title="New volume from sales"></div>
-          </div>
-
-          <div class="d-flex justify-content-between mb-4">
-            <span>0%</span>
-            <span>100%</span>
-          </div>
-          &lt;!&ndash; End Progress &ndash;&gt;
-
-          &lt;!&ndash; Table &ndash;&gt;
-          <div class="table-responsive">
-            <table class="table table-lg table-nowrap card-table mb-0">
-              <tr>
-                <th scope="row">
-                  <span class="legend-indicator bg-primary"></span>Gross value
-                </th>
-                <td>$3,500.71</td>
-                <td>
-                  <span class="badge bg-soft-success text-success">+12.1%</span>
-                </td>
-              </tr>
-
-              <tr>
-                <th scope="row">
-                  <span class="legend-indicator bg-primary opacity-50"></span>Net volume from sales
-                </th>
-                <td>$2,980.45</td>
-                <td>
-                  <span class="badge bg-soft-warning text-warning">+6.9%</span>
-                </td>
-              </tr>
-
-              <tr>
-                <th scope="row">
-                  <span class="legend-indicator bg-primary opacity-25"></span>New volume from sales
-                </th>
-                <td>$950.00</td>
-                <td>
-                  <span class="badge bg-soft-danger text-danger">-1.5%</span>
-                </td>
-              </tr>
-
-              <tr>
-                <th scope="row">
-                  <span class="legend-indicator"></span>Other
-                </th>
-                <td>32</td>
-                <td>
-                  <span class="badge bg-soft-success text-success">1.9%</span>
-                </td>
-              </tr>
-            </table>
-          </div>
-          &lt;!&ndash; End Table &ndash;&gt;
-        </div>
-        &lt;!&ndash; End Body &ndash;&gt;
       </div>
-      &lt;!&ndash; End Card &ndash;&gt;
+
+
+      &lt;!&ndash; Enrollment Summary &ndash;&gt;
+
+      <div class="col-lg-6 mb-3 mb-lg-5">
+
+        <div class="card h-100">
+
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Enrollment summary
+            </h4>
+
+            <a
+              href="javascript:;"
+              class="text-primary"
+            >
+              View details
+            </a>
+
+          </div>
+
+
+          <div class="card-body">
+
+            &lt;!&ndash; Legend &ndash;&gt;
+
+            <div class="d-flex gap-3 small-muted mb-3">
+
+              <span>
+
+                <i
+                  class="bi bi-square-fill text-primary me-1"
+                ></i>
+
+                Enrollments
+
+              </span>
+
+
+              <span>
+
+                <i
+                  class="bi bi-square-fill text-success me-1"
+                ></i>
+
+                Completions
+
+              </span>
+
+            </div>
+
+
+            &lt;!&ndash; Chart &ndash;&gt;
+
+            <app-grouped-bar-chart
+              [labels]="courseLabels"
+              [datasets]="courseDatasets"
+              [height]="230"
+              [currency]="false"
+              ariaLabel="Course enrollment summary"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-  </div>-->
-</main>
+
+
+    &lt;!&ndash; ================================= &ndash;&gt;
+    &lt;!&ndash; ADDITIONAL COURSE SECTION &ndash;&gt;
+    &lt;!&ndash; ================================= &ndash;&gt;
+
+
+
+
+    <app-page-footer />
+
+  </div>
+
+</main>-->

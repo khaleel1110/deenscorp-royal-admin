@@ -64,98 +64,141 @@
       </div>
     </div>
 
-    <article class="wf-card mb-3">
-      <div class="filter-bar">
-        <div class="input-icon search-control">
-          <i class="bi bi-search"></i>
-          <input
-            class="form-control"
-            [value]="query()"
-            (input)="updateSearch($event)"
-            [disabled]="isLoading()"
-            placeholder="Search courses by name, code, or tag...">
+    <div class="card mb-3">
+      <div class="card-header filter-bar">
+
+        <div class="d-flex row justify-content-between align-items-center">
+
+          <!-- Search -->
+          <div class="col-lg-4 mb-2 mb-lg-0">
+            <div class="input-icon search-control">
+              <i class="bi bi-search"></i>
+
+              <input
+                class="form-control"
+                [value]="query()"
+                (input)="updateSearch($event)"
+                [disabled]="isLoading()"
+                placeholder="Search courses by name, code, or tag..."
+              >
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row row-cols-5 text-end g-2">
+
+              <div class="col">
+                <select
+                  class="col form-select"
+                  [disabled]="isLoading()"
+                  [value]="selectedCategoryId()"
+                  (change)="selectedCategoryId.set($any($event.target).value)">
+                  <option value="">All categories</option>
+                  @for (category of categories(); track category.id) {
+                    <option [value]="category.id">{{ category.name }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="col">
+
+                <select
+                  class="col form-select"
+                  [disabled]="isLoading()"
+                  [value]="selectedLevel()"
+                  (change)="selectedLevel.set($any($event.target).value)">
+                  <option value="">All levels</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+
+              <div class="col">
+                <select
+                  class="form-select"
+                  [disabled]="isLoading()"
+                  [value]="selectedDeliveryMode()"
+                  (change)="selectedDeliveryMode.set($any($event.target).value)">
+                  <option value="">All delivery modes</option>
+                  <option value="Classroom">Classroom</option>
+                  <option value="Online">Online</option>
+                  <option value="Virtual">Virtual</option>
+                  <option value="Onsite">Onsite</option>
+                </select>
+
+              </div>
+              <div class="col">
+
+                <select
+                  class="form-select"
+                  [disabled]="isLoading()"
+                  [value]="selectedStatus()"
+                  (change)="selectedStatus.set($any($event.target).value)">
+                  <option value="">All statuses</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
+
+              <div class="col">
+                <button class="btn btn-outline-primary" (click)="clearFilters()" [disabled]="isLoading()">
+                  <i class="bi bi-arrow-counterclockwise"></i> Clear
+                </button>
+
+              </div>
+
+
+            </div>
+
+          </div>
         </div>
 
-        <select
-          class="form-select"
-          [disabled]="isLoading()"
-          [value]="selectedCategoryId()"
-          (change)="selectedCategoryId.set($any($event.target).value)">
-          <option value="">All categories</option>
-          @for (category of categories(); track category.id) {
-            <option [value]="category.id">{{ category.name }}</option>
-          }
-        </select>
 
-        <select
-          class="form-select"
-          [disabled]="isLoading()"
-          [value]="selectedLevel()"
-          (change)="selectedLevel.set($any($event.target).value)">
-          <option value="">All levels</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
-        </select>
-
-        <select
-          class="form-select"
-          [disabled]="isLoading()"
-          [value]="selectedDeliveryMode()"
-          (change)="selectedDeliveryMode.set($any($event.target).value)">
-          <option value="">All delivery modes</option>
-          <option value="Classroom">Classroom</option>
-          <option value="Online">Online</option>
-          <option value="Virtual">Virtual</option>
-          <option value="Onsite">Onsite</option>
-        </select>
-
-        <select
-          class="form-select"
-          [disabled]="isLoading()"
-          [value]="selectedStatus()"
-          (change)="selectedStatus.set($any($event.target).value)">
-          <option value="">All statuses</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-
-        <button class="btn btn-outline-secondary" (click)="clearFilters()" [disabled]="isLoading()">
-          <i class="bi bi-arrow-counterclockwise"></i> Clear
-        </button>
       </div>
 
-      <div class="table-responsive">
-        <table class="table wf-table">
-          <thead>
-            <tr>
-              <th>Course</th>
-              <th>Category</th>
-              <th>Level</th>
-              <th>Delivery Modes</th>
-              <th>Duration</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+      <div class="card-body table-responsive">
+        <table id="datatable" class="table table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table" style="width: 100%">
+          <thead class="thead-light">
+          <tr>
+            <th><input class="form-check-input" type="checkbox" aria-label="Select all"></th>
+
+            <th>Course</th>
+            <th>Category</th>
+            <th>Level</th>
+            <th>Delivery Modes</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
           </thead>
 
           @if (isLoading()) {
             <tbody>
-              <tr><td colspan="7" class="text-center py-4">Loading courses…</td></tr>
+
+
+            <tr>
+              <td colspan="7" class="text-center py-4">Loading courses…</td>
+            </tr>
             </tbody>
           } @else if (pagedCourses().length === 0) {
             <tbody>
-              <tr><td colspan="7" class="text-center py-4 small-muted">No courses match your filters.</td></tr>
+            <tr>
+              <td colspan="7" class="text-center py-4 small-muted">No courses match your filters.</td>
+            </tr>
             </tbody>
           } @else {
             <tbody>
               @for (course of pagedCourses(); track course.id) {
                 <tr>
+                  <td><input class="form-check-input" type="checkbox"
+                             [attr.aria-label]="'Select ' + course.name"></td>
                   <td>
                     <a class="table-person" [routerLink]="['/app/course-list', course.id]">
                       <span class="avatar sm">
                         @if (course.thumbnail) {
-                          <img [src]="course.thumbnail" [alt]="course.name" class="w-100 h-100 object-fit-cover rounded">
+                          <img [src]="course.thumbnail" [alt]="course.name"
+                               class="w-100 h-100 object-fit-cover rounded">
                         } @else {
                           <i class="bi bi-book"></i>
                         }
@@ -173,9 +216,10 @@
                       <span class="badge status-neutral me-1">{{ mode }}</span>
                     }
                   </td>
-                  <td>{{ course.duration }}</td>
+                  <td [routerLink]="['/view-coursesssss', course.categoryId]">{{ course.duration }}</td>
                   <td>
-                    <span class="badge" [class.status-success]="course.isActive" [class.status-neutral]="!course.isActive">
+                    <span class="badge" [class.status-success]="course.isActive"
+                          [class.status-neutral]="!course.isActive">
                       {{ course.isActive ? 'Active' : 'Inactive' }}
                     </span>
                     @if (course.featured) {
@@ -183,15 +227,29 @@
                     }
                   </td>
                   <td>
+                    <div ngbDropdown container="body">
+                      <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle
+                              ><i class="bi bi-three-dots"></i>
+                      </button>
+                      <div ngbDropdownMenu><a ngbDropdownItem
+                                              [routerLink]="['/view-coursesssss', course.id]">View
+                        details</a>
+                        <button ngbDropdownItem (click)="openEditCourseModal(course)">Edit</button>
+                      </div>
+                    </div>
+                  </td>
+           <!--       <td>
                     <div class="d-flex gap-1">
-                      <button class="btn btn-sm btn-outline-secondary" (click)="openEditCourseModal(course)" aria-label="Edit course">
+                      <button class="btn btn-sm btn-outline-primary" (click)="openEditCourseModal(course)"
+                              aria-label="Edit course">
                         <i class="bi bi-pencil"></i>
                       </button>
-                      <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course)" aria-label="Delete course">
+                      <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course)"
+                              aria-label="Delete course">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
-                  </td>
+                  </td>-->
                 </tr>
               }
             </tbody>
@@ -209,24 +267,29 @@
         </span>
         <ul class="pagination pagination-sm mb-0">
           <li class="page-item" [class.disabled]="page() === 1">
-            <button class="page-link" (click)="previousPage()" [disabled]="page() === 1" aria-label="Previous page">&lsaquo;</button>
+            <button class="page-link" (click)="previousPage()" [disabled]="page() === 1" aria-label="Previous page">
+              &lsaquo;
+            </button>
           </li>
           <li class="page-item active"><span class="page-link">{{ page() }} / {{ totalPages() }}</span></li>
           <li class="page-item" [class.disabled]="page() === totalPages()">
-            <button class="page-link" (click)="nextPage()" [disabled]="page() === totalPages()" aria-label="Next page">&rsaquo;</button>
+            <button class="page-link" (click)="nextPage()" [disabled]="page() === totalPages()" aria-label="Next page">
+              &rsaquo;
+            </button>
           </li>
         </ul>
       </div>
-    </article>
+    </div>
+
 
     <!-- ============================= -->
     <!-- CATEGORIES -->
     <!-- ============================= -->
-    <article class="wf-card mb-3">
-      <div class="wf-card-header">
+    <article class="card mb-3">
+      <div class="card-header">
         <h2>Categories</h2>
       </div>
-      <div class="wf-card-body">
+      <div class="card-body border-2 border-primary">
         <div class="row g-3">
           @for (category of categories(); track category.id) {
             <div class="col-md-4">

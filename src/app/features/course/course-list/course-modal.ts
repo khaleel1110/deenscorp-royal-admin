@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -18,17 +19,6 @@ import { CourseSessionService } from '../../../services/domain/course-session-se
 const DELIVERY_MODES = ['Classroom', 'Online', 'Virtual', 'Onsite'] as const;
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
 
-function toList(value: string): string[] {
-  return value
-    .split(/\r?\n|,/)
-    .map((v) => v.trim())
-    .filter(Boolean);
-}
-
-function fromList(value?: string[]): string {
-  return (value ?? []).join('\n');
-}
-
 @Component({
   selector: 'app-course-modal',
   standalone: true,
@@ -40,22 +30,11 @@ function fromList(value?: string[]): string {
     </div>
 
     <div class="modal-body">
-
-      <div class="stepper mb-4">
-        @for (label of steps; track label; let i = $index) {
-          <div class="step" [class.active]="step() === i + 1" [class.done]="step() > i + 1">
-            <span class="step-number">
-              @if (step() > i + 1) { <i class="bi bi-check"></i> } @else { {{ i + 1 }} }
-            </span>
-            <span>{{ label }}</span>
-          </div>
-        }
-      </div>
-
       <form [formGroup]="form">
 
         <!-- Step 1: Basic Info -->
         @if (step() === 1) {
+          <h5 class="mb-3">{{ steps[0] }}</h5>
           <div class="row g-3">
             <div class="col-md-8">
               <label class="form-label">Course Name *</label>
@@ -136,68 +115,188 @@ function fromList(value?: string[]): string {
               </div>
             </div>
 
+            <!-- Dynamic Tags (Step 1) -->
             <div class="col-md-6">
-              <label class="form-label">Tags (comma separated)</label>
-              <input class="form-control" formControlName="tagsText" placeholder="e.g. Cyber, Security, Risk">
+              <label class="form-label">Tags</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">One per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('tags')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="tags">
+                @for (ctrl of getFormArray('tags').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Tag">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('tags', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
+
+            <!-- Dynamic Industries (Step 1) -->
             <div class="col-md-6">
-              <label class="form-label">Industries (comma separated)</label>
-              <input class="form-control" formControlName="industriesText" placeholder="e.g. Banking, Government">
+              <label class="form-label">Industries</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">One per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('industries')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="industries">
+                @for (ctrl of getFormArray('industries').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Industry">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('industries', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
           </div>
         }
 
         <!-- Step 2: Details -->
         @if (step() === 2) {
+          <h5 class="mb-3">{{ steps[1] }}</h5>
           <div class="row g-3">
             <div class="col-12">
               <label class="form-label">Overview</label>
-              <textarea class="form-control" rows="3" formControlName="overview"
-                        placeholder="Full course overview shown on the course page"></textarea>
+              <textarea class="form-control" rows="3" formControlName="overview"></textarea>
             </div>
+
+            <!-- DYNAMIC ARRAY: Objectives -->
             <div class="col-md-6">
-              <label class="form-label">Objectives <span class="small-muted">(one per line)</span></label>
-              <textarea class="form-control" rows="4" formControlName="objectivesText"></textarea>
+              <label class="form-label">Objectives</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">Add one per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('objectives')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="objectives">
+                @for (ctrl of getFormArray('objectives').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Objective">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('objectives', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
+
+            <!-- DYNAMIC ARRAY: Outcomes -->
             <div class="col-md-6">
-              <label class="form-label">Outcomes <span class="small-muted">(one per line)</span></label>
-              <textarea class="form-control" rows="4" formControlName="outcomesText"></textarea>
+              <label class="form-label">Outcomes</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">Add one per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('outcomes')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="outcomes">
+                @for (ctrl of getFormArray('outcomes').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Outcome">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('outcomes', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
+
+            <!-- DYNAMIC ARRAY: Who Should Attend -->
             <div class="col-md-6">
-              <label class="form-label">Who Should Attend <span class="small-muted">(one per line)</span></label>
-              <textarea class="form-control" rows="4" formControlName="whoShouldAttendText"></textarea>
+              <label class="form-label">Who Should Attend</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">Add one per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('whoShouldAttend')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="whoShouldAttend">
+                @for (ctrl of getFormArray('whoShouldAttend').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Who should attend">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('whoShouldAttend', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
+
+            <!-- DYNAMIC ARRAY: Prerequisites -->
             <div class="col-md-6">
-              <label class="form-label">Prerequisites <span class="small-muted">(one per line)</span></label>
-              <textarea class="form-control" rows="4" formControlName="prerequisitesText"></textarea>
+              <label class="form-label">Prerequisites</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">Add one per line</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('prerequisites')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="prerequisites">
+                @for (ctrl of getFormArray('prerequisites').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Prerequisite">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('prerequisites', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
           </div>
         }
 
         <!-- Step 3: Media -->
         @if (step() === 3) {
+          <h5 class="mb-3">{{ steps[2] }}</h5>
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Thumbnail URL</label>
-              <input class="form-control" formControlName="thumbnail" placeholder="/assets/img/480x320/img1.jpg">
+              <input class="form-control" formControlName="thumbnail">
             </div>
             <div class="col-md-6">
               <label class="form-label">Banner URL</label>
-              <input class="form-control" formControlName="banner" placeholder="/assets/img/1920x800/img1.jpg">
+              <input class="form-control" formControlName="banner">
             </div>
             <div class="col-12">
               <label class="form-label">Brochure URL</label>
-              <input class="form-control" formControlName="brochureUrl" placeholder="https://.../brochure.pdf">
+              <input class="form-control" formControlName="brochureUrl">
             </div>
+
+            <!-- DYNAMIC ARRAY: Gallery -->
             <div class="col-12">
-              <label class="form-label">Gallery Images <span class="small-muted">(one URL per line)</span></label>
-              <textarea class="form-control" rows="3" formControlName="galleryText"></textarea>
+              <label class="form-label">Gallery Images</label>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small-muted">One URL per item</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addItem('gallery')">
+                  <i class="bi bi-plus-lg"></i> Add
+                </button>
+              </div>
+              <div formArrayName="gallery">
+                @for (ctrl of getFormArray('gallery').controls; track ctrl; let i = $index) {
+                  <div class="input-group mb-1">
+                    <input class="form-control" [formControlName]="i" placeholder="Image URL">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem('gallery', i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
           </div>
         }
 
         <!-- Step 4: Topics -->
         @if (step() === 4) {
+          <h5 class="mb-3">{{ steps[3] }}</h5>
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="mb-0">Course Topics</h6>
             <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addTopic()">
@@ -225,15 +324,32 @@ function fromList(value?: string[]): string {
                   </div>
                   <div class="col-md-4">
                     <label class="form-label">Duration</label>
-                    <input class="form-control" formControlName="duration" placeholder="e.g. 3 Hours">
+                    <input class="form-control" formControlName="duration">
                   </div>
                   <div class="col-12">
                     <label class="form-label">Description</label>
                     <textarea class="form-control" rows="2" formControlName="description"></textarea>
                   </div>
+
+                  <!-- DYNAMIC ARRAY: Learning Points inside topic -->
                   <div class="col-12">
-                    <label class="form-label">Learning Points <span class="small-muted">(one per line)</span></label>
-                    <textarea class="form-control" rows="2" formControlName="learningPointsText"></textarea>
+                    <label class="form-label">Learning Points</label>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small-muted">One per line</span>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addLearningPoint(i)">
+                        <i class="bi bi-plus-lg"></i> Add
+                      </button>
+                    </div>
+                    <div formArrayName="learningPoints">
+                      @for (lpCtrl of getLearningPoints(i).controls; track lpCtrl; let j = $index) {
+                        <div class="input-group mb-1">
+                          <input class="form-control" [formControlName]="j" placeholder="Learning point">
+                          <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeLearningPoint(i, j)">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
@@ -243,6 +359,7 @@ function fromList(value?: string[]): string {
 
         <!-- Step 5: Session -->
         @if (step() === 5) {
+          <h5 class="mb-3">{{ steps[4] }}</h5>
           @if (isEdit) {
             <div class="alert alert-info">
               <i class="bi bi-info-circle me-2"></i>
@@ -324,6 +441,7 @@ function fromList(value?: string[]): string {
 
         <!-- Step 6: Review -->
         @if (step() === 6) {
+          <h5 class="mb-3">{{ steps[5] }}</h5>
           <div class="alert alert-success">
             <i class="bi bi-check-circle me-2"></i>
             Review the summary below, then save.
@@ -334,6 +452,12 @@ function fromList(value?: string[]): string {
             <div class="detail-row"><dt>Category</dt><dd>{{ categoryName() }}</dd></div>
             <div class="detail-row"><dt>Level</dt><dd>{{ form.get('level')?.value }}</dd></div>
             <div class="detail-row"><dt>Delivery Modes</dt><dd>{{ selectedModes.join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Objectives</dt><dd>{{ getArrayValues('objectives').join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Outcomes</dt><dd>{{ getArrayValues('outcomes').join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Who Should Attend</dt><dd>{{ getArrayValues('whoShouldAttend').join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Prerequisites</dt><dd>{{ getArrayValues('prerequisites').join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Tags</dt><dd>{{ getArrayValues('tags').join(', ') || '—' }}</dd></div>
+            <div class="detail-row"><dt>Industries</dt><dd>{{ getArrayValues('industries').join(', ') || '—' }}</dd></div>
             <div class="detail-row"><dt>Topics</dt><dd>{{ topics.length }} added</dd></div>
             @if (!isEdit) {
               <div class="detail-row">
@@ -343,8 +467,8 @@ function fromList(value?: string[]): string {
             }
           </dl>
 
-          @if (errorMessage) {
-            <div class="alert alert-danger">{{ errorMessage }}</div>
+          @if (errorMessage()) {
+            <div class="alert alert-danger">{{ errorMessage() }}</div>
           }
         }
 
@@ -364,8 +488,8 @@ function fromList(value?: string[]): string {
             Continue <i class="bi bi-arrow-right"></i>
           </button>
         } @else {
-          <button type="button" class="btn btn-primary" [disabled]="isSaving" (click)="save()">
-            {{ isSaving ? 'Saving...' : (isEdit ? 'Save Changes' : 'Create Course') }}
+          <button type="button" class="btn btn-primary" [disabled]="isSaving()" (click)="save()">
+            {{ isSaving() ? 'Saving...' : (isEdit ? 'Save Changes' : 'Create Course') }}
           </button>
         }
       </div>
@@ -396,7 +520,6 @@ export class CourseModal implements OnInit {
   selectedModes: string[] = [];
 
   form!: FormGroup;
-  errorMessageValue = '';
 
   get isEdit(): boolean {
     return !!this.course;
@@ -415,6 +538,7 @@ export class CourseModal implements OnInit {
     this.selectedModes = [...(this.course?.deliveryModes ?? [])];
 
     this.form = this.fb.group({
+      // Basic Info
       name: [this.course?.name ?? '', Validators.required],
       code: [this.course?.code ?? '', Validators.required],
       categoryId: [this.course?.categoryId ?? '', Validators.required],
@@ -426,22 +550,28 @@ export class CourseModal implements OnInit {
       featured: [this.course?.featured ?? false],
       isActive: [this.course?.isActive ?? true],
       shortDescription: [this.course?.shortDescription ?? '', Validators.required],
-      tagsText: [fromList(this.course?.tags).replace(/\n/g, ', ')],
-      industriesText: [fromList(this.course?.industries).replace(/\n/g, ', ')],
 
-      overview: [''],
-      objectivesText: [''],
-      outcomesText: [''],
-      whoShouldAttendText: [''],
-      prerequisitesText: [''],
+      // Details (arrays)
+      overview: [this.course?.details?.overview ?? ''],
+      objectives: this.fb.array<string>([]),
+      outcomes: this.fb.array<string>([]),
+      whoShouldAttend: this.fb.array<string>([]),
+      prerequisites: this.fb.array<string>([]),
 
+      // Media
       thumbnail: [this.course?.thumbnail ?? ''],
       banner: [this.course?.banner ?? ''],
       brochureUrl: [this.course?.brochureUrl ?? ''],
-      galleryText: [fromList(this.course?.gallery)],
+      gallery: this.fb.array<string>([]),
 
+      // Tags & Industries (arrays)
+      tags: this.fb.array<string>([]),
+      industries: this.fb.array<string>([]),
+
+      // Topics
       topics: this.fb.array([]),
 
+      // Session
       createSession: [false],
       venueId: [''],
       sessionDeliveryMode: ['Classroom'],
@@ -455,17 +585,17 @@ export class CourseModal implements OnInit {
       sessionStatus: ['Upcoming'],
     });
 
+    // Populate arrays if editing
     if (this.course) {
-      this.courseService.getDetails(this.course.id).subscribe((details) => {
-        this.form.patchValue({
-          overview: details?.overview ?? '',
-          objectivesText: fromList(details?.objectives),
-          outcomesText: fromList(details?.outcomes),
-          whoShouldAttendText: fromList(details?.whoShouldAttend),
-          prerequisitesText: fromList(details?.prerequisites),
-        });
-      });
+      this.setArray('objectives', this.course.details?.objectives ?? []);
+      this.setArray('outcomes', this.course.details?.outcomes ?? []);
+      this.setArray('whoShouldAttend', this.course.details?.whoShouldAttend ?? []);
+      this.setArray('prerequisites', this.course.details?.prerequisites ?? []);
+      this.setArray('gallery', this.course.gallery ?? []);
+      this.setArray('tags', this.course.tags ?? []);
+      this.setArray('industries', this.course.industries ?? []);
 
+      // Load topics
       this.courseService.getTopics(this.course.id).subscribe((topics) => {
         for (const topic of topics) {
           this.topics.push(this.buildTopicGroup(topic));
@@ -474,18 +604,69 @@ export class CourseModal implements OnInit {
     }
   }
 
+  // Helper to get a FormArray by name
+  getFormArray(name: string): FormArray {
+    return this.form.get(name) as FormArray;
+  }
+
+  // Add an empty string to a FormArray
+  addItem(name: string): void {
+    const arr = this.getFormArray(name);
+    arr.push(new FormControl(''));
+  }
+
+  // Remove item at index from a FormArray
+  removeItem(name: string, index: number): void {
+    const arr = this.getFormArray(name);
+    arr.removeAt(index);
+  }
+
+  // Set array values from a string array
+  setArray(name: string, values: string[]): void {
+    const arr = this.getFormArray(name);
+    arr.clear();
+    values.forEach(v => arr.push(new FormControl(v)));
+  }
+
+  // Get values from a FormArray as string[]
+  getArrayValues(name: string): string[] {
+    return this.getFormArray(name).controls.map(c => c.value).filter(v => v?.trim());
+  }
+
+  // Build a topic FormGroup
   private buildTopicGroup(topic?: {
     title?: string;
     description?: string;
     duration?: string;
     learningPoints?: string[];
   }) {
-    return this.fb.group({
+    const group = this.fb.group({
       title: [topic?.title ?? ''],
       description: [topic?.description ?? ''],
       duration: [topic?.duration ?? ''],
-      learningPointsText: [fromList(topic?.learningPoints)],
+      learningPoints: this.fb.array<string>([]),
     });
+    if (topic?.learningPoints) {
+      const lpArray = group.get('learningPoints') as FormArray;
+      topic.learningPoints.forEach(lp => lpArray.push(new FormControl(lp)));
+    }
+    return group;
+  }
+
+  // Get learningPoints FormArray for a specific topic
+  getLearningPoints(topicIndex: number): FormArray {
+    const topicGroup = this.topics.at(topicIndex) as FormGroup;
+    return topicGroup.get('learningPoints') as FormArray;
+  }
+
+  addLearningPoint(topicIndex: number): void {
+    const lpArray = this.getLearningPoints(topicIndex);
+    lpArray.push(new FormControl(''));
+  }
+
+  removeLearningPoint(topicIndex: number, pointIndex: number): void {
+    const lpArray = this.getLearningPoints(topicIndex);
+    lpArray.removeAt(pointIndex);
   }
 
   addTopic(): void {
@@ -547,26 +728,31 @@ export class CourseModal implements OnInit {
       brochureUrl: v.brochureUrl,
       thumbnail: v.thumbnail,
       banner: v.banner,
-      gallery: toList(v.galleryText),
-      tags: toList(v.tagsText),
-      industries: toList(v.industriesText),
+      gallery: this.getArrayValues('gallery'),
+      tags: this.getArrayValues('tags'),
+      industries: this.getArrayValues('industries'),
       featured: v.featured,
       isActive: v.isActive,
       details: {
         overview: v.overview,
-        objectives: toList(v.objectivesText),
-        outcomes: toList(v.outcomesText),
-        whoShouldAttend: toList(v.whoShouldAttendText),
-        prerequisites: toList(v.prerequisitesText),
+        objectives: this.getArrayValues('objectives'),
+        outcomes: this.getArrayValues('outcomes'),
+        whoShouldAttend: this.getArrayValues('whoShouldAttend'),
+        prerequisites: this.getArrayValues('prerequisites'),
       },
-      topics: this.topics.controls.map((group, i) => ({
-        title: group.get('title')?.value ?? '',
-        description: group.get('description')?.value ?? '',
-        duration: group.get('duration')?.value ?? '',
-        learningPoints: toList(group.get('learningPointsText')?.value ?? ''),
-        order: i + 1,
-        lessons: [],
-      })),
+      topics: this.topics.controls.map((group, i) => {
+        const formGroup = group as FormGroup;           // cast to FormGroup
+        const lpArray = formGroup.get('learningPoints') as FormArray;
+        const learningPoints = lpArray.controls.map(c => c.value).filter(v => v?.trim());
+        return {
+          title: formGroup.get('title')?.value ?? '',
+          description: formGroup.get('description')?.value ?? '',
+          duration: formGroup.get('duration')?.value ?? '',
+          learningPoints,
+          order: i + 1,
+          lessons: [],
+        };
+      }),
     };
   }
 
@@ -586,23 +772,30 @@ export class CourseModal implements OnInit {
 
         if (this.form.get('createSession')?.value) {
           const v = this.form.value;
+          const startDate = v.startDate ? new Date(v.startDate) : undefined;
+          const endDate = v.endDate ? new Date(v.endDate) : undefined;
+          const regDeadline = v.registrationDeadline ? new Date(v.registrationDeadline) : undefined;
 
-          await this.sessionService.create(courseId, {
-            venueId: v.venueId,
-            startDate: new Date(v.startDate),
-            endDate: new Date(v.endDate),
-            registrationDeadline: new Date(v.registrationDeadline),
-            duration: v.duration,
-            price: Number(v.price) || 0,
-            currency: v.currency,
-            availableSeats: Number(v.totalSeats) || 0,
-            totalSeats: Number(v.totalSeats) || 0,
-            instructor: v.instructor,
-            deliveryMode: v.sessionDeliveryMode,
-            status: v.sessionStatus,
-            notes: '',
-            isFeatured: false,
-          });
+          if (v.venueId && startDate && endDate) {
+            await this.sessionService.create(courseId, {
+              venueId: v.venueId,
+              startDate,
+              endDate,
+              registrationDeadline: regDeadline || new Date(),
+              duration: v.duration,
+              price: Number(v.price) || 0,
+              currency: v.currency,
+              availableSeats: Number(v.totalSeats) || 0,
+              totalSeats: Number(v.totalSeats) || 0,
+              instructor: v.instructor,
+              deliveryMode: v.sessionDeliveryMode,
+              status: v.sessionStatus,
+              notes: '',
+              isFeatured: false,
+            });
+          } else {
+            console.warn('Session creation skipped: missing venue or dates.');
+          }
         }
       }
 

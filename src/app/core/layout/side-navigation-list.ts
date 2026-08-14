@@ -12,7 +12,7 @@ export const GmsNavigationList: NavigationType[] = [
     icon: 'activities-monitoring',
     badge: {
       tone: 'badge-tone-secondary',
-      text: '0',
+      text: '',
     },
     subNavigationItems: [
       {
@@ -20,14 +20,14 @@ export const GmsNavigationList: NavigationType[] = [
         disabled: true,
 
         onClick: () => {},
-        matches: 'dashboard',
+        matches: 'course-dashboard',
       },
       {
         label: 'View courses list',
         disabled: true,
         matchExact: false,
         onClick: () => {},
-        matches: 'dashboard',
+        matches: 'course-list',
       },
       {
         label: 'Add new Course',

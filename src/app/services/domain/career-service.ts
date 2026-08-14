@@ -6,14 +6,10 @@ import {
   doc,
   docData, addDoc,
 } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  map,
-} from 'rxjs';
-import { JobApplication } from '../features/company/career-overview/career-overview';
+
 
 export interface Job {
   id: string;
@@ -181,7 +177,7 @@ export class CareerService implements OnDestroy {
   ngOnDestroy() {
     this.subscription?.unsubscribe();
   }
-
+/*
   submitApplication(
     careerId: string,
     application: JobApplication
@@ -195,5 +191,5 @@ export class CareerService implements OnDestroy {
     return addDoc(ref, application);
 
 
-  }
+  }*/
 }

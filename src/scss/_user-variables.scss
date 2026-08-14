@@ -31,7 +31,7 @@ $icon-prefix:                 ai- !default;
 // Grayscale
 $white:                       #fff !default;
 $gray-100:                    #f6f9fc !default;
-$gray-200: rgba(237, 241, 245, 0.84) !default;
+$gray-200: rgb(237 54 0) !default;
 $gray-300: #bdbfc0 !default;
 $gray-400:                    #d7dde2 !default;
 $gray-500:                    #b4bbc3 !default;
@@ -49,7 +49,7 @@ $colors: () !default;
 $min-contrast-ratio:   2 !default;
 
 // Theme colors
-$primary:                     #448c74 !default;
+$primary: #ed3600 !default;
 $secondary:                   $gray-200 !default;
 $info:                        #3f7fca !default;
 $success:                     #3fca90 !default;

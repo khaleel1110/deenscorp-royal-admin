@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start-admin": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "start-emulators": "cd ../deenscorp-royal-functions && npm run build && cd ../deenscorp-royal-admin &&  firebase emulators:start --only functions,firestore,auth,pubsub,storage",

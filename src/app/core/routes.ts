@@ -5,8 +5,25 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('../features/dashboard/main-dashboard/main-dashboard').then(
-        (_) => _.MainDashboard,
-      ),
+      import('../features/dashboard/main-dashboard/main-dashboard').then((_) => _.MainDashboard),
   },
+  {
+    path: 'course-dashboard',
+    loadComponent: () =>
+      import('../features/course/course-dashboard/course-dashboard').then((_) => _.CourseDashboard),
+  },
+  {
+    path: 'course-list',
+    loadComponent: () =>
+      import('../features/course/course-list/course-list').then((_) => _.CourseList),
+  },
+  {
+    path: 'view-coursesssss/:id',
+    loadComponent: () =>
+      import('../features/course/view-course/view-course').then((_) => _.ViewCourse),
+  },
+  {
+    path: '**',
+    redirectTo: 'course-list',
+  }
 ];

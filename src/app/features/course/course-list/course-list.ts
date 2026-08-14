@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { DashboardStat } from '../../dashboard/main-dashboard/dashboard-stat/dashboard-stat';
@@ -10,14 +10,22 @@ import { PageFooterComponent } from '../../../shared/components/page-footer/page
 import { Course, CourseService } from '../../../services/domain/course';
 import { CourseCategory, CourseCategoryService } from '../../../services/domain/course-category';
 import { TrainingVenue, TrainingVenueService } from '../../../services/domain/program-venue';
-
-import { CourseModal } from '../course-modal/course-modal';
-import { CourseCategoryModal } from '../course-category-modal/course-category-modal';
+import {CourseCategoryModal} from './course-category-modal';
+import {CourseModal} from './course-modal';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, DashboardStat, PageFooterComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    DashboardStat,
+    PageFooterComponent,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    NgbDropdownItem,
+  ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.scss',
 })
@@ -29,7 +37,9 @@ export class CourseList {
 
   // ─── Data ──────────────────────────────────────────────────
   readonly courses = toSignal(this.courseService.courses$, { initialValue: [] as Course[] });
-  readonly categories = toSignal(this.categoryService.categories$, { initialValue: [] as CourseCategory[] });
+  readonly categories = toSignal(this.categoryService.categories$, {
+    initialValue: [] as CourseCategory[],
+  });
   readonly venues = toSignal(this.venueService.venues$, { initialValue: [] as TrainingVenue[] });
   readonly isLoading = toSignal(this.courseService.isLoading$, { initialValue: true });
 
@@ -59,8 +69,7 @@ export class CourseList {
       const matchesCategory = !categoryId || course.categoryId === categoryId;
       const matchesLevel = !level || course.level === level;
       const matchesMode = !mode || (course.deliveryModes ?? []).includes(mode as any);
-      const matchesStatus =
-        !status || (status === 'active' ? course.isActive : !course.isActive);
+      const matchesStatus = !status || (status === 'active' ? course.isActive : !course.isActive);
 
       return matchesQuery && matchesCategory && matchesLevel && matchesMode && matchesStatus;
     });
