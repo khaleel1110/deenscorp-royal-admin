@@ -101,6 +101,42 @@ export class ViewCourse {
     });
   };
 
+  /** Used by the sidebar session "tickets": splits a date into day + short month. */
+  readonly dateParts = (date: any): { day: string; month: string } => {
+    if (!date) return { day: '—', month: '' };
+    const d = date.toDate ? date.toDate() : new Date(date);
+    return {
+      day: d.toLocaleDateString('en-US', { day: '2-digit' }),
+      month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+    };
+  };
+
+  /** Percentage of seats already taken, used for the ticket's seat-fill bar. */
+  seatsFillPercent(session: CourseSession): number {
+    if (!session.totalSeats) return 0;
+    const taken = session.totalSeats - session.availableSeats;
+    return Math.max(0, Math.min(100, Math.round((taken / session.totalSeats) * 100)));
+  }
+
+  /** Sessions that haven't happened/been cancelled yet, soonest first. */
+  readonly upcomingSessions = computed(() => {
+    const list = this.sessions().filter(
+      (s) => s.status !== 'Completed' && s.status !== 'Cancelled',
+    );
+
+    return [...list].sort((a, b) => {
+      const aDate = (a.startDate as any)?.toDate ? (a.startDate as any).toDate() : new Date(a.startDate as any);
+      const bDate = (b.startDate as any)?.toDate ? (b.startDate as any).toDate() : new Date(b.startDate as any);
+      return aDate.getTime() - bDate.getTime();
+    });
+  });
+
+  readonly nextSession = computed(() => this.upcomingSessions()[0]);
+
+  readonly totalAvailableSeats = computed(() =>
+    this.sessions().reduce((sum, s) => sum + (s.availableSeats || 0), 0),
+  );
+
   // --------------------------------------------------------------
   // Edit & Delete Actions
   // --------------------------------------------------------------

@@ -135,10 +135,11 @@ export class CourseList {
   }
 
   // ─── Modals ────────────────────────────────────────────────
-  openAddCategoryModal(): void {
+/*  openAddCategoryModal(): void {
     this.modalService.open(CourseCategoryModal, { size: 'md' });
-  }
+  }*/
 
+/*
   openEditCategoryModal(category: CourseCategory): void {
     const ref = this.modalService.open(CourseCategoryModal, { size: 'md' });
     ref.componentInstance.category = category;
@@ -157,6 +158,103 @@ export class CourseList {
     if (!confirm(`Delete "${course.name}"? This cannot be undone.`)) {
       return;
     }
+    await this.courseService.delete(course.id);
+  }
+
+  async deleteCategory(category: CourseCategory): Promise<void> {
+    const courseCount = this.courseCountFor(category.id);
+
+    const message = courseCount > 0
+        ? `The category "${category.name}" has ${courseCount} course${
+            courseCount === 1 ? '' : 's'
+        } assigned to it.\n\nAre you sure you want to delete this category?`
+        : `Are you sure you want to delete "${category.name}"?\n\nThis action cannot be undone.`;
+
+    const confirmed = window.confirm(message);
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await this.categoryService.delete(category.id);
+    } catch (error) {
+      console.error('Failed to delete category:', error);
+
+      alert('Failed to delete the category. Please try again.');
+    }
+  }
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // ─── Modals ────────────────────────────────────────────────
+
+  openAddCategoryModal(): void {
+    this.modalService.open(CourseCategoryModal, { size: 'md' });
+  }
+
+  openEditCategoryModal(category: CourseCategory): void {
+    const ref = this.modalService.open(CourseCategoryModal, { size: 'md' });
+    ref.componentInstance.category = category;
+  }
+
+  openAddCourseModal(): void {
+    this.modalService.open(CourseModal, { size: 'lg' });
+  }
+
+  openEditCourseModal(course: Course): void {
+    const ref = this.modalService.open(CourseModal, { size: 'lg' });
+    ref.componentInstance.course = course;
+  }
+
+
+// ─── Delete Category ──────────────────────────────────────
+
+  async deleteCategory(category: CourseCategory): Promise<void> {
+    const courseCount = this.courseCountFor(category.id);
+
+    const message = courseCount > 0
+        ? `The category "${category.name}" has ${courseCount} course${
+            courseCount === 1 ? '' : 's'
+        } assigned to it.\n\nAre you sure you want to delete this category?`
+        : `Are you sure you want to delete "${category.name}"?\n\nThis action cannot be undone.`;
+
+    const confirmed = window.confirm(message);
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await this.categoryService.delete(category.id);
+    } catch (error) {
+      console.error('Failed to delete category:', error);
+
+      alert('Failed to delete the category. Please try again.');
+    }
+  }
+
+
+// ─── Delete Course ────────────────────────────────────────
+
+  async deleteCourse(course: Course): Promise<void> {
+    if (!confirm(`Delete "${course.name}"? This cannot be undone.`)) {
+      return;
+    }
+
     await this.courseService.delete(course.id);
   }
 }

@@ -126,6 +126,8 @@ export class CourseCategoryService implements OnDestroy {
     return docData(ref) as Observable<CourseCategoryDetails>;
   }
 
+
+
   /** Creates a new category. Returns the generated id (slugified name). */
   async create(input: CourseCategoryInput): Promise<string> {
     const id = slugify(input.name) || crypto.randomUUID();

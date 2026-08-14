@@ -1,4 +1,10 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -17,17 +23,31 @@ import { getFirestore, provideFirestore, connectFirestoreEmulator } from '@angul
 import { getStorage, provideStorage, connectStorageEmulator } from '@angular/fire/storage';
 
 import { environment } from '../environments/environment';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {NgProgressHttpModule} from "ngx-progressbar/http";
+import {NgProgressRouterModule} from "ngx-progressbar/router";
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'enabled',
   anchorScrolling: 'enabled',
 };
 
+let inMemoryScrollingFeature;
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({
       eventCoalescing: true,
     }),
+
+
+
+    importProvidersFrom(NgbModule),
+
+    importProvidersFrom(NgProgressHttpModule, NgProgressRouterModule),
+    provideHttpClient(withInterceptorsFromDi()),
+
+
 
     provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling(scrollConfig)),
 

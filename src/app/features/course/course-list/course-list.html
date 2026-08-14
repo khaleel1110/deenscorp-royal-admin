@@ -194,7 +194,7 @@
                   <td><input class="form-check-input" type="checkbox"
                              [attr.aria-label]="'Select ' + course.name"></td>
                   <td>
-                    <a class="table-person" [routerLink]="['/app/course-list', course.id]">
+                    <a class="table-person"     [routerLink]="['/gms/view-course', course.id]">
                       <span class="avatar sm">
                         @if (course.thumbnail) {
                           <img [src]="course.thumbnail" [alt]="course.name"
@@ -216,7 +216,7 @@
                       <span class="badge status-neutral me-1">{{ mode }}</span>
                     }
                   </td>
-                  <td [routerLink]="['/view-coursesssss', course.categoryId]">{{ course.duration }}</td>
+                  <td >{{ course.duration }}</td>
                   <td>
                     <span class="badge" [class.status-success]="course.isActive"
                           [class.status-neutral]="!course.isActive">
@@ -231,9 +231,13 @@
                       <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle
                               ><i class="bi bi-three-dots"></i>
                       </button>
-                      <div ngbDropdownMenu><a ngbDropdownItem
-                                              [routerLink]="['/view-coursesssss', course.id]">View
-                        details</a>
+                      <div ngbDropdownMenu>
+                        <a
+                          ngbDropdownItem
+                          [routerLink]="['/gms/view-course', course.id]"
+                        >
+                          View details
+                        </a>
                         <button ngbDropdownItem (click)="openEditCourseModal(course)">Edit</button>
                       </div>
                     </div>
@@ -285,35 +289,127 @@
     <!-- ============================= -->
     <!-- CATEGORIES -->
     <!-- ============================= -->
-    <article class="card mb-3">
-      <div class="card-header">
-        <h2>Categories</h2>
+
+
+    <div class="mb-4">
+
+      <!-- Section Header -->
+      <div class="mb-3">
+        <h2 class="mb-0">Categories</h2>
       </div>
-      <div class="card-body border-2 border-primary">
-        <div class="row g-3">
-          @for (category of categories(); track category.id) {
-            <div class="col-md-4">
-              <div class="quick-action">
-                <span class="d-flex align-items-center gap-3">
-                  <span class="step-number m-0" [style.background]="category.color">
-                    <i class="bi" [class]="'bi-' + (category.icon || 'tag')"></i>
-                  </span>
-                  <span>
-                    <strong>{{ category.name }}</strong>
-                    <span class="small-muted d-block">
-                      {{ courseCountFor(category.id) }} course{{ courseCountFor(category.id) === 1 ? '' : 's' }}
-                    </span>
-                  </span>
-                </span>
-                <button class="btn btn-sm btn-outline-secondary" (click)="openEditCategoryModal(category)">
-                  <i class="bi bi-pencil"></i>
-                </button>
-              </div>
-            </div>
-          }
+
+      <!-- Categories -->
+      <div class="mb-4">
+
+        <!-- Section Header -->
+        <div class="mb-3">
+          <h2 class="mb-0">Categories</h2>
         </div>
+
+        <!-- Categories -->
+        <div class="row g-3">
+
+          @for (category of categories(); track category.id) {
+
+            <div class="col-md-4">
+
+              <article class="card category-card h-100">
+
+                <div class="card-body">
+
+                  <div class="d-flex align-items-center justify-content-between">
+
+                    <!-- Left -->
+                    <div class="d-flex align-items-center gap-3">
+
+                      <!-- Icon -->
+                      <span
+                        class="category-icon"
+                        [style.background]="category.color"
+                      >
+                  <i
+                    class="bi"
+                    [class]="'bi-' + (category.icon || 'tag')"
+                  ></i>
+                </span>
+
+                      <!-- Name + Count -->
+                      <div class="category-info">
+
+                        <div class="d-flex align-items-center gap-2">
+
+                          <strong class="category-name">
+                            {{ category.name }}
+                          </strong>
+
+                          <span class="category-count">
+                      {{ courseCountFor(category.id) }}
+                    </span>
+
+                        </div>
+
+                        <span class="small-muted">
+                    course{{ courseCountFor(category.id) === 1 ? '' : 's' }}
+                  </span>
+
+                      </div>
+
+                    </div>
+
+                    <!-- Actions -->
+                    <div ngbDropdown container="body">
+
+                      <button
+                        type="button"
+                        class="btn btn-sm category-edit-btn"
+                        ngbDropdownToggle
+                        aria-label="Category actions"
+                      >
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+
+                      <div ngbDropdownMenu>
+
+                        <!-- Edit -->
+                        <button
+                          type="button"
+                          ngbDropdownItem
+                          (click)="openEditCategoryModal(category)"
+                        >
+                          <i class="bi bi-pencil me-2"></i>
+                          Edit
+                        </button>
+
+                        <!-- Delete -->
+                        <button
+                          type="button"
+                          ngbDropdownItem
+                          class="text-danger"
+                          (click)="deleteCategory(category)"
+                        >
+                          <i class="bi bi-trash me-2"></i>
+                          Delete
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </article>
+
+            </div>
+
+          }
+
+        </div>
+
       </div>
-    </article>
+
+    </div>
 
     <app-page-footer/>
   </div>

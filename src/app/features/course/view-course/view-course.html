@@ -1,278 +1,279 @@
-<div class="bg-light py-4">
-  <div class="container">
+<div class="course-view">
 
-    <!-- Header with actions -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h1 class="h2 mb-1">{{ course()?.name }}</h1>
-        <p class="text-muted mb-0">
-          <span class="badge bg-secondary me-2">{{ course()?.code }}</span>
-          {{ categoryName() }}
-        </p>
+  @if (loading()) {
+    <div class="course-view__loading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading…</span>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
-          <i class="bi bi-pencil me-1"></i> Edit
-        </button>
-        <button class="btn btn-outline-danger btn-sm" (click)="deleteCourse()">
-          <i class="bi bi-trash me-1"></i> Delete
-        </button>
-        <button class="btn btn-secondary btn-sm" routerLink="/course-list">
-          <i class="bi bi-arrow-left me-1"></i> Back
-        </button>
+      <p>Loading course…</p>
+    </div>
+  } @else {
+
+    <!-- ============================= -->
+    <!-- HERO -->
+    <!-- ============================= -->
+    <header class="course-hero">
+      <div class="course-hero__pattern" aria-hidden="true"></div>
+
+      <div class="course-hero__inner">
+        <a routerLink="gms/course-list" class="course-hero__back">
+          <i class="bi bi-arrow-left"></i> All courses
+        </a>
+
+        <div class="course-hero__top">
+          <div class="course-hero__eyebrow">
+            <span>{{ categoryName() }}</span>
+            <span class="course-hero__dot">·</span>
+            <span class="course-hero__code">{{ course()?.code }}</span>
+          </div>
+
+          <div class="course-hero__actions">
+            <button class="course-btn course-btn--ghost" (click)="openEditModal()">
+              <i class="bi bi-pencil"></i> Edit
+            </button>
+            <button class="course-btn course-btn--ghost course-btn--danger" (click)="deleteCourse()">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+
+        <h1 class="text-white display-4">{{ course()?.name }}</h1>
+        <p class="course-hero__summary">{{ course()?.shortDescription }}</p>
+
+        <div class="course-hero__badges">
+          <span class="course-chip course-chip--level">{{ course()?.level }}</span>
+          @if (course()?.certificate) {
+            <span class="course-chip course-chip--gold"><i class="bi bi-patch-check-fill"></i> Certified</span>
+          }
+          @if (course()?.accreditation) {
+            <span class="course-chip">{{ course()?.accreditation }}</span>
+          }
+          <span class="course-chip" [class.course-chip--muted]="!course()?.isActive">
+            <i class="bi" [class.bi-dot]="course()?.isActive" [class.bi-pause-circle]="!course()?.isActive"></i>
+            {{ course()?.isActive ? 'Active' : 'Inactive' }}
+          </span>
+          @if (course()?.featured) {
+            <span class="course-chip course-chip--gold"><i class="bi bi-star-fill"></i> Featured</span>
+          }
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================= -->
+    <!-- STAT STRIP -->
+    <!-- ============================= -->
+    <div class="course-stats">
+      <div class="course-stats__item">
+        <span class="course-stats__label">Duration</span>
+        <span class="course-stats__value">{{ course()?.duration || '—' }}</span>
+      </div>
+      <div class="course-stats__divider"></div>
+      <div class="course-stats__item">
+        <span class="course-stats__label">Language</span>
+        <span class="course-stats__value">{{ course()?.language || '—' }}</span>
+      </div>
+      <div class="course-stats__divider"></div>
+      <div class="course-stats__item">
+        <span class="course-stats__label">Delivery</span>
+        <span class="course-stats__value course-stats__value--wrap">
+          @for (mode of course()?.deliveryModes; track mode) {
+            <span class="course-mode-tag">{{ mode }}</span>
+          }
+        </span>
+      </div>
+      <div class="course-stats__divider"></div>
+      <div class="course-stats__item">
+        <span class="course-stats__label">Next Session</span>
+        <span class="course-stats__value">
+          {{ nextSession() ? formatDate(nextSession()!.startDate) : 'None scheduled' }}
+        </span>
+      </div>
+      <div class="course-stats__divider"></div>
+      <div class="course-stats__item">
+        <span class="course-stats__label">Seats Open</span>
+        <span class="course-stats__value">{{ totalAvailableSeats() }}</span>
       </div>
     </div>
 
-    @if (loading()) {
-      <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading…</span>
-        </div>
-      </div>
-    } @else {
-      <!-- Course Info Card -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <dl class="row mb-0">
-                <dt class="col-sm-4 text-muted">Name</dt>
-                <dd class="col-sm-8">{{ course()?.name }}</dd>
+    <!-- ============================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================= -->
+    <div class="course-body">
 
-                <dt class="col-sm-4 text-muted">Code</dt>
-                <dd class="col-sm-8">{{ course()?.code }}</dd>
+      <div class="course-body__main">
 
-                <dt class="col-sm-4 text-muted">Category</dt>
-                <dd class="col-sm-8">{{ categoryName() }}</dd>
+        <!-- Overview -->
+        <section class="course-section">
+          <h2 class="course-section__title">Overview</h2>
+          <p class="course-prose">{{ details()?.overview || 'No overview provided yet.' }}</p>
+        </section>
 
-                <dt class="col-sm-4 text-muted">Level</dt>
-                <dd class="col-sm-8">{{ course()?.level }}</dd>
-
-                <dt class="col-sm-4 text-muted">Language</dt>
-                <dd class="col-sm-8">{{ course()?.language }}</dd>
-              </dl>
-            </div>
-            <div class="col-md-6">
-              <dl class="row mb-0">
-                <dt class="col-sm-4 text-muted">Duration</dt>
-                <dd class="col-sm-8">{{ course()?.duration }}</dd>
-
-                <dt class="col-sm-4 text-muted">Accreditation</dt>
-                <dd class="col-sm-8">{{ course()?.accreditation || '—' }}</dd>
-
-                <dt class="col-sm-4 text-muted">Certificate</dt>
-                <dd class="col-sm-8">{{ course()?.certificate ? 'Yes' : 'No' }}</dd>
-
-                <dt class="col-sm-4 text-muted">Featured</dt>
-                <dd class="col-sm-8">{{ course()?.featured ? 'Yes' : 'No' }}</dd>
-
-                <dt class="col-sm-4 text-muted">Status</dt>
-                <dd class="col-sm-8">
-                  <span class="badge" [class.bg-success]="course()?.isActive" [class.bg-secondary]="!course()?.isActive">
-                    {{ course()?.isActive ? 'Active' : 'Inactive' }}
-                  </span>
-                </dd>
-              </dl>
-            </div>
-          </div>
-
-          <!-- Delivery Modes -->
-          <div class="mt-3">
-            <span class="text-muted me-2">Delivery Modes:</span>
-            @for (mode of course()?.deliveryModes; track mode) {
-              <span class="badge bg-light text-dark me-1">{{ mode }}</span>
+        <!-- Objectives / Outcomes -->
+        <section class="course-section course-grid-2">
+          <div>
+            <h2 class="course-section__title ">Objectives</h2>
+            @if (details()?.objectives?.length) {
+              <ul class="course-list ">
+                @for (item of details()?.objectives; track $index) {
+                  <li><i class="bi bi-check2"></i > <span class="text-dark">{{ item }}</span> </li>
+                }
+              </ul>
+            } @else {
+              <p class="course-empty">No objectives listed.</p>
             }
           </div>
-
-          <!-- Tags & Industries -->
-          <div class="mt-2">
-            <span class="text-muted me-2">Tags:</span>
-            @for (tag of course()?.tags; track tag) {
-              <span class="badge bg-info text-white me-1">{{ tag }}</span>
+          <div>
+            <h2 class="course-section__title">Outcomes</h2>
+            @if (details()?.outcomes?.length) {
+              <ul class="course-list">
+                @for (item of details()?.outcomes; track $index) {
+                  <li><i class="bi bi-check2"></i> <span class="text-dark">{{ item }}</span> </li>
+                }
+              </ul>
+            } @else {
+              <p class="course-empty">No outcomes listed.</p>
             }
           </div>
-          <div class="mt-1">
-            <span class="text-muted me-2">Industries:</span>
-            @for (industry of course()?.industries; track industry) {
-              <span class="badge bg-secondary me-1">{{ industry }}</span>
+        </section>
+
+        <!-- Who Should Attend / Prerequisites -->
+        <section class="course-section course-grid-2">
+          <div>
+            <h2 class="course-section__title">Who Should Attend</h2>
+            @if (details()?.whoShouldAttend?.length) {
+              <ul class="course-list">
+                @for (item of details()?.whoShouldAttend; track $index) {
+                  <li><i class="bi bi-person"></i> <span class="text-dark">{{ item }}</span> </li>
+                }
+              </ul>
+            } @else {
+              <p class="course-empty">Open to all professionals.</p>
             }
           </div>
-        </div>
-      </div>
+          <div>
+            <h2 class="course-section__title">Prerequisites</h2>
+            @if (details()?.prerequisites?.length) {
+              <ul class="course-list">
+                @for (item of details()?.prerequisites; track $index) {
+                  <li><i class="bi bi-info-circle"></i> <span class="text-dark">{{ item }}</span> </li>
+                }
+              </ul>
+            } @else {
+              <p class="course-empty">No prerequisites required.</p>
+            }
+          </div>
+        </section>
 
-      <!-- Short Description & Overview -->
-      <div class="row g-4 mb-4">
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Short Description</h5>
-              <p class="card-text">{{ course()?.shortDescription }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Overview</h5>
-              <p class="card-text">{{ details()?.overview }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- Curriculum Timeline -->
+        <section class="course-section">
+          <h2 class="course-section__title">Curriculum</h2>
 
-      <!-- Objectives, Outcomes, Who, Prerequisites -->
-      <div class="row g-4 mb-4">
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Objectives</h5>
-              @if (details()?.objectives?.length) {
-                <ul>
-                  @for (item of details()?.objectives; track $index) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              } @else {
-                <p class="text-muted">—</p>
-              }
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Outcomes</h5>
-              @if (details()?.outcomes?.length) {
-                <ul>
-                  @for (item of details()?.outcomes; track $index) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              } @else {
-                <p class="text-muted">—</p>
-              }
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Who Should Attend</h5>
-              @if (details()?.whoShouldAttend?.length) {
-                <ul>
-                  @for (item of details()?.whoShouldAttend; track $index) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              } @else {
-                <p class="text-muted">—</p>
-              }
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-primary">Prerequisites</h5>
-              @if (details()?.prerequisites?.length) {
-                <ul>
-                  @for (item of details()?.prerequisites; track $index) {
-                    <li>{{ item }}</li>
-                  }
-                </ul>
-              } @else {
-                <p class="text-muted">—</p>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Topics -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h5 class="card-title text-primary">Course Topics</h5>
           @if (topics().length) {
-            <div class="accordion" id="topicsAccordion">
+            <ol class="course-timeline">
               @for (topic of topics(); track topic.id; let i = $index) {
-                <div class="accordion-item">
-                  <h2 class="accordion-header" [id]="'heading' + i">
-                    <button class="accordion-button" [class.collapsed]="i !== 0" type="button"
-                            data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
-                            [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
-                            [attr.aria-controls]="'collapse' + i">
-                      {{ topic.title }}
-                      <span class="badge bg-secondary ms-2">{{ topic.duration }}</span>
-                    </button>
-                  </h2>
-                  <div [id]="'collapse' + i" class="accordion-collapse collapse"
-                       [class.show]="i === 0"
-                       [attr.aria-labelledby]="'heading' + i"
-                       data-bs-parent="#topicsAccordion">
-                    <div class="accordion-body">
+                <li class="course-timeline__item">
+                  <div class="course-timeline__marker">{{ i + 1 }}</div>
+                  <details class="course-timeline__card" [open]="i === 0">
+                    <summary>
+                      <span class="course-timeline__title">{{ topic.title }}</span>
+                      <span class="course-timeline__duration">{{ topic.duration }}</span>
+                      <i class="bi bi-chevron-down course-timeline__chevron"></i>
+                    </summary>
+                    <div class="course-timeline__body">
                       <p>{{ topic.description }}</p>
                       @if (topic.learningPoints?.length) {
-                        <ul>
+                        <ul class="course-list course-list--tight">
                           @for (point of topic.learningPoints; track $index) {
-                            <li>{{ point }}</li>
+                            <li><i class="bi bi-dot"></i> {{ point }}</li>
                           }
                         </ul>
                       }
+                    </div>
+                  </details>
+                </li>
+              }
+            </ol>
+          } @else {
+            <p class="course-empty">No curriculum topics defined yet.</p>
+          }
+        </section>
+
+      </div>
+
+      <!-- ============================= -->
+      <!-- SIDEBAR -->
+      <!-- ============================= -->
+      <aside class="course-body__side">
+
+        <div class="course-side-card">
+          <h3 class="course-side-card__title">At a Glance</h3>
+          <dl class="course-facts">
+            <div><dt>Category</dt><dd>{{ categoryName() }}</dd></div>
+            <div><dt>Level</dt><dd>{{ course()?.level }}</dd></div>
+            <div><dt>Accreditation</dt><dd>{{ course()?.accreditation || '—' }}</dd></div>
+            <div><dt>Certificate</dt><dd>{{ course()?.certificate ? 'Awarded' : 'Not offered' }}</dd></div>
+          </dl>
+        </div>
+
+        @if (course()?.tags?.length) {
+          <div class="course-side-card">
+            <h3 class="course-side-card__title">Tags</h3>
+            <div class="course-chip-row">
+              @for (tag of course()?.tags; track tag) {
+                <span class="course-chip course-chip--outline">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (course()?.industries?.length) {
+          <div class="course-side-card">
+            <h3 class="course-side-card__title">Industries</h3>
+            <div class="course-chip-row">
+              @for (industry of course()?.industries; track industry) {
+                <span class="course-chip course-chip--outline">{{ industry }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="course-side-card">
+          <h3 class="course-side-card__title">Sessions</h3>
+
+          @if (sessions().length) {
+            <div class="course-tickets">
+              @for (session of sessions(); track session.id) {
+                <div class="course-ticket">
+                  <div class="course-ticket__date">
+                    <span class="course-ticket__day">{{ dateParts(session.startDate).day }}</span>
+                    <span class="course-ticket__month">{{ dateParts(session.startDate).month }}</span>
+                  </div>
+                  <div class="course-ticket__divider"></div>
+                  <div class="course-ticket__body">
+                    <div class="course-ticket__row">
+                      <strong>{{ venueName(session.venueId) }}</strong>
+                      <span class="course-status" [attr.data-status]="session.status">{{ session.status }}</span>
+                    </div>
+                    <div class="course-ticket__meta">
+                      {{ session.deliveryMode }} · {{ session.currency }} {{ session.price | number:'1.2-2' }}
+                    </div>
+                    <div class="course-ticket__seats">
+                      <div class="course-ticket__seats-bar">
+                        <div class="course-ticket__seats-fill" [style.width.%]="seatsFillPercent(session)"></div>
+                      </div>
+                      <span>{{ session.availableSeats }} / {{ session.totalSeats }} seats left</span>
                     </div>
                   </div>
                 </div>
               }
             </div>
           } @else {
-            <p class="text-muted">No topics defined.</p>
+            <p class="course-empty">No sessions scheduled.</p>
           }
         </div>
-      </div>
 
-      <!-- Sessions -->
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary">Scheduled Sessions</h5>
-          @if (sessions().length) {
-            <div class="table-responsive">
-              <table class="table table-hover table-sm">
-                <thead>
-                <tr>
-                  <th>Start Date</th>
-                  <th>Venue</th>
-                  <th>Duration</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                  @for (session of sessions(); track session.id) {
-                    <tr>
-                      <td>{{ formatDate(session.startDate) }}</td>
-                      <td>{{ venueName(session.venueId) }}</td>
-                      <td>{{ session.duration }}</td>
-                      <td>{{ session.currency }} {{ session.price | number:'1.2-2' }}</td>
-                      <td>
-                        <span class="badge"
-                              [class.bg-success]="session.status === 'Open'"
-                              [class.bg-warning]="session.status === 'Few Seats'"
-                              [class.bg-danger]="session.status === 'Full'"
-                              [class.bg-secondary]="session.status === 'Completed'"
-                              [class.bg-dark]="session.status === 'Cancelled'"
-                              [class.bg-primary]="session.status === 'Upcoming'">
-                          {{ session.status }}
-                        </span>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          } @else {
-            <p class="text-muted">No sessions scheduled.</p>
-          }
-        </div>
-      </div>
-    }
-  </div>
+      </aside>
+    </div>
+
+  }
 </div>
