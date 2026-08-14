@@ -1,0 +1,24 @@
+.modal-content { border: 0; border-radius: 18px; background: var(--wf-surface); color: var(--wf-text); box-shadow: var(--wf-shadow-lg); overflow: hidden; }
+.modal-header, .modal-footer { border-color: var(--wf-border); padding: 18px 22px; }
+.modal-body { padding: 22px; }
+.modal-title { font-size: 1.12rem; }
+.btn-close { filter: var(--wf-close-filter, none); }
+[data-theme='dark'] { --wf-close-filter: invert(1); }
+.drawer-modal .modal-dialog,
+.modal-dialog.drawer-modal { margin: 0 0 0 auto; min-height: 100%; }
+.drawer-modal .modal-content,
+.modal-dialog.drawer-modal .modal-content { min-height: 100vh; border-radius: 18px 0 0 18px; }
+.modal.fade .modal-dialog { transform: translateY(12px) scale(.98); transition: transform var(--wf-motion-duration-medium-2) var(--wf-motion-easing-emphasized-enter); }
+.modal.show .modal-dialog { transform: translateY(0) scale(1); }
+.drawer-modal.fade .modal-dialog,
+.modal.fade .modal-dialog.drawer-modal { transform: translateX(24px); }
+.drawer-modal.show .modal-dialog,
+.modal.show .modal-dialog.drawer-modal { transform: translateX(0); }
+.modal-backdrop.show { animation: wf-backdrop-in var(--wf-motion-duration-medium-1) var(--wf-motion-easing-standard-enter) both; }
+.toast-container { position: fixed; z-index: 1100; right: 20px; bottom: 20px; display: grid; width: min(370px, calc(100vw - 40px)); gap: 10px; }
+.wf-toast { display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--wf-border); border-radius: 12px; padding: 14px; background: var(--wf-surface-raised); box-shadow: var(--wf-shadow-lg); will-change: transform, opacity; }
+
+@keyframes wf-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: var(--bs-backdrop-opacity); }
+}

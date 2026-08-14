@@ -1,5 +1,11 @@
-import { Injectable, inject } from '@angular/core';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+} from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -35,20 +41,26 @@ export interface CourseCategory {
   updatedAt: any;
 }
 
+export interface CourseCategoryDetails {
+  // Extend this interface whenever you add more fields
+  description?: string;
 
+  featuredCourses?: string[];
+
+  overview?: string;
+
+  objectives?: string[];
+
+  benefits?: string[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class CourseCategory {
+export class CourseCategoryService implements OnDestroy {
+  private firestore = inject(Firestore);
 
-  constructor() {
-    const firestore = inject(Firestore);
-
-    console.log(firestore);
-  }
-
-  /*private subscription?: Subscription;
+  private subscription?: Subscription;
 
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -65,27 +77,25 @@ export class CourseCategory {
   loadCategories(): void {
     this.loadingSubject.next(true);
 
-    const ref = collection(this.firestore, 'courseCategories');
-
-    console.log('Collection reference:', ref.path);
+    const ref = collection(this.firestore, 'course-categories');
 
     this.subscription = collectionData(ref, {
       idField: 'id',
-    }).subscribe({
-      next: (categories) => {
-        console.log('Firestore returned:', categories);
+    })
+      .pipe(map((data) => data as CourseCategory[]))
+      .subscribe({
+        next: (categories) => {
+          this.categoriesSubject.next(categories);
 
-        this.categoriesSubject.next(categories as CourseCategory[]);
+          this.loadingSubject.next(false);
+        },
 
-        this.loadingSubject.next(false);
-      },
+        error: (error) => {
+          console.error('Error loading course categories:', error);
 
-      error: (error) => {
-        console.error('Firestore Error:', error);
-
-        this.loadingSubject.next(false);
-      },
-    });
+          this.loadingSubject.next(false);
+        },
+      });
   }
 
   getAll(): Observable<CourseCategory[]> {
@@ -93,22 +103,53 @@ export class CourseCategory {
   }
 
   getCount(): Observable<number> {
-    return this.categories$.pipe(map((categories) => categories.length));
+    return this.categories$.pipe(
+      map((categories) => categories.length),
+    );
   }
 
   getFeatured(): Observable<CourseCategory[]> {
     return this.categories$.pipe(
-      map((categories) => categories.filter((category) => category.featured)),
+      map((categories) =>
+        categories.filter((category) => category.featured),
+      ),
     );
   }
 
   getById(id: string): Observable<CourseCategory | undefined> {
     return this.categories$.pipe(
-      map((categories) => categories.find((category) => category.id === id)),
+      map((categories) =>
+        categories.find((category) => category.id === id),
+      ),
     );
+  }
+
+  getBySlug(slug: string): Observable<CourseCategory | undefined> {
+    return this.categories$.pipe(
+      map((categories) =>
+        categories.find((category) => category.slug === slug),
+      ),
+    );
+  }
+
+  getActive(): Observable<CourseCategory[]> {
+    return this.categories$.pipe(
+      map((categories) =>
+        categories.filter((category) => category.isActive),
+      ),
+    );
+  }
+
+  getDetails(categoryId: string): Observable<CourseCategoryDetails> {
+    const ref = doc(
+      this.firestore,
+      `courseCategories/${categoryId}/details/information`,
+    );
+
+    return docData(ref) as Observable<CourseCategoryDetails>;
   }
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
-  }*/
+  }
 }

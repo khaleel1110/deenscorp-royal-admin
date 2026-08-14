@@ -1,0 +1,30 @@
+.form-label { margin-bottom: 6px; color: var(--wf-text); font-size: .78rem; font-weight: 600; }
+.form-control, .form-select {
+  min-height: 42px;
+  border-color: var(--wf-border);
+  border-radius: 10px;
+  background-color: var(--wf-surface);
+  color: var(--wf-text);
+  font-size: .83rem;
+  transition: var(--wf-transition-effects), transform var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard);
+}
+.form-control::placeholder { color: color-mix(in srgb, var(--wf-text-muted) 72%, transparent); }
+.form-control:focus, .form-select:focus { border-color: var(--wf-primary); box-shadow: 0 0 0 3px var(--wf-focus); transform: translateY(-1px); }
+.input-icon { position: relative; }
+.input-icon > i { position: absolute; z-index: 2; top: 50%; left: 13px; transform: translateY(-50%); color: var(--wf-text-muted); }
+.input-icon > .form-control { padding-left: 38px; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--wf-border); padding: 14px 16px; }
+.filter-bar .form-control, .filter-bar .form-select { width: auto; min-width: 150px; }
+.filter-bar .search-control { min-width: min(320px, 100%); flex: 1; }
+.upload-zone { display: grid; min-height: 130px; place-items: center; border: 1.5px dashed var(--wf-border-strong); border-radius: 12px; padding: 20px; background: var(--wf-surface-muted); color: var(--wf-text-muted); text-align: center; transition: var(--wf-transition-surface); }
+.upload-zone:hover { transform: translateY(-2px); border-color: var(--wf-primary); background: color-mix(in srgb, var(--wf-primary-soft) 58%, var(--wf-surface)); color: var(--wf-text); }
+.form-check-input { border-color: var(--wf-border-strong); background-color: var(--wf-surface); }
+.form-check-input:checked { border-color: var(--wf-primary); background-color: var(--wf-primary); }
+.ng-invalid.ng-touched:not(form) { border-color: var(--wf-danger); animation: wf-invalid-nudge var(--wf-motion-duration-medium-1) var(--wf-motion-easing-emphasized); }
+.invalid-feedback { display: block; font-size: .72rem; }
+
+@keyframes wf-invalid-nudge {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-3px); }
+  65% { transform: translateX(3px); }
+}

@@ -1,0 +1,49 @@
+.donut-wrap { display: flex; align-items: center; gap: 24px; }
+.donut {
+  position: relative;
+  display: grid;
+  width: 152px;
+  aspect-ratio: 1;
+  flex: 0 0 152px;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--wf-primary) 0 62%, var(--wf-success) 62% 81%, var(--wf-warning) 81% 94%, var(--wf-danger) 94%);
+  animation: wf-chart-reveal var(--wf-motion-duration-long-1) var(--wf-motion-easing-emphasized-enter) both;
+}
+.donut::after { position: absolute; width: 68%; aspect-ratio: 1; border-radius: 50%; background: var(--wf-surface); content: ''; }
+.donut-center { position: relative; z-index: 1; text-align: center; }
+.donut-center strong { display: block; font-size: 1.55rem; }
+.chart-legend { display: grid; flex: 1; gap: 9px; }
+.legend-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 8px; color: var(--wf-text-muted); font-size: .76rem; animation: wf-content-rise var(--wf-motion-duration-medium-2) var(--wf-motion-easing-emphasized-enter) both; }
+.legend-row:nth-child(2) { animation-delay: 35ms; }
+.legend-row:nth-child(3) { animation-delay: 70ms; }
+.legend-row:nth-child(4) { animation-delay: 105ms; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot-color, var(--wf-primary)); }
+.bar-chart { display: flex; min-height: 220px; align-items: flex-end; gap: clamp(14px, 3vw, 32px); border-bottom: 1px solid var(--wf-border); padding: 20px 14px 0; }
+.bar-group { display: flex; min-width: 36px; flex: 1; align-items: flex-end; justify-content: center; gap: 7px; }
+.bar { width: 18px; min-height: 10px; border-radius: 5px 5px 0 0; background: var(--wf-primary); transform-origin: bottom; animation: wf-bar-rise var(--wf-motion-duration-medium-4) var(--wf-motion-easing-emphasized-enter) both; }
+.bar-group:nth-child(2) .bar { animation-delay: 50ms; }
+.bar-group:nth-child(3) .bar { animation-delay: 100ms; }
+.bar-group:nth-child(4) .bar { animation-delay: 150ms; }
+.bar-group:nth-child(5) .bar { animation-delay: 200ms; }
+.bar.secondary { background: var(--wf-success); }
+.bar-labels { display: flex; justify-content: space-around; gap: 8px; padding: 9px 8px 0; color: var(--wf-text-muted); font-size: .68rem; }
+.grouped-bar-chart { position: relative; min-height: 180px; width: 100%; }
+.grouped-bar-chart canvas { display: block; width: 100% !important; height: 100% !important; }
+.progress { --bs-progress-bg: var(--wf-surface-muted); height: 8px; border-radius: 99px; overflow: hidden; }
+.progress-bar { transform-origin: left; animation: wf-progress-fill var(--wf-motion-duration-medium-4) var(--wf-motion-easing-emphasized-enter) both; }
+
+@keyframes wf-chart-reveal {
+  from { opacity: 0; transform: scale(.94) rotate(-3deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes wf-bar-rise {
+  from { transform: scaleY(.08); opacity: .65; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes wf-progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

@@ -1,0 +1,232 @@
+.stat-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 1.5rem;
+
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.75rem;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+
+  border-color: transparent;
+}
+
+
+// ------------------------------------
+// Top
+// ------------------------------------
+
+.stat-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.stat-content {
+  min-width: 0;
+}
+
+
+// ------------------------------------
+// Label
+// ------------------------------------
+
+.small-muted {
+  color: var(--bs-secondary-color);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+
+// ------------------------------------
+// Value
+// ------------------------------------
+
+.metric-value {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--bs-heading-color);
+}
+
+
+// ------------------------------------
+// Icon
+// ------------------------------------
+
+.stat-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0.75rem;
+
+  font-size: 1.1rem;
+}
+
+
+// ------------------------------------
+// Icon tones
+// ------------------------------------
+
+.stat-icon.primary {
+  color: var(--bs-primary);
+  background: rgba(55, 125, 255, 0.1);
+}
+
+.stat-icon.success {
+  color: var(--bs-success);
+  background: rgba(0, 201, 167, 0.1);
+}
+
+.stat-icon.warning {
+  color: var(--bs-warning);
+  background: rgba(245, 196, 67, 0.12);
+}
+
+.stat-icon.danger {
+  color: var(--bs-danger);
+  background: rgba(237, 76, 120, 0.1);
+}
+
+.stat-icon.purple {
+  color: #6f42c1;
+  background: rgba(111, 66, 193, 0.1);
+}
+
+
+// ------------------------------------
+// Footer
+// ------------------------------------
+
+.stat-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-top: 1.25rem;
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  padding: 0.25rem 0.5rem;
+
+  border-radius: 0.375rem;
+
+  background: rgba(0, 201, 167, 0.1);
+
+  color: var(--bs-success);
+
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trend.down {
+  color: var(--bs-danger);
+  background: rgba(237, 76, 120, 0.1);
+}
+
+.trend-label {
+  color: var(--bs-secondary-color);
+  font-size: 0.8125rem;
+}
+
+
+// ------------------------------------
+// Loading
+// ------------------------------------
+
+.stat-skeleton {
+  width: 96px;
+  height: 30px;
+
+  border-radius: 0.35rem;
+
+  background: var(--bs-secondary-bg);
+
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.helper-skeleton {
+  width: 72%;
+  height: 10px;
+
+  margin-top: 0.5rem;
+
+  border-radius: 999px;
+
+  background: var(--bs-secondary-bg);
+
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.trend-skeleton {
+  width: 88px;
+  height: 22px;
+
+  margin-top: 1.25rem;
+
+  border-radius: 999px;
+
+  background: var(--bs-secondary-bg);
+
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+
+// ------------------------------------
+// Responsive
+// ------------------------------------
+
+@media (max-width: 575.98px) {
+
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

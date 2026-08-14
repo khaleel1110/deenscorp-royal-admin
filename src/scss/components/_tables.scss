@@ -1,0 +1,18 @@
+.table-responsive { scrollbar-width: thin; }
+.wf-table { --bs-table-bg: transparent; --bs-table-color: var(--wf-text); --bs-table-border-color: var(--wf-border); margin: 0; min-width: 820px; font-size: .78rem; }
+.wf-table thead th { border-bottom-width: 1px; background: var(--wf-surface-muted); color: var(--wf-text-muted); font-size: .66rem; font-weight: 700; letter-spacing: .035em; padding: 12px 14px; text-transform: uppercase; white-space: nowrap; }
+.wf-table tbody td { vertical-align: middle; padding: 12px 14px; }
+.wf-table tbody tr { transition: background-color var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard), box-shadow var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard); }
+.wf-table tbody tr:hover { background: color-mix(in srgb, var(--wf-primary-soft) 45%, transparent); box-shadow: inset 3px 0 0 var(--wf-primary); }
+.table-person { display: flex; align-items: center; gap: 9px; }
+.table-person strong { display: block; color: var(--wf-text); font-size: .8rem; }
+.badge { --bs-badge-padding-x: .65em; --bs-badge-padding-y: .45em; --bs-badge-font-weight: 600; border-radius: 6px; transition: var(--wf-transition-effects), transform var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard); }
+.badge:hover { transform: translateY(-1px); }
+.status-success { background: var(--wf-success-soft); color: var(--wf-success); }
+.status-warning { background: var(--wf-warning-soft); color: #b66a00; }
+.status-danger { background: var(--wf-danger-soft); color: var(--wf-danger); }
+.status-info { background: var(--wf-primary-soft); color: var(--wf-primary); }
+.status-neutral { background: var(--wf-surface-muted); color: var(--wf-text-muted); }
+.pagination { --bs-pagination-bg: var(--wf-surface); --bs-pagination-border-color: var(--wf-border); --bs-pagination-color: var(--wf-text); --bs-pagination-active-bg: var(--wf-primary); --bs-pagination-active-border-color: var(--wf-primary); --bs-pagination-hover-bg: var(--wf-primary-soft); --bs-pagination-hover-color: var(--wf-primary); }
+.pagination .page-link { border-radius: 8px; margin: 0 2px; transition: var(--wf-transition-effects), transform var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard); }
+.pagination .page-link:hover { transform: translateY(-1px); }

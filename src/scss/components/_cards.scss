@@ -1,0 +1,36 @@
+@use '../abstracts/mixins' as *;
+.wf-card { @include card-surface; overflow: hidden; transition: var(--wf-transition-surface); }
+.wf-card:hover { box-shadow: 0 10px 26px rgb(16 24 40 / 7%); }
+.wf-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--wf-border); padding: 16px 18px; }
+.wf-card-header h2, .wf-card-header h3 { margin: 0; font-size: .98rem; }
+.wf-card-body { padding: 18px; }
+.stat-card { @include card-surface; min-height: 145px; padding: 18px; transition: var(--wf-transition-surface); }
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgb(16 24 40 / 8%); }
+.stat-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.stat-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: var(--wf-primary-soft); color: var(--wf-primary); font-size: 1.08rem; transition: var(--wf-transition-effects), transform var(--wf-motion-duration-short-4) var(--wf-motion-easing-emphasized); }
+.stat-card:hover .stat-icon,
+.alert-tile:hover .stat-icon,
+.quick-action:hover .stat-icon { transform: scale(1.05); }
+.stat-icon.success { background: var(--wf-success-soft); color: var(--wf-success); }
+.stat-icon.warning { background: var(--wf-warning-soft); color: var(--wf-warning); }
+.stat-icon.danger { background: var(--wf-danger-soft); color: var(--wf-danger); }
+.stat-icon.purple { background: var(--wf-purple-soft); color: var(--wf-purple); }
+.trend { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; margin-top: 11px; padding: 4px 7px; background: var(--wf-success-soft); color: var(--wf-success); font-size: .7rem; font-weight: 650; transition: var(--wf-transition-effects); }
+.trend.down { background: var(--wf-danger-soft); color: var(--wf-danger); }
+.info-tile { display: flex; align-items: flex-start; gap: 13px; border: 1px solid var(--wf-border); border-radius: 12px; padding: 15px; background: var(--wf-surface); transition: var(--wf-transition-surface); }
+.alert-tile { display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--wf-border); border-radius: 12px; padding: 14px; background: var(--wf-surface); transition: var(--wf-transition-surface); }
+.info-tile:hover,
+.alert-tile:hover { transform: translateY(-2px); box-shadow: var(--wf-shadow); }
+.alert-tile.danger { border-color: color-mix(in srgb, var(--wf-danger) 28%, var(--wf-border)); background: color-mix(in srgb, var(--wf-danger-soft) 45%, var(--wf-surface)); }
+.alert-tile.warning { border-color: color-mix(in srgb, var(--wf-warning) 32%, var(--wf-border)); background: color-mix(in srgb, var(--wf-warning-soft) 46%, var(--wf-surface)); }
+.alert-tile.info { border-color: color-mix(in srgb, var(--wf-primary) 25%, var(--wf-border)); background: color-mix(in srgb, var(--wf-primary-soft) 48%, var(--wf-surface)); }
+.empty-state { display: grid; min-height: 220px; place-items: center; padding: 30px; color: var(--wf-text-muted); text-align: center; }
+.empty-state-icon { display: grid; width: 66px; height: 66px; place-items: center; border-radius: 50%; margin: 0 auto 14px; background: var(--wf-primary-soft); color: var(--wf-primary); font-size: 1.7rem; }
+.detail-list { display: grid; gap: 13px; margin: 0; }
+.detail-row { display: grid; grid-template-columns: minmax(110px, .7fr) minmax(0, 1.3fr); gap: 16px; font-size: .85rem; }
+.detail-row dt { color: var(--wf-text-muted); font-weight: 500; }
+.detail-row dd { margin: 0; color: var(--wf-text); font-weight: 550; }
+.facility-image { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; object-fit: cover; }
+.quick-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--wf-border); padding: 13px 0; color: var(--wf-text); transition: background-color var(--wf-motion-duration-short-3) var(--wf-motion-easing-standard), transform var(--wf-motion-duration-short-4) var(--wf-motion-easing-emphasized); }
+.quick-action:hover { background: color-mix(in srgb, var(--wf-primary-soft) 26%, transparent); transform: translateX(2px); }
+.quick-action:last-child { border-bottom: 0; }

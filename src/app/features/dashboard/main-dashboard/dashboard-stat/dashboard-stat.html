@@ -1,0 +1,83 @@
+<article class="card bg-white  stat-card h-100">
+
+  <!-- Top -->
+  <div class=" stat-card-top">
+
+    <div class="stat-content">
+
+      <!-- Label -->
+      <div class="small-muted mb-2">
+        {{ label() }}
+      </div>
+
+      @if (loading()) {
+
+        <div class="stat-skeleton"></div>
+
+        <div class="helper-skeleton"></div>
+
+      } @else {
+
+        <!-- Value -->
+        <div class="metric-value">
+          {{ value() }}
+        </div>
+
+        <!-- Helper -->
+        @if (helper()) {
+          <div class="small-muted mt-1">
+            {{ helper() }}
+          </div>
+        }
+
+      }
+
+    </div>
+
+
+    <!-- Icon -->
+    <span
+      class="stat-icon"
+      [class]="'stat-icon ' + tone()"
+    >
+      <i [class]="'bi ' + icon()"></i>
+    </span>
+
+  </div>
+
+
+  <!-- Bottom -->
+  @if (loading()) {
+
+    <div class="trend-skeleton"></div>
+
+  } @else if (trend()) {
+
+    <div class="stat-footer">
+
+      <span
+        class="trend"
+        [class.down]="trendDown()"
+      >
+
+        <i
+          [class]="
+            trendDown()
+              ? 'bi bi-arrow-down'
+              : 'bi bi-arrow-up'
+          "
+        ></i>
+
+        {{ trend() }}
+
+      </span>
+
+      <span class="trend-label">
+        from previous period
+      </span>
+
+    </div>
+
+  }
+
+</article>
