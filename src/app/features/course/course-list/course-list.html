@@ -14,8 +14,8 @@
             <h1 class="page-title">Courses</h1>
             <p class="page-subtitle">Manage course categories, course listings, and sessions.</p>
           </div>
-          <div class="col page-actions text-end">
-            <button class="btn btn-outline-secondary" (click)="openAddCategoryModal()">
+          <div class="col page-actions me-2 text-end">
+            <button class="btn me-2 btn-outline-primary" (click)="openAddCategoryModal()">
               <i class="bi bi-tag"></i> Add Category
             </button>
             <button class="btn btn-primary" (click)="openAddCourseModal()">
@@ -194,7 +194,7 @@
                   <td><input class="form-check-input" type="checkbox"
                              [attr.aria-label]="'Select ' + course.name"></td>
                   <td>
-                    <a class="table-person"     [routerLink]="['/gms/view-course', course.id]">
+                    <a class=" text-secondary"     [routerLink]="['/gms/view-course', course.id]">
                       <span class="avatar sm">
                         @if (course.thumbnail) {
                           <img [src]="course.thumbnail" [alt]="course.name"
@@ -213,22 +213,23 @@
                   <td>{{ course.level }}</td>
                   <td>
                     @for (mode of course.deliveryModes; track mode) {
-                      <span class="badge status-neutral me-1">{{ mode }}</span>
+
+                      <span class="badge bg-success me-1">{{ mode }}</span>
                     }
                   </td>
                   <td >{{ course.duration }}</td>
                   <td>
-                    <span class="badge" [class.status-success]="course.isActive"
+                    <span class="badge" [class.bg-success]="course.isActive"
                           [class.status-neutral]="!course.isActive">
                       {{ course.isActive ? 'Active' : 'Inactive' }}
                     </span>
                     @if (course.featured) {
-                      <span class="badge status-warning ms-1">Featured</span>
+                      <span class="badge bg-secondary">Featured</span>
                     }
                   </td>
                   <td>
                     <div ngbDropdown container="body">
-                      <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle
+                      <button class="btn btn-sm btn-outline-white" ngbDropdownToggle
                               ><i class="bi bi-three-dots"></i>
                       </button>
                       <div ngbDropdownMenu>

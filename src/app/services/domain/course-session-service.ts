@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
+  collectionGroup,
   collectionData,
   doc,
   setDoc,
@@ -35,40 +36,50 @@ export interface CourseSession {
 
 export type CourseSessionInput = Omit<CourseSession, 'id' | 'courseId' | 'createdAt' | 'updatedAt'>;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CourseSessionService {
   private readonly firestore = inject(Firestore);
+
+  private sortByStartDate(sessions: CourseSession[]): CourseSession[] {
+    return [...sessions].sort((a, b) => {
+      const aDate = a.startDate?.toDate ? a.startDate.toDate() : new Date(a.startDate);
+      const bDate = b.startDate?.toDate ? b.startDate.toDate() : new Date(b.startDate);
+      return aDate.getTime() - bDate.getTime();
+    });
+  }
 
   /**
    * courses/{courseId}/sessions — matches the CLI seeder layout.
    */
   getByCourse(courseId: string): Observable<CourseSession[]> {
     const ref = collection(this.firestore, `courses/${courseId}/sessions`);
-
     return (collectionData(ref, { idField: 'id' }) as Observable<CourseSession[]>).pipe(
-      map((sessions) =>
-        [...sessions].sort((a, b) => {
-          const aDate = a.startDate?.toDate ? a.startDate.toDate() : new Date(a.startDate);
-          const bDate = b.startDate?.toDate ? b.startDate.toDate() : new Date(b.startDate);
-          return aDate.getTime() - bDate.getTime();
-        }),
-      ),
+      map((sessions) => this.sortByStartDate(sessions)),
+    );
+  }
+
+  /**
+   * Every session across every course — was `return this.;` (didn't compile)
+   * and typed as Observable<Course[]> instead of Observable<CourseSession[]>.
+   * Uses a collectionGroup query since sessions live in per-course
+   * subcollections rather than one flat collection.
+   */
+  getAll(): Observable<CourseSession[]> {
+    const ref = collectionGroup(this.firestore, 'sessions');
+    return (collectionData(ref, { idField: 'id' }) as Observable<CourseSession[]>).pipe(
+      map((sessions) => this.sortByStartDate(sessions)),
     );
   }
 
   async create(courseId: string, input: CourseSessionInput): Promise<string> {
     const id = crypto.randomUUID();
     const ref = doc(this.firestore, `courses/${courseId}/sessions/${id}`);
-
     await setDoc(ref, {
       ...input,
       courseId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
-
     return id;
   }
 

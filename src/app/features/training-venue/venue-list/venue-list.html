@@ -1,0 +1,77 @@
+<main id="content" role="main" class="main">
+  <div class="container">
+<div class="admin-venues">
+  <div class="page-head">
+    <div>
+      <h1>Training Venues</h1>
+      <p class="text-muted mb-0">Manage the venues used across your scheduled sessions.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openAddVenueModal()">
+      <i class="bi bi-plus-lg me-1"></i> Add Venue
+    </button>
+  </div>
+
+  <div class="input-icon search-bar">
+    <i class="bi bi-search"></i>
+    <input
+      type="search"
+      class="form-control"
+      placeholder="Search by name, city, or country…"
+      [(ngModel)]="searchTerm"
+      name="searchTerm">
+  </div>
+
+  <div class="row g-3">
+    @for (venue of filteredVenues; track venue.id) {
+      <div class="col-lg-4 col-md-6">
+        <article class="venue-card" [class.venue-card--inactive]="!venue.isActive">
+
+          <a [routerLink]="['/admin/venues', venue.id]" class="venue-card__media"
+             [style.background-image]="venue.image ? 'url(' + venue.image + ')' : null">
+            @if (!venue.image) { <i class="bi bi-geo-alt"></i> }
+            @if (!venue.isActive) { <span class="venue-card__badge">Hidden</span> }
+          </a>
+
+          <div class="card-body d-flex align-items-start justify-content-between gap-2">
+            <div class="category-info">
+              <a [routerLink]="['/admin/venues', venue.id]" class="category-name text-decoration-none">
+                {{ venue.name }}
+              </a>
+              <div class="small-muted">
+                <i class="bi bi-geo-alt me-1"></i>{{ venue.city }}{{ venue.country ? ', ' + venue.country : '' }}
+              </div>
+            </div>
+
+            <div ngbDropdown container="body">
+              <button type="button" class="btn btn-sm category-edit-btn" ngbDropdownToggle aria-label="Venue actions">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <button type="button" ngbDropdownItem [routerLink]="['/gms/view-venues', venue.id]">
+                  <i class="bi bi-eye me-2"></i>View
+                </button>
+                <button type="button" ngbDropdownItem (click)="openEditVenueModal(venue)">
+                  <i class="bi bi-pencil me-2"></i>Edit
+                </button>
+                <button type="button" ngbDropdownItem (click)="toggleActive(venue)">
+                  <i class="bi me-2" [class.bi-eye-slash]="venue.isActive" [class.bi-eye]="!venue.isActive"></i>
+                  {{ venue.isActive ? 'Hide' : 'Unhide' }}
+                </button>
+                <button type="button" ngbDropdownItem class="text-danger" (click)="deleteVenue(venue)">
+                  <i class="bi bi-trash me-2"></i>Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </article>
+      </div>
+    }
+
+    @if (filteredVenues.length === 0) {
+      <div class="col-12 text-center text-muted py-5">No venues found.</div>
+    }
+  </div>
+</div>
+  </div>
+</main>

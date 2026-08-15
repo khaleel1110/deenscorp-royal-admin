@@ -1,0 +1,84 @@
+<main id="content" role="main" class="main">
+  <div class="container">
+    <div class="admin-featured">
+
+      <div class="page-head">
+        <div>
+          <h1>Featured Courses</h1>
+          <p class="text-muted mb-0">Manage the courses highlighted on the home page.</p>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="openAddModal()">
+          <i class="bi bi-plus-lg me-1"></i> Add Featured Course
+        </button>
+      </div>
+
+      <div class="input-icon search-bar">
+        <i class="bi bi-search"></i>
+        <input
+          type="search"
+          class="form-control"
+          placeholder="Search by title, category, or badge…"
+          [(ngModel)]="searchTerm"
+          name="searchTerm">
+      </div>
+
+      <div class="row g-3">
+        @for (item of filteredItems; track item.id) {
+          <div class="col-lg-4 col-md-6">
+            <article class="featured-card" [class.featured-card--inactive]="!item.isActive">
+
+              <div class="featured-card__media" [style.background-image]="item.image ? 'url(' + item.image + ')' : null">
+                @if (!item.image) { <i class="bi bi-image"></i> }
+                <span class="featured-card__badge" [class]="'badge bg-' + item.badgeColor">{{ item.badge }}</span>
+                @if (!item.isActive) { <span class="featured-card__hidden">Hidden</span> }
+              </div>
+
+              <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between gap-2">
+                  <div class="category-info">
+                    <small class="text-primary fw-semibold d-block">{{ item.category }}</small>
+                    <span class="category-name">{{ item.title }}</span>
+                    <div class="small-muted">
+                      <i class="bi bi-star-fill text-warning me-1"></i>{{ item.rating }} ({{ item.reviewCount }})
+                    </div>
+                  </div>
+
+                  <div ngbDropdown container="body">
+                    <button type="button" class="btn btn-sm category-edit-btn" ngbDropdownToggle aria-label="Actions">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <button type="button" ngbDropdownItem (click)="openEditModal(item)">
+                        <i class="bi bi-pencil me-2"></i>Edit
+                      </button>
+                      <button type="button" ngbDropdownItem (click)="toggleActive(item)">
+                        <i class="bi me-2" [class.bi-eye-slash]="item.isActive" [class.bi-eye]="!item.isActive"></i>
+                        {{ item.isActive ? 'Hide' : 'Unhide' }}
+                      </button>
+                      <button type="button" ngbDropdownItem class="text-danger" (click)="deleteItem(item)">
+                        <i class="bi bi-trash me-2"></i>Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                  <div>
+                    <small class="text-muted text-decoration-line-through">${{ item.originalPrice }}</small>
+                    <div class="fw-bold text-primary">${{ item.currentPrice }}</div>
+                  </div>
+                  <span class="small-muted">Order: {{ item.displayOrder }}</span>
+                </div>
+              </div>
+
+            </article>
+          </div>
+        }
+
+        @if (filteredItems.length === 0) {
+          <div class="col-12 text-center text-muted py-5">No featured courses found.</div>
+        }
+      </div>
+    </div>
+  </div>
+</main>

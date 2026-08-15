@@ -1,0 +1,182 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ isEdit ? 'Edit Featured Course' : 'Add Featured Course' }}</h5>
+  <button type="button" class="btn-close" (click)="cancel()" aria-label="Close"></button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="modal-body">
+
+    @if (error()) {
+      <div class="alert alert-danger py-2">{{ error() }}</div>
+    }
+
+    <div class="row g-3">
+
+      <!-- Prefill from existing course (convenience only) -->
+      <div class="col-12">
+        <label class="form-label">Link an Existing Course <span class="text-muted small">(optional — prefills fields below)</span></label>
+        <div class="input-icon">
+          <i class="bi bi-link-45deg"></i>
+          <select
+            class="form-select"
+            formControlName="courseId"
+            (change)="onPrefillCourseChange($any($event.target).value)">
+            <option value="">— Not linked —</option>
+            @for (course of courses(); track course.id) {
+              <option [value]="course.id">{{ course.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <label class="form-label">Title <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-mortarboard"></i>
+          <input type="text" class="form-control" formControlName="title" placeholder="e.g. Complete Python Bootcamp">
+        </div>
+        @if (form.get('title')?.invalid && form.get('title')?.touched) {
+          <small class="text-danger">Title is required.</small>
+        }
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Visibility</label>
+        <div class="form-check form-switch pt-2">
+          <input class="form-check-input" type="checkbox" role="switch" formControlName="isActive" id="featuredActive">
+          <label class="form-check-label" for="featuredActive">
+            {{ form.get('isActive')?.value ? 'Shown on site' : 'Hidden' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Category <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-tag"></i>
+          <input type="text" class="form-control" formControlName="category" placeholder="e.g. Code">
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Badge Text</label>
+        <input type="text" class="form-control" formControlName="badge" placeholder="Bestseller">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Badge Color</label>
+        <select class="form-select" formControlName="badgeColor">
+          @for (opt of badgeColors; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Rating (0–5)</label>
+        <input type="number" step="0.1" min="0" max="5" class="form-control" formControlName="rating">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Review Count</label>
+        <input type="number" min="0" class="form-control" formControlName="reviewCount">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Lessons</label>
+        <input type="number" min="0" class="form-control" formControlName="lessons">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Duration</label>
+        <div class="input-icon">
+          <i class="bi bi-clock"></i>
+          <input type="text" class="form-control" formControlName="duration" placeholder="e.g. 3h 25m">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Preview Link <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-box-arrow-up-right"></i>
+          <input type="text" class="form-control" formControlName="previewUrl" placeholder="/course/list/some-course-id">
+        </div>
+        @if (form.get('previewUrl')?.invalid && form.get('previewUrl')?.touched) {
+          <small class="text-danger">A preview link is required.</small>
+        }
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Original Price</label>
+        <input type="number" step="0.01" min="0" class="form-control" formControlName="originalPrice">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Current Price</label>
+        <input type="number" step="0.01" min="0" class="form-control" formControlName="currentPrice">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Currency</label>
+        <input type="text" class="form-control" formControlName="currency" placeholder="USD">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Display Order</label>
+        <input type="number" class="form-control" formControlName="displayOrder">
+        <small class="text-muted">Lower numbers show first.</small>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Course Image <span class="text-danger">*</span></label>
+
+        <div class="image-upload">
+          @if (imagePreview) {
+            <div class="image-upload__preview" [style.background-image]="'url(' + imagePreview + ')'">
+              <button type="button" class="image-upload__remove" (click)="removeImage()" [disabled]="uploading()" aria-label="Remove image">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            @if (!uploading()) {
+              <label for="featuredImageInput" class="btn btn-outline-secondary btn-sm mt-2">
+                <i class="bi bi-arrow-repeat me-1"></i> Replace image
+              </label>
+            }
+          } @else {
+            <label class="image-upload__dropzone" for="featuredImageInput">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Click to upload an image</span>
+              <small>JPG, PNG or WebP · up to 5MB</small>
+            </label>
+          }
+
+          <input id="featuredImageInput" type="file" accept="image/*" class="d-none" (change)="onFileSelected($event)">
+
+          @if (uploading()) {
+            <div class="upload-progress mt-2">
+              <div class="upload-progress__bar" [style.width.%]="uploadProgress()"></div>
+            </div>
+            <small class="text-muted">Uploading… {{ uploadProgress() }}%</small>
+          }
+
+          @if (uploadError()) {
+            <small class="text-danger d-block mt-1">{{ uploadError() }}</small>
+          }
+
+          @if (form.get('image')?.invalid && form.get('image')?.touched && !imagePreview) {
+            <small class="text-danger d-block mt-1">An image is required.</small>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+      {{ isEdit ? 'Save Changes' : 'Add Featured Course' }}
+    </button>
+  </div>
+</form>

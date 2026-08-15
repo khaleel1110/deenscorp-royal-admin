@@ -1,1 +1,67 @@
-<p>course-dashboard works!</p>
+<!-- course-dashboard.html -->
+<main id="content" role="main" class="main">
+  <div class="container">
+    <!-- Stats Row (unchanged) -->
+    <div class="row">
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat
+          label="Total Courses"
+          [value]="totalCourses | number"
+          icon="bi-book"
+          tone="primary"
+        />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat
+          label="Active Courses"
+          [value]="activeCourses"
+          icon="bi-bookshelf"
+          tone="success"
+
+        />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat
+          label="Categories"
+          [value]="totalCategories"
+          icon="bi-bookmarks"
+          tone="warning"
+
+        />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat
+          label="Topics"
+          [value]="totalTopics"
+          icon="bi-file-check"
+          tone="purple"
+        />
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+      <div class="col-lg-6 mb-3 mb-lg-5">
+        <!-- Bubble chart -->
+        <app-category-course-chart></app-category-course-chart>
+      </div>
+      <div class="col-lg-6 mb-3 mb-lg-5">
+        <!-- Grouped Bar Chart -->
+        <div class="card h-100">
+          <div class="card-header">
+            <h4 class="card-header-title">Courses by Category</h4>
+          </div>
+          <div class="card-body">
+            <app-grouped-bar-chart
+              [labels]="barLabels"
+              [datasets]="barDatasets"
+              [height]="230"
+              [currency]="false"
+              ariaLabel="Courses per category"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

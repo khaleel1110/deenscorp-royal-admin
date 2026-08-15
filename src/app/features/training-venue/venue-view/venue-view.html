@@ -1,0 +1,146 @@
+<main class="venue-view">
+
+  @if (loading()) {
+    <div class="venue-view__loading">
+      <div class="spinner-border" role="status"><span class="visually-hidden">Loading…</span></div>
+      <p>Loading venue…</p>
+    </div>
+  } @else {
+
+    <header class="venue-hero" [class.venue-hero--has-image]="!!venue()?.image"
+            [style.background-image]="venue()?.image ? 'url(' + venue()?.image + ')' : null">
+      <div class="venue-hero__inner">
+        <a routerLink="/admin/venues" class="venue-hero__back">
+          <i class="bi bi-arrow-left"></i> All venues
+        </a>
+
+        <div class="venue-hero__top">
+          <div class="venue-hero__eyebrow">
+            <i class="bi bi-geo-alt-fill"></i>
+            {{ venue()?.city }}{{ venue()?.country ? ', ' + venue()?.country : '' }}
+          </div>
+
+          <div class="venue-hero__actions">
+            <button class="btn btn-light btn-sm" (click)="openEditModal()">
+              <i class="bi bi-pencil me-1"></i> Edit
+            </button>
+            <button class="btn btn-outline-light btn-sm venue-hero__danger" (click)="deleteVenue()">
+              <i class="bi bi-trash me-1"></i> Delete
+            </button>
+          </div>
+        </div>
+
+        <h1>{{ venue()?.name }}</h1>
+
+        @if (!venue()?.isActive) {
+          <span class="venue-chip venue-chip--muted">Hidden from public site</span>
+        }
+      </div>
+    </header>
+
+    <div class="venue-body">
+
+      <div class="venue-body__main">
+
+        <section class="venue-section">
+          <h2>Address</h2>
+          <p class="venue-prose">
+            {{ venue()?.address }}
+            @if (venue()?.city) { , {{ venue()?.city }} }
+            @if (venue()?.state) { , {{ venue()?.state }} }
+            {{ venue()?.postcode }}<br>
+            {{ venue()?.country }}
+          </p>
+          @if (mapUrl()) {
+            <a [href]="mapUrl()" target="_blank" rel="noopener" class="venue-map-link">
+              <i class="bi bi-map"></i> Open in Google Maps
+            </a>
+          }
+        </section>
+
+        @if (venue()?.facilities?.length) {
+          <section class="venue-section">
+            <h2>Facilities</h2>
+            <div class="venue-chip-row">
+              @for (facility of venue()?.facilities; track facility) {
+                <span class="venue-chip">{{ facility }}</span>
+              }
+            </div>
+          </section>
+        }
+
+        <section class="venue-section">
+          <h2>Scheduled Sessions</h2>
+
+          @if (sessionsAtVenue().length) {
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-header-dark">
+                <tr>
+                  <th>Course</th>
+                  <th>Date</th>
+                  <th>Delivery</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (session of sessionsAtVenue(); track session.id) {
+                    <tr>
+                      <td>{{ courseName(session.courseId) }}</td>
+                      <td>{{ formatDate(session.startDate) }}</td>
+                      <td>{{ session.deliveryMode }}</td>
+                      <td>{{ session.currency }} {{ session.price | number:'1.2-2' }}</td>
+                      <td>
+                        <span class="badge"
+                              [class.bg-success]="session.status === 'Open'"
+                              [class.bg-warning]="session.status === 'Few Seats'"
+                              [class.bg-danger]="session.status === 'Full'"
+                              [class.bg-secondary]="session.status === 'Completed'"
+                              [class.bg-dark]="session.status === 'Cancelled'"
+                              [class.bg-primary]="session.status === 'Upcoming'">
+                          {{ session.status }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="venue-empty">No sessions have been scheduled at this venue yet.</p>
+          }
+        </section>
+
+      </div>
+
+      <aside class="venue-body__side">
+        <div class="venue-side-card">
+          <h3>Contact</h3>
+          <dl class="venue-facts">
+            <div><dt>Email</dt><dd>{{ venue()?.contactEmail || '—' }}</dd></div>
+            <div><dt>Phone</dt><dd>{{ venue()?.contactPhone || '—' }}</dd></div>
+            <div>
+              <dt>Website</dt>
+              <dd>
+                @if (venue()?.website) {
+                  <a [href]="venue()?.website" target="_blank" rel="noopener">{{ venue()?.website }}</a>
+                } @else { — }
+              </dd>
+            </div>
+            <div><dt>Timezone</dt><dd>{{ venue()?.timezone || '—' }}</dd></div>
+          </dl>
+        </div>
+
+        <div class="venue-side-card">
+          <h3>At a Glance</h3>
+          <dl class="venue-facts">
+            <div><dt>Sessions</dt><dd>{{ sessionsAtVenue().length }}</dd></div>
+            <div><dt>Status</dt><dd>{{ venue()?.isActive ? 'Active' : 'Hidden' }}</dd></div>
+          </dl>
+        </div>
+      </aside>
+
+    </div>
+  }
+</main>

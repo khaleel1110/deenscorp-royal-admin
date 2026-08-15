@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+
+:host {
+  --v-ink: #000000;
+  --v-slate: #57647d;
+  --v-paper: #f6f7fa;
+  --v-surface: #ffffff;
+  --v-line: #e3e7ef;
+  --v-accent: #ed3600;
+
+  display: block;
+  background: var(--v-paper);
+  font-family: 'Inter', sans-serif;
+  color: var(--v-ink);
+}
+
+.venue-view { padding-bottom: 3rem; }
+
+.venue-view__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 6rem 0;
+  color: var(--v-slate);
+}
+
+/* Hero */
+.venue-hero { background: linear-gradient(160deg, #16181c 0%, #2a2b2e 100%); color: #f4f6fb; padding: 2.25rem 0 2.75rem; }
+.venue-hero__inner { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+.venue-hero__back {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .85rem; color: rgba(244,246,251,.7); text-decoration: none; margin-bottom: 1.5rem;
+  &:hover { color: #fff; }
+}
+
+.venue-hero__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+
+.venue-hero__eyebrow {
+  font-size: .8rem; letter-spacing: .03em; text-transform: uppercase;
+  color: #f0d489; font-weight: 600;
+  display: flex; align-items: center; gap: .4rem;
+}
+
+.venue-hero__actions { display: flex; gap: .6rem; }
+.venue-hero__danger:hover { background: rgba(179,67,47,.25); border-color: rgba(179,67,47,.5); }
+
+.venue-hero h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin: .9rem 0 .6rem;
+  color: #fff;
+}
+
+.venue-chip {
+  display: inline-flex; align-items: center;
+  font-size: .78rem; font-weight: 500;
+  padding: .3rem .7rem; border-radius: 999px;
+  background: var(--v-paper); border: 1px solid var(--v-line); color: var(--v-slate);
+}
+
+.venue-chip--muted { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); color: #f4f6fb; }
+
+/* Body */
+.venue-body {
+  max-width: 1080px; margin: 2.5rem auto 0; padding: 0 1.5rem;
+  display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2.5rem;
+}
+@media (max-width: 900px) { .venue-body { grid-template-columns: 1fr; } }
+
+.venue-section { margin-bottom: 2.25rem; }
+.venue-section h2 {
+  font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.15rem;
+  color: var(--v-ink); margin-bottom: .8rem; padding-bottom: .5rem; border-bottom: 1px solid var(--v-line);
+}
+
+.venue-prose { color: var(--v-slate); line-height: 1.7; font-size: .95rem; margin-bottom: .6rem; }
+
+.venue-map-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .85rem; font-weight: 600; color: var(--v-accent); text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.venue-chip-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.venue-empty { color: var(--v-slate); font-size: .9rem; font-style: italic; }
+
+.table-header-dark th {
+  background-color: #212529 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-color: #212529;
+}
+
+/* Sidebar */
+.venue-body__side { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.venue-side-card {
+  background: var(--v-surface); border: 1px solid var(--v-line); border-radius: 14px; padding: 1.25rem;
+  h3 { font-size: .82rem; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--v-slate); margin-bottom: .9rem; }
+}
+
+.venue-facts { display: flex; flex-direction: column; gap: .6rem; margin: 0; }
+.venue-facts > div { display: flex; justify-content: space-between; gap: 1rem; font-size: .86rem; }
+.venue-facts dt { color: var(--v-slate); flex-shrink: 0; }
+.venue-facts dd { margin: 0; font-weight: 600; color: var(--v-ink); text-align: right; word-break: break-word; }
+.venue-facts dd a { color: var(--v-accent); text-decoration: none; &:hover { text-decoration: underline; } }
+.venue-hero {
+  position: relative;
+  background: linear-gradient(160deg, #16181c 0%, #2a2b2e 100%);
+  background-size: cover;
+  background-position: center;
+  color: #f4f6fb;
+  padding: 2.25rem 0 2.75rem;
+  overflow: hidden;
+}
+
+.venue-hero--has-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(10,10,12,.82) 0%, rgba(20,20,22,.6) 60%, rgba(10,10,12,.85) 100%);
+}
+
+.venue-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

@@ -58,13 +58,12 @@ export class MainDashboard {
     {
       label: 'Management',
       data: [120000, 150000, 180000, 210000, 250000],
-      color: '#16833b',
     },
 
     {
       label: 'Inspection',
       data: [80000, 100000, 130000, 170000, 190000],
-      color: '#0f9d58',
+
     },
   ];
 

@@ -42,35 +42,36 @@ export const GmsNavigationList: NavigationType[] = [
   {
     label: 'Training Location',
     icon: 'geo-tagging',
+    matches: 'venue-list',
 
-    onClick: () => {},
+    /*   onClick: () => {},
     subNavigationItems: [
       {
         label: 'Dashboard',
         disabled: true,
 
         onClick: () => {},
-        matches: 'farm-geo-tagging',
+        matches: 'venue-dashboard',
       },
       {
         label: 'View Location list',
         disabled: true,
         matchExact: false,
         onClick: () => {},
-        matches: 'farm-geo-tagging/list',
+        matches: 'venue-list',
       },
-      /*   {
+      /!*   {
            label: 'Add farm plot',
            disabled: true,
            onClick: () => {
            },
-           matches: 'farm-geo-tagging/new/edit',},*/
+           matches: 'farm-geo-tagging/new/edit',},*!/
     ],
-    matches: 'farm-geo-tagging',
+    matches: 'farm-geo-tagging',*/
   },
 
   {
-    label: ' Distribution',
+    label: ' Featured Courses',
     disabled: true,
     icon: 'input-distribution',
     onClick: () => {},
@@ -80,14 +81,14 @@ export const GmsNavigationList: NavigationType[] = [
         disabled: true,
 
         onClick: () => {},
-        matches: 'input-distribution',
+        matches: 'featured-dashboard',
       },
       {
-        label: 'View distribution records',
+        label: 'Featured Courses List',
         disabled: true,
         matchExact: false,
         onClick: () => {},
-        matches: 'input-distribution/list',
+        matches: 'featured-list',
       },
       /*   {
            label: 'Record a distributed input',

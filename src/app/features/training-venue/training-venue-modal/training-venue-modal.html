@@ -1,0 +1,190 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ isEdit ? 'Edit Venue' : 'Add Venue' }}</h5>
+  <button type="button" class="btn-close" (click)="cancel()" aria-label="Close"></button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="modal-body">
+
+    @if (error()) {
+      <div class="alert alert-danger py-2">{{ error() }}</div>
+    }
+
+    <div class="row g-3">
+
+      <div class="col-md-8">
+        <label class="form-label">Venue Name <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-building"></i>
+          <input type="text" class="form-control" formControlName="name" placeholder="e.g. Marriott Hotel Abuja">
+        </div>
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <small class="text-danger">Venue name is required.</small>
+        }
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Visibility</label>
+        <div class="form-check form-switch pt-2">
+          <input class="form-check-input" type="checkbox" role="switch" formControlName="isActive" id="venueActive">
+          <label class="form-check-label" for="venueActive">
+            {{ form.get('isActive')?.value ? 'Visible on site' : 'Hidden' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">City <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-geo-alt"></i>
+          <input type="text" class="form-control" formControlName="city" placeholder="e.g. Abuja">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Country <span class="text-danger">*</span></label>
+        <div class="input-icon">
+          <i class="bi bi-flag"></i>
+          <input type="text" class="form-control" formControlName="country" placeholder="e.g. Nigeria">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">State / Region</label>
+        <input type="text" class="form-control" formControlName="state">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Postcode</label>
+        <input type="text" class="form-control" formControlName="postcode">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Address</label>
+        <div class="input-icon">
+          <i class="bi bi-signpost"></i>
+          <input type="text" class="form-control" formControlName="address" placeholder="Street address">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Latitude</label>
+        <input type="number" step="any" class="form-control" formControlName="latitude">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Longitude</label>
+        <input type="number" step="any" class="form-control" formControlName="longitude">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Timezone</label>
+        <div class="input-icon">
+          <i class="bi bi-clock"></i>
+          <input type="text" class="form-control" formControlName="timezone" placeholder="e.g. Africa/Lagos">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Contact Email</label>
+        <div class="input-icon">
+          <i class="bi bi-envelope"></i>
+          <input type="email" class="form-control" formControlName="contactEmail" placeholder="venue@example.com">
+        </div>
+        @if (form.get('contactEmail')?.invalid && form.get('contactEmail')?.touched) {
+          <small class="text-danger">Enter a valid email address.</small>
+        }
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Contact Phone</label>
+        <div class="input-icon">
+          <i class="bi bi-telephone"></i>
+          <input type="text" class="form-control" formControlName="contactPhone">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Website</label>
+        <div class="input-icon">
+          <i class="bi bi-globe"></i>
+          <input type="text" class="form-control" formControlName="website" placeholder="https://">
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Venue Image</label>
+
+        <div class="image-upload">
+          @if (imagePreview) {
+            <div class="image-upload__preview" [style.background-image]="'url(' + imagePreview + ')'">
+              <button type="button" class="image-upload__remove" (click)="removeImage()" [disabled]="uploading()" aria-label="Remove image">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            @if (!uploading()) {
+              <label for="venueImageInput" class="btn btn-outline-secondary btn-sm mt-2">
+                <i class="bi bi-arrow-repeat me-1"></i> Replace image
+              </label>
+            }
+          } @else {
+            <label class="image-upload__dropzone" for="venueImageInput">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Click to upload an image</span>
+              <small>JPG, PNG or WebP · up to 5MB</small>
+            </label>
+          }
+
+          <input id="venueImageInput" type="file" accept="image/*" class="d-none" (change)="onFileSelected($event)">
+
+          @if (uploading()) {
+            <div class="upload-progress mt-2">
+              <div class="upload-progress__bar" [style.width.%]="uploadProgress()"></div>
+            </div>
+            <small class="text-muted">Uploading… {{ uploadProgress() }}%</small>
+          }
+
+          @if (uploadError()) {
+            <small class="text-danger d-block mt-1">{{ uploadError() }}</small>
+          }
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Facilities</label>
+        <div class="input-icon">
+          <i class="bi bi-plus-circle"></i>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Type a facility and press Enter (e.g. Wi-Fi, Parking)"
+            [(ngModel)]="newFacility"
+            [ngModelOptions]="{ standalone: true }"
+            (keydown.enter)="$event.preventDefault(); addFacility()">
+        </div>
+
+        @if (facilities().length) {
+          <div class="chip-row mt-2">
+            @for (facility of facilities(); track facility; let i = $index) {
+              <span class="chip">
+                {{ facility }}
+                <button type="button" (click)="removeFacility(i)" aria-label="Remove facility">
+                  <i class="bi bi-x"></i>
+                </button>
+              </span>
+            }
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+      {{ isEdit ? 'Save Changes' : 'Add Venue' }}
+    </button>
+  </div>
+</form>
