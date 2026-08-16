@@ -8,6 +8,38 @@ export const GmsNavigationList: NavigationType[] = [
   },
 
   {
+    label: 'Applications',
+    icon: 'activities-monitoring',
+    badge: {
+      tone: 'badge-tone-secondary',
+      text: '',
+    },
+    subNavigationItems: [
+      {
+        label: 'Dashboard',
+        disabled: true,
+
+        onClick: () => {},
+        matches: 'application-dashboard',
+      },
+      {
+        label: 'Application  list',
+        disabled: true,
+        matchExact: false,
+        onClick: () => {},
+        matches: 'application-list',
+      },
+  /*    {
+        label: 'Add new Course',
+        disabled: true,
+        onClick: () => {},
+        matches: 'application/new/edit',
+      },*/
+    ],
+    matches: 'application',
+  },
+
+  {
     label: 'Courses',
     icon: 'activities-monitoring',
     badge: {

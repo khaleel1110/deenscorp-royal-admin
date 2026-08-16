@@ -1,0 +1,145 @@
+<main id="content" role="main" class="main">
+  <div class="container">
+
+    <header class="page-header">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">Dashboard</li>
+            <li class="breadcrumb-item active">Applications</li>
+          </ol>
+        </nav>
+        <h1 class="page-title">Course Applications</h1>
+        <p class="page-subtitle">Review applications, approve payment, and manage access details.</p>
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="row">
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Total Applications" [value]="totalApplications().toString()" icon="bi-inbox" tone="primary" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Pending Review" [value]="pendingReview().toString()" icon="bi-hourglass-split" tone="warning" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Awaiting Payment" [value]="awaitingPayment().toString()" icon="bi-cash-coin" tone="purple" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Paid" [value]="paidCount().toString()" icon="bi-check-circle" tone="success" />
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header filter-bar">
+        <div class="row g-2 align-items-center">
+          <div class="col-lg-5">
+            <div class="input-icon">
+              <i class="bi bi-search"></i>
+              <input class="form-control" (input)="updateSearch($event)" placeholder="Search by name, email, or course...">
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <select class="form-select" [value]="statusFilter()" (change)="statusFilter.set($any($event.target).value)">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="col-lg-3">
+            <select class="form-select" [value]="paymentFilter()" (change)="paymentFilter.set($any($event.target).value)">
+              <option value="">All payment states</option>
+              <option value="unpaid">Unpaid</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="thead-light">
+            <tr>
+              <th>Applicant</th>
+              <th>Course</th>
+              <th>Session</th>
+              <th>Status</th>
+              <th>Payment</th>
+              <th>Access</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (app of filtered(); track app.id) {
+              <tr>
+                <td>
+                  <a class="text-secondary" [routerLink]="['/gms/applications', app.id]">
+                    <strong>{{ app.fullName }}</strong>
+                    <span class="small-muted d-block">{{ app.email }}</span>
+                  </a>
+                </td>
+                <td>{{ app.courseName }}</td>
+                <td>
+                  {{ app.session || '—' }}
+                  @if (app.deliveryMode) {
+                    <span class="badge bg-secondary ms-1">{{ app.deliveryMode }}</span>
+                  }
+                </td>
+                <td>
+                  <span class="badge"
+                        [class.bg-warning]="app.status === 'pending'"
+                        [class.bg-success]="app.status === 'approved'"
+                        [class.bg-danger]="app.status === 'rejected'">
+                    {{ app.status }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [class.bg-success]="app.paymentStatus === 'paid'" [class.bg-secondary]="app.paymentStatus === 'unpaid'">
+                    {{ app.paymentStatus }}
+                  </span>
+                  @if (app.amountDue) {
+                    <span class="small-muted d-block">{{ app.currency }} {{ app.amountDue | number:'1.2-2' }}</span>
+                  }
+                </td>
+                <td>
+                  @if (app.accessDetailsSent) {
+                    <i class="bi bi-check-circle-fill text-success" title="Access details sent"></i>
+                  } @else if (app.deliveryMode === 'Virtual' || app.deliveryMode === 'Online') {
+                    <i class="bi bi-link-45deg text-muted" [class.text-warning]="app.paymentStatus === 'paid'" title="Meeting link pending"></i>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>
+                  <div ngbDropdown container="body">
+                    <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle><i class="bi bi-three-dots"></i></button>
+                    <div ngbDropdownMenu>
+                      <a ngbDropdownItem      [routerLink]="['/gms/application-view', app.id]">
+                        <i class="bi bi-eye me-2"></i>View details
+                      </a>
+                      @if (app.status === 'pending') {
+                        <button ngbDropdownItem (click)="approve(app)"><i class="bi bi-check-lg me-2"></i>Approve</button>
+                        <button ngbDropdownItem class="text-danger" (click)="reject(app)"><i class="bi bi-x-lg me-2"></i>Reject</button>
+                      }
+                      @if (app.status === 'approved' && app.paymentStatus === 'unpaid') {
+                        <button ngbDropdownItem (click)="openRecordPaymentModal(app)"><i class="bi bi-cash-coin me-2"></i>Record Payment</button>
+                      }
+                      <button ngbDropdownItem (click)="openEditModal(app)"><i class="bi bi-pencil me-2"></i>Edit</button>
+                      <button ngbDropdownItem class="text-danger" (click)="deleteApplication(app)"><i class="bi bi-trash me-2"></i>Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+
+            @if (filtered().length === 0) {
+              <tr><td colspan="7" class="text-center text-muted py-4">No applications match your filters.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>

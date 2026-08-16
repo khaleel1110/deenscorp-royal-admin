@@ -1,0 +1,41 @@
+<main id="content" role="main" class="main">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Total Applications" [value]="totalApplications | number" icon="bi-inbox" tone="primary" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Pending Review" [value]="pendingReview" icon="bi-hourglass-split" tone="warning" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Awaiting Payment" [value]="awaitingPayment" icon="bi-cash-coin" tone="purple" />
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+        <app-dashboard-stat label="Revenue Collected" [value]="totalRevenue | number:'1.0-2'" icon="bi-graph-up" tone="success" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mb-3 mb-lg-5">
+        <div class="card h-100">
+          <div class="card-header"><h4 class="card-header-title">Applications by Course</h4></div>
+          <div class="card-body">
+            @if (!loading && barLabels.length) {
+              <app-grouped-bar-chart
+                [labels]="barLabels"
+                [datasets]="barDatasets"
+                [height]="260"
+                [currency]="false"
+                ariaLabel="Applications per course"
+              />
+            } @else if (!loading) {
+              <p class="text-muted text-center py-5 mb-0">No applications yet.</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>

@@ -53,9 +53,23 @@ export const routes: Routes = [
     loadComponent: () =>
       import('../features/featured-course/featured-course-list/featured-course-list').then((m) => m.FeaturedCourseList),
   },
+{
+    path: 'application-dashboard',
+    loadComponent: () =>
+      import('../features/users/application-dashboard/application-dashboard').then((m) => m.ApplicationDashboard),
+  },
+{
+    path: 'application-list',
+    loadComponent: () =>
+      import('../features/users/application-list/application-list').then((m) => m.ApplicationList),
+  },{
+    path: 'application-view/:id',
+    loadComponent: () =>
+      import('../features/users/application-view/application-view').then((m) => m.ApplicationView),
+  },
 
-  {
+/*  {
     path: '**',
     redirectTo: 'course-list',
-  },
+  },*/
 ];

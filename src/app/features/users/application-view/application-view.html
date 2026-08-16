@@ -1,0 +1,191 @@
+<main id="content" role="main" class="main">
+  <div class="container">
+
+    @if (loading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    } @else {
+
+      <header class="page-header">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a routerLink="/gms/applications">Applications</a></li>
+              <li class="breadcrumb-item active">{{ application()?.fullName }}</li>
+            </ol>
+          </nav>
+          <h1 class="page-title">{{ application()?.fullName }}</h1>
+          <p class="page-subtitle">{{ application()?.courseName }} @if (application()?.session) { — {{ application()?.session }} }</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm" (click)="openEditModal()"><i class="bi bi-pencil me-1"></i>Edit</button>
+          <button class="btn btn-outline-danger btn-sm" (click)="deleteApplication()"><i class="bi bi-trash me-1"></i>Delete</button>
+        </div>
+      </header>
+
+      <!-- Pipeline -->
+      <div class="app-pipeline mb-4">
+        <div class="app-pipeline__step" [class.app-pipeline__step--done]="true">
+          <i class="bi bi-send-check"></i><span>Applied</span>
+        </div>
+        <div class="app-pipeline__line" [class.app-pipeline__line--done]="application()?.status !== 'pending'"></div>
+
+        <div class="app-pipeline__step"
+             [class.app-pipeline__step--done]="application()?.status === 'approved'"
+             [class.app-pipeline__step--failed]="application()?.status === 'rejected'">
+          <i class="bi" [class.bi-check-circle]="application()?.status === 'approved'" [class.bi-x-circle]="application()?.status === 'rejected'" [class.bi-hourglass]="application()?.status === 'pending'"></i>
+          <span>{{ application()?.status === 'rejected' ? 'Rejected' : 'Approved' }}</span>
+        </div>
+        <div class="app-pipeline__line" [class.app-pipeline__line--done]="application()?.paymentStatus === 'paid'"></div>
+
+        <div class="app-pipeline__step" [class.app-pipeline__step--done]="application()?.paymentStatus === 'paid'">
+          <i class="bi bi-cash-coin"></i><span>Paid</span>
+        </div>
+        <div class="app-pipeline__line" [class.app-pipeline__line--done]="application()?.accessDetailsSent"></div>
+
+        <div class="app-pipeline__step" [class.app-pipeline__step--done]="application()?.accessDetailsSent">
+          <i class="bi bi-key"></i><span>Access Sent</span>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="d-flex gap-2 mb-4 flex-wrap">
+        @if (application()?.status === 'pending') {
+          <button class="btn btn-success btn-sm" (click)="approve()"><i class="bi bi-check-lg me-1"></i>Approve Application</button>
+          <button class="btn btn-outline-danger btn-sm" (click)="reject()"><i class="bi bi-x-lg me-1"></i>Reject</button>
+        }
+        @if (application()?.status === 'approved' && application()?.paymentStatus === 'unpaid') {
+          <button class="btn btn-primary btn-sm" (click)="openRecordPaymentModal()"><i class="bi bi-cash-coin me-1"></i>Record Payment</button>
+        }
+      </div>
+
+      <div class="row g-4">
+
+        <div class="col-lg-8">
+
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Applicant Details</h5></div>
+            <div class="card-body">
+              <dl class="row mb-0">
+                <dt class="col-sm-3 text-muted">Email</dt><dd class="col-sm-9">{{ application()?.email }}</dd>
+                <dt class="col-sm-3 text-muted">Phone</dt><dd class="col-sm-9">{{ application()?.phone }}</dd>
+                <dt class="col-sm-3 text-muted">Organization</dt><dd class="col-sm-9">{{ application()?.organization || '—' }}</dd>
+                <dt class="col-sm-3 text-muted">Message</dt><dd class="col-sm-9">{{ application()?.message || '—' }}</dd>
+                <dt class="col-sm-3 text-muted">Admin Notes</dt><dd class="col-sm-9">{{ application()?.adminNotes || '—' }}</dd>
+                <dt class="col-sm-3 text-muted">Applied On</dt><dd class="col-sm-9">{{ formatDateTime(application()?.createdAt) }}</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Access Details</h5></div>
+            <div class="card-body">
+              @if (isVirtual()) {
+                <p class="mb-2"><strong>Delivery:</strong> {{ application()?.deliveryMode }}</p>
+                <p class="mb-2"><strong>Meeting Link:</strong>
+                  @if (application()?.meetingLink) {
+                    <a [href]="application()?.meetingLink" target="_blank" rel="noopener">{{ application()?.meetingLink }}</a>
+                  } @else {
+                    <span class="text-muted">Not set yet — add it via Edit.</span>
+                  }
+                </p>
+              } @else {
+                <p class="mb-2"><strong>Venue:</strong> {{ application()?.venueName || '—' }}</p>
+              }
+              @if (application()?.accessNotes) {
+                <p class="mb-0"><strong>Notes:</strong> {{ application()?.accessNotes }}</p>
+              }
+              @if (application()?.accessDetailsSent) {
+                <span class="badge bg-success mt-2"><i class="bi bi-check-circle me-1"></i>Access email sent</span>
+              } @else if (application()?.paymentStatus === 'paid') {
+                <span class="badge bg-warning mt-2">Payment confirmed — waiting on meeting link/access notes</span>
+              }
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Payment History</h5>
+              @if (application()?.status === 'approved') {
+                <button class="btn btn-sm btn-outline-primary" (click)="openRecordPaymentModal()">
+                  <i class="bi bi-plus-lg me-1"></i>Add Payment
+                </button>
+              }
+            </div>
+            <div class="card-body">
+              @if (payments().length) {
+                <table class="table table-sm table-hover mb-0">
+                  <thead>
+                    <tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th><th>Notes</th></tr>
+                  </thead>
+                  <tbody>
+                    @for (p of payments(); track p.id) {
+                      <tr>
+                        <td>{{ formatDateTime(p.recordedAt) }}</td>
+                        <td>{{ p.currency }} {{ p.amount | number:'1.2-2' }}</td>
+                        <td>{{ p.method }}</td>
+                        <td>{{ p.reference || '—' }}</td>
+                        <td>{{ p.notes || '—' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              } @else {
+                <p class="text-muted mb-0">No payments recorded yet.</p>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+          <div class="card mb-3">
+            <div class="card-header"><h6 class="mb-0">Payment Summary</h6></div>
+            <div class="card-body">
+              <dl class="row mb-0 small">
+                <dt class="col-6 text-muted">Status</dt>
+                <dd class="col-6 text-end">
+                  <span class="badge" [class.bg-success]="application()?.paymentStatus === 'paid'" [class.bg-secondary]="application()?.paymentStatus === 'unpaid'">
+                    {{ application()?.paymentStatus }}
+                  </span>
+                </dd>
+                <dt class="col-6 text-muted">Amount Due</dt>
+                <dd class="col-6 text-end">{{ application()?.currency }} {{ (application()?.amountDue ?? 0) | number:'1.2-2' }}</dd>
+                <dt class="col-6 text-muted">Total Paid</dt>
+                <dd class="col-6 text-end">{{ application()?.currency }} {{ (application()?.totalPaid ?? 0) | number:'1.2-2' }}</dd>
+                <dt class="col-6 text-muted">Reference</dt>
+                <dd class="col-6 text-end"><code>{{ application()?.paymentReference || '—' }}</code></dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h6 class="mb-0">Email Log</h6></div>
+            <div class="card-body small">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Application Received</span>
+                <span class="badge bg-light text-dark">{{ application()?.emailStatus || '—' }}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Payment Instructions</span>
+                <span class="badge bg-light text-dark">{{ application()?.approvalEmailStatus || '—' }}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Payment Confirmed</span>
+                <span class="badge bg-light text-dark">{{ application()?.paymentEmailStatus || '—' }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Access Details</span>
+                <span class="badge bg-light text-dark">{{ application()?.accessEmailStatus || '—' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</main>
