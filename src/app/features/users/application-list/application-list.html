@@ -74,7 +74,7 @@
             @for (app of filtered(); track app.id) {
               <tr>
                 <td>
-                  <a class="text-secondary" [routerLink]="['/gms/applications', app.id]">
+                  <a  class="text-secondary" [routerLink]="['/deenscorp/applications', app.id]">
                     <strong>{{ app.fullName }}</strong>
                     <span class="small-muted d-block">{{ app.email }}</span>
                   </a>
@@ -115,7 +115,7 @@
                   <div ngbDropdown container="body">
                     <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle><i class="bi bi-three-dots"></i></button>
                     <div ngbDropdownMenu>
-                      <a ngbDropdownItem      [routerLink]="['/gms/application-view', app.id]">
+                      <a ngbDropdownItem      [routerLink]="['/deenscorp/application-view', app.id]">
                         <i class="bi bi-eye me-2"></i>View details
                       </a>
                       @if (app.status === 'pending') {

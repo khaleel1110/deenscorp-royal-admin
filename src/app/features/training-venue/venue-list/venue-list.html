@@ -26,7 +26,7 @@
       <div class="col-lg-4 col-md-6">
         <article class="venue-card" [class.venue-card--inactive]="!venue.isActive">
 
-          <a [routerLink]="['/admin/venues', venue.id]" class="venue-card__media"
+          <a [routerLink]="['/deenscorp/venues', venue.id]" class="venue-card__media"
              [style.background-image]="venue.image ? 'url(' + venue.image + ')' : null">
             @if (!venue.image) { <i class="bi bi-geo-alt"></i> }
             @if (!venue.isActive) { <span class="venue-card__badge">Hidden</span> }
@@ -34,7 +34,7 @@
 
           <div class="card-body d-flex align-items-start justify-content-between gap-2">
             <div class="category-info">
-              <a [routerLink]="['/admin/venues', venue.id]" class="category-name text-decoration-none">
+              <a [routerLink]="['/deenscorp/venues', venue.id]" class="category-name text-decoration-none">
                 {{ venue.name }}
               </a>
               <div class="small-muted">

@@ -5,11 +5,11 @@ import { SplashScreenComponent } from './features/authentication/splash-screen/s
   selector: 'app-root',
   imports: [RouterOutlet, SplashScreenComponent],
   standalone: true,
-  template: ` <!--@if (showSplashScreen) {
+  template: ` @if (showSplashScreen) {
       <yex-splash-screen></yex-splash-screen>
-    } @else {-->
+    } @else {
       <router-outlet></router-outlet>
- <!--   }-->`,
+    }`,
 })
 export class App {
   showSplashScreen = true;
