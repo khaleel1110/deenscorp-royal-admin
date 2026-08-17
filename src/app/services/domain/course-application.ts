@@ -28,6 +28,16 @@ export interface CourseApplication {
   venueId?: string | null;
   venueName?: string | null;
   message?: string | null;
+  isFeatured: boolean;
+  meetingLink?: string; // NEW — only populated for Online/Virtual sessions
+  meetingEventId?: string;
+
+  sessionPrice?: number | null;
+  sessionCurrency?: string | null;
+
+  // Payment fields (set during approval)
+  amountDue?: number | null;
+  currency?: string | null;
 
   // Application review
   status: ApplicationStatus;
@@ -37,14 +47,12 @@ export interface CourseApplication {
 
   // Payment
   paymentStatus: PaymentStatus;
-  amountDue?: number | null;
-  currency?: string | null;
   paymentReference?: string | null;
   paidAt?: any;
   totalPaid?: number;
 
   // Access (virtual meeting link / venue confirmation)
-  meetingLink?: string | null;
+
   accessNotes?: string | null;
   accessDetailsSent?: boolean;
 
@@ -117,7 +125,9 @@ export class CourseApplicationService {
   }
 
   // ── Manual creation (e.g. phone/offline applications entered by admin) ──
-  async create(input: Omit<CourseApplication, 'id' | 'status' | 'paymentStatus' | 'createdAt'>): Promise<string> {
+  async create(
+    input: Omit<CourseApplication, 'id' | 'status' | 'paymentStatus' | 'createdAt'>,
+  ): Promise<string> {
     const ref = collection(this.firestore, this.collectionPath);
     const docRef = await addDoc(ref, {
       ...input,
@@ -162,16 +172,21 @@ export class CourseApplicationService {
     id: string,
     amountDue: number,
     currency = 'USD',
+    adminNotes?: string,
   ): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionPath}/${id}`);
-    await updateDoc(ref, {
+    const updateData: any = {
       status: 'approved' as ApplicationStatus,
       amountDue,
       currency,
       paymentReference: generatePaymentReference(id),
       approvedAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    });
+    };
+    if (adminNotes !== undefined) {
+      updateData.adminNotes = adminNotes;
+    }
+    await updateDoc(ref, updateData);
   }
 
   async reject(id: string, reason?: string): Promise<void> {
@@ -195,10 +210,7 @@ export class CourseApplicationService {
     applicationId: string,
     payment: Omit<ApplicationPayment, 'id' | 'recordedAt'>,
   ): Promise<string> {
-    const ref = collection(
-      this.firestore,
-      `${this.collectionPath}/${applicationId}/payments`,
-    );
+    const ref = collection(this.firestore, `${this.collectionPath}/${applicationId}/payments`);
     const docRef = await addDoc(ref, {
       ...payment,
       recordedAt: serverTimestamp(),

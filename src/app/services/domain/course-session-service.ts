@@ -9,6 +9,9 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp,
+  docData,
+  query,
+  where,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -28,8 +31,10 @@ export interface CourseSession {
   instructor: string;
   deliveryMode: 'Classroom' | 'Virtual' | 'Online' | 'Onsite';
   status: 'Upcoming' | 'Open' | 'Few Seats' | 'Full' | 'Completed' | 'Cancelled';
-  notes: string;
   isFeatured: boolean;
+  meetingLink?: string; // NEW — only populated for Online/Virtual sessions
+  meetingEventId?: string;
+  notes: string;
   createdAt?: any;
   updatedAt?: any;
 }
@@ -55,6 +60,27 @@ export class CourseSessionService {
     const ref = collection(this.firestore, `courses/${courseId}/sessions`);
     return (collectionData(ref, { idField: 'id' }) as Observable<CourseSession[]>).pipe(
       map((sessions) => this.sortByStartDate(sessions)),
+    );
+  }
+
+  // In CourseSessionService
+
+  /**
+   * Get a single session by its courseId and sessionId.
+   */
+  getById(courseId: string, sessionId: string): Observable<CourseSession | undefined> {
+    const ref = doc(this.firestore, `courses/${courseId}/sessions/${sessionId}`);
+    return docData(ref, { idField: 'id' }) as Observable<CourseSession | undefined>;
+  }
+
+  /**
+   * Find a session by its ID across all courses (collectionGroup).
+   */
+  getByIdGlobally(sessionId: string): Observable<CourseSession | undefined> {
+    const ref = collectionGroup(this.firestore, 'sessions');
+    const q = query(ref, where('__name__', '==', sessionId));
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((sessions) => sessions[0] as CourseSession | undefined),
     );
   }
 

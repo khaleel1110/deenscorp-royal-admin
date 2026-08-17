@@ -11,6 +11,7 @@ import {
 } from '../../../services/domain/course-application';
 import { ApplicationModal } from '../application-modal/application-modal';
 import { PaymentModal } from '../payment-modal/payment-modal';
+import { ApprovalModal } from '../approval-modal';
 
 @Component({
   selector: 'app-application-list',
@@ -73,26 +74,11 @@ export class ApplicationList {
     const ref = this.modalService.open(ApplicationModal, { size: 'lg' });
     ref.componentInstance.application = app;
   }
-
   async approve(app: CourseApplication): Promise<void> {
-    const amountStr = prompt(
-      `Amount due for "${app.courseName}" (numbers only):`,
-      app.amountDue?.toString() ?? '',
-    );
-    if (amountStr === null) return;
-
-    const amount = Number(amountStr);
-    if (isNaN(amount) || amount <= 0) {
-      alert('Enter a valid amount.');
-      return;
-    }
-
-    try {
-      await this.applicationService.approve(app.id, amount, app.currency ?? 'USD');
-    } catch (error) {
-      console.error('Failed to approve application:', error);
-      alert('Failed to approve. Please try again.');
-    }
+    const ref = this.modalService.open(ApprovalModal, { size: 'lg' });
+    ref.componentInstance.application = app;
+    await ref.result.catch(() => false);
+    // No manual refresh needed – Firestore real‑time updates will reflect changes
   }
 
   async reject(app: CourseApplication): Promise<void> {

@@ -15,6 +15,7 @@ import { Course, CourseFormInput, CourseService } from '../../../services/domain
 import { CourseCategoryService } from '../../../services/domain/course-category';
 import { TrainingVenueService } from '../../../services/domain/program-venue';
 import { CourseSessionService } from '../../../services/domain/course-session-service';
+import { GoogleMeetService } from '../../../services/domain/google-meet-services';
 
 const DELIVERY_MODES = ['Classroom', 'Online', 'Virtual', 'Onsite'] as const;
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
@@ -394,6 +395,33 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
                     }
                   </select>
                 </div>
+                @if (isOnlineOrVirtual) {
+                  <div class="col-12">
+                    <label class="form-label">Google Meet Link</label>
+
+                    @if (form.get('meetingLink')?.value) {
+                      <div class="input-group">
+                        <input class="form-control" formControlName="meetingLink" readonly>
+                        <button type="button" class="btn btn-outline-secondary" (click)="generateMeetLink()"
+                                [disabled]="isGeneratingMeet()">
+                          Regenerate
+                        </button>
+                      </div>
+                    } @else {
+                      <div>
+                        <button type="button" class="btn btn-outline-primary" (click)="generateMeetLink()"
+                                [disabled]="isGeneratingMeet()">
+                          <i class="bi bi-camera-video"></i>
+                          {{ isGeneratingMeet() ? 'Generating…' : 'Generate Google Meet Link' }}
+                        </button>
+                      </div>
+                    }
+
+                    @if (meetError()) {
+                      <div class="text-danger small mt-1">{{ meetError() }}</div>
+                    }
+                  </div>
+                }
 
                 <div class="col-md-4">
                   <label class="form-label">Start Date</label>
@@ -505,7 +533,11 @@ export class CourseModal implements OnInit {
   private readonly categoryService = inject(CourseCategoryService);
   private readonly venueService = inject(TrainingVenueService);
   private readonly sessionService = inject(CourseSessionService);
+  private readonly meetService = inject(GoogleMeetService);
 
+
+  readonly isGeneratingMeet = signal(false);
+  readonly meetError = signal('');
   readonly steps = ['Basic Info', 'Details', 'Media', 'Topics', 'Session', 'Review'];
   readonly deliveryModes = DELIVERY_MODES;
   readonly levels = LEVELS;
@@ -651,6 +683,37 @@ export class CourseModal implements OnInit {
       topic.learningPoints.forEach(lp => lpArray.push(new FormControl(lp)));
     }
     return group;
+  }
+
+
+  get isOnlineOrVirtual(): boolean {
+    const mode = this.form.get('sessionDeliveryMode')?.value;
+    return mode === 'Online' || mode === 'Virtual';
+  }
+
+  async generateMeetLink(): Promise<void> {
+    const v = this.form.value;
+    if (!v.startDate || !v.endDate) {
+      this.meetError.set('Set a start and end date first.');
+      return;
+    }
+
+    this.isGeneratingMeet.set(true);
+    this.meetError.set('');
+
+    try {
+      const result = await this.meetService.generateMeetLink({
+        title: v.name || 'Course Session',
+        description: v.shortDescription,
+        startDate: new Date(v.startDate),
+        endDate: new Date(v.endDate),
+      });
+      this.form.get('meetingLink')?.setValue(result.meetingLink);
+    } catch (err: any) {
+      this.meetError.set(err?.message ?? 'Could not generate Google Meet link.');
+    } finally {
+      this.isGeneratingMeet.set(false);
+    }
   }
 
   // Get learningPoints FormArray for a specific topic
