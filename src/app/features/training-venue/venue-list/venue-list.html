@@ -47,16 +47,16 @@
                 <i class="bi bi-three-dots-vertical"></i>
               </button>
               <div ngbDropdownMenu>
-                <button type="button" ngbDropdownItem [routerLink]="['/gms/view-venues', venue.id]">
+                <button type="button" ngbDropdownItem [routerLink]="['/deenscorp/view-venues', venue.id]">
                   <i class="bi bi-eye me-2"></i>View
                 </button>
                 <button type="button" ngbDropdownItem (click)="openEditVenueModal(venue)">
                   <i class="bi bi-pencil me-2"></i>Edit
                 </button>
-                <button type="button" ngbDropdownItem (click)="toggleActive(venue)">
+          <!--      <button type="button" ngbDropdownItem (click)="toggleActive(venue)">
                   <i class="bi me-2" [class.bi-eye-slash]="venue.isActive" [class.bi-eye]="!venue.isActive"></i>
                   {{ venue.isActive ? 'Hide' : 'Unhide' }}
-                </button>
+                </button>-->
                 <button type="button" ngbDropdownItem class="text-danger" (click)="deleteVenue(venue)">
                   <i class="bi bi-trash me-2"></i>Delete
                 </button>

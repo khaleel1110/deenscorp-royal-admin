@@ -17,64 +17,161 @@
     <!-- Stats -->
     <div class="row">
       <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-        <app-dashboard-stat label="Total Applications" [value]="totalApplications().toString()" icon="bi-inbox" tone="primary" />
+        <app-dashboard-stat label="Total Applications" [value]="totalApplications().toString()" icon="bi-inbox"
+                            tone="primary"/>
       </div>
       <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-        <app-dashboard-stat label="Pending Review" [value]="pendingReview().toString()" icon="bi-hourglass-split" tone="warning" />
+        <app-dashboard-stat label="Pending Review" [value]="pendingReview().toString()" icon="bi-hourglass-split"
+                            tone="warning"/>
       </div>
       <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-        <app-dashboard-stat label="Awaiting Payment" [value]="awaitingPayment().toString()" icon="bi-cash-coin" tone="purple" />
+        <app-dashboard-stat label="Awaiting Payment" [value]="awaitingPayment().toString()" icon="bi-cash-coin"
+                            tone="purple"/>
       </div>
       <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-        <app-dashboard-stat label="Paid" [value]="paidCount().toString()" icon="bi-check-circle" tone="success" />
+        <app-dashboard-stat label="Paid" [value]="paidCount().toString()" icon="bi-check-circle" tone="success"/>
+      </div>
+    </div>
+
+    <!-- Application Filters -->
+    <div ngTabs class="course-tabs-wrapper">
+      <div class="card course-tabs-card">
+
+        <div class="card-body p-2 p-md-3">
+
+          <ul
+            ngTabList
+            [(selectedTab)]="selectedTab"
+            selectionMode="explicit"
+            class="course-tabs"
+            id="pageHeaderTab"
+            role="tablist"
+            aria-label="Course application filters"
+          >
+
+            <!-- All -->
+            <li
+              ngTab
+              value="all"
+              class="course-tab"
+              role="tab"
+            >
+          <span class="tab-label">
+            <i class="bi bi-grid me-2"></i>
+            All
+          </span>
+
+              <span class="badge tab-badge badge-all">
+            {{ totalApplications() }}
+          </span>
+            </li>
+
+            <!-- Pending -->
+            <li
+              ngTab
+              value="pending"
+              class="course-tab"
+              role="tab"
+            >
+          <span class="tab-label">
+            <i class="bi bi-hourglass-split me-2"></i>
+            Pending
+          </span>
+
+              <span class="badge tab-badge badge-pending">
+            {{ pendingReview() }}
+          </span>
+            </li>
+
+            <!-- Awaiting Payment -->
+            <li
+              ngTab
+              value="awaiting-payment"
+              class="course-tab"
+              role="tab"
+            >
+          <span class="tab-label">
+            <i class="bi bi-credit-card me-2"></i>
+            Awaiting Payment
+          </span>
+
+              <span class="badge tab-badge badge-payment">
+            {{ awaitingPayment() }}
+          </span>
+            </li>
+
+            <!-- Paid -->
+            <li
+              ngTab
+              value="paid"
+              class="course-tab"
+              role="tab"
+            >
+          <span class="tab-label">
+            <i class="bi bi-check-circle me-2"></i>
+            Paid
+          </span>
+
+              <span class="badge tab-badge badge-paid">
+            {{ paidCount() }}
+          </span>
+            </li>
+
+            <!-- Rejected -->
+            <li
+              ngTab
+              value="rejected"
+              class="course-tab"
+              role="tab"
+            >
+          <span class="tab-label">
+            <i class="bi bi-x-circle me-2"></i>
+            Rejected
+          </span>
+
+              <span class="badge tab-badge badge-rejected">
+            {{ rejectedCount() }}
+          </span>
+            </li>
+
+          </ul>
+
+        </div>
+
       </div>
     </div>
 
     <div class="card mb-3">
       <div class="card-header filter-bar">
-        <div class="row g-2 align-items-center">
-          <div class="col-lg-5">
-            <div class="input-icon">
-              <i class="bi bi-search"></i>
-              <input class="form-control" (input)="updateSearch($event)" placeholder="Search by name, email, or course...">
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <select class="form-select" [value]="statusFilter()" (change)="statusFilter.set($any($event.target).value)">
-              <option value="">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
-          <div class="col-lg-3">
-            <select class="form-select" [value]="paymentFilter()" (change)="paymentFilter.set($any($event.target).value)">
-              <option value="">All payment states</option>
-              <option value="unpaid">Unpaid</option>
-              <option value="paid">Paid</option>
-            </select>
-          </div>
+        <div class="input-icon search-control" style="max-width: 420px;">
+          <i class="bi bi-search"></i>
+
+          <input
+            class="form-control"
+            (input)="updateSearch($event)"
+            placeholder="Search by name, email, or course..."
+          >
         </div>
       </div>
 
       <div class="card-body table-responsive">
         <table class="table table-hover align-middle">
           <thead class="thead-light">
-            <tr>
-              <th>Applicant</th>
-              <th>Course</th>
-              <th>Session</th>
-              <th>Status</th>
-              <th>Payment</th>
-              <th>Access</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>Applicant</th>
+            <th>Course</th>
+            <th>Session</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Access</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
             @for (app of filtered(); track app.id) {
               <tr>
                 <td>
-                  <a  class="text-secondary" [routerLink]="['/deenscorp/applications', app.id]">
+                  <a class="text-primary-emphasis" [routerLink]="['/deenscorp/application-view', app.id]">
                     <strong>{{ app.fullName }}</strong>
                     <span class="small-muted d-block">{{ app.email }}</span>
                   </a>
@@ -95,7 +192,8 @@
                   </span>
                 </td>
                 <td>
-                  <span class="badge" [class.bg-success]="app.paymentStatus === 'paid'" [class.bg-secondary]="app.paymentStatus === 'unpaid'">
+                  <span class="badge" [class.bg-success]="app.paymentStatus === 'paid'"
+                        [class.bg-secondary]="app.paymentStatus === 'unpaid'">
                     {{ app.paymentStatus }}
                   </span>
                   @if (app.amountDue) {
@@ -106,27 +204,43 @@
                   @if (app.accessDetailsSent) {
                     <i class="bi bi-check-circle-fill text-success" title="Access details sent"></i>
                   } @else if (app.deliveryMode === 'Virtual' || app.deliveryMode === 'Online') {
-                    <i class="bi bi-link-45deg text-muted" [class.text-warning]="app.paymentStatus === 'paid'" title="Meeting link pending"></i>
+                    <i class="bi bi-link-45deg text-muted" [class.text-warning]="app.paymentStatus === 'paid'"
+                       title="Meeting link pending"></i>
                   } @else {
                     <span class="text-muted">—</span>
                   }
                 </td>
                 <td>
                   <div ngbDropdown container="body">
-                    <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle><i class="bi bi-three-dots"></i></button>
+                    <button class="btn btn-sm btn-outline-secondary" ngbDropdownToggle><i class="bi bi-three-dots"></i>
+                    </button>
                     <div ngbDropdownMenu>
-                      <a ngbDropdownItem      [routerLink]="['/deenscorp/application-view', app.id]">
+                      <a ngbDropdownItem [routerLink]="['/deenscorp/application-view', app.id]">
                         <i class="bi bi-eye me-2"></i>View details
                       </a>
                       @if (app.status === 'pending') {
-                        <button ngbDropdownItem (click)="approve(app)"><i class="bi bi-check-lg me-2"></i>Approve</button>
-                        <button ngbDropdownItem class="text-danger" (click)="reject(app)"><i class="bi bi-x-lg me-2"></i>Reject</button>
+                        <button ngbDropdownItem (click)="approve(app)"><i class="bi bi-check-lg me-2"></i>Approve
+                        </button>
+                        <button ngbDropdownItem class="text-danger" (click)="reject(app)">
+                          <i class="bi bi-x-lg me-2"></i>
+                          Reject
+                        </button>
                       }
                       @if (app.status === 'approved' && app.paymentStatus === 'unpaid') {
-                        <button ngbDropdownItem (click)="openRecordPaymentModal(app)"><i class="bi bi-cash-coin me-2"></i>Record Payment</button>
+                        <button ngbDropdownItem (click)="openRecordPaymentModal(app)"><i
+                          class="bi bi-cash-coin me-2"></i>Record Payment
+                        </button>
                       }
-                      <button ngbDropdownItem (click)="openEditModal(app)"><i class="bi bi-pencil me-2"></i>Edit</button>
-                      <button ngbDropdownItem class="text-danger" (click)="deleteApplication(app)"><i class="bi bi-trash me-2"></i>Delete</button>
+                      @if (app.status === 'approved') {
+                        <button ngbDropdownItem (click)="openAccessModal(app)"><i class="bi bi-key me-2"></i>Manage
+                          Access
+                        </button>
+                      }
+              <!--        <button ngbDropdownItem (click)="openEditModal(app)"><i class="bi bi-pencil me-2"></i>Edit
+                      </button>
+                      <button ngbDropdownItem class="text-danger" (click)="deleteApplication(app)"><i
+                        class="bi bi-trash me-2"></i>Delete
+                      </button>-->
                     </div>
                   </div>
                 </td>
@@ -134,7 +248,9 @@
             }
 
             @if (filtered().length === 0) {
-              <tr><td colspan="7" class="text-center text-muted py-4">No applications match your filters.</td></tr>
+              <tr>
+                <td colspan="7" class="text-center text-muted py-4">No applications in this view.</td>
+              </tr>
             }
           </tbody>
         </table>

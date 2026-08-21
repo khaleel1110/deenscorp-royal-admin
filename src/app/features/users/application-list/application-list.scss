@@ -1,0 +1,247 @@
+/* =========================================
+   COURSE APPLICATION TABS
+========================================= */
+
+.course-tabs-wrapper {
+  margin: 2rem 0;
+}
+
+.course-tabs-card {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* =========================================
+   TAB CONTAINER
+========================================= */
+
+.course-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.course-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================
+   INDIVIDUAL TAB
+========================================= */
+
+[ngTab].course-tab {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  min-height: 48px;
+  padding: 0.7rem 1.1rem;
+
+  border: 0;
+  border-radius: 10px;
+
+  color: #677788;
+  background: transparent;
+
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* =========================================
+   TAB ICON
+========================================= */
+
+.course-tab .tab-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.course-tab .tab-label i {
+  font-size: 1rem;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+/* =========================================
+   HOVER
+========================================= */
+
+[ngTab].course-tab:hover {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.06);
+}
+
+[ngTab].course-tab:hover .tab-label i {
+  opacity: 1;
+}
+
+/* =========================================
+   ACTIVE TAB
+========================================= */
+
+[ngTab].course-tab[aria-selected="true"] {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.09);
+  font-weight: 600;
+}
+
+/* Active indicator */
+
+[ngTab].course-tab[aria-selected="true"]::after {
+  content: "";
+
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -1px;
+
+  height: 3px;
+
+  background: var(--bs-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Active icon */
+
+[ngTab].course-tab[aria-selected="true"] .tab-label i {
+  opacity: 1;
+}
+
+/* =========================================
+   BADGES
+========================================= */
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 25px;
+  height: 23px;
+
+  padding: 0 7px;
+
+  border-radius: 999px;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* All */
+
+.badge-all {
+  color: #677788;
+  background: #f1f3f5;
+}
+
+/* Pending */
+
+.badge-pending {
+  color: #856404;
+  background: #fff3cd;
+}
+
+/* Awaiting payment */
+
+.badge-payment {
+  color: #6f42c1;
+  background: #eee5ff;
+}
+
+/* Paid */
+
+.badge-paid {
+  color: #198754;
+  background: #d1e7dd;
+}
+
+/* Rejected */
+
+.badge-rejected {
+  color: #dc3545;
+  background: #f8d7da;
+}
+
+/* =========================================
+   ACTIVE BADGES
+========================================= */
+
+[ngTab].course-tab[aria-selected="true"] .badge-all {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767.98px) {
+
+  .course-tabs-card {
+    border-radius: 12px;
+  }
+
+  .course-tabs {
+    gap: 0.25rem;
+  }
+
+  [ngTab].course-tab {
+    padding: 0.65rem 0.85rem;
+    min-height: 44px;
+    font-size: 0.8rem;
+  }
+
+  .course-tab .tab-label i {
+    font-size: 0.9rem;
+  }
+
+  .tab-badge {
+    min-width: 22px;
+    height: 21px;
+    font-size: 0.65rem;
+  }
+
+}
+.search-control {
+  position: relative;
+}
+
+.search-control i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.search-control .form-control {
+  padding-left: 40px;
+}

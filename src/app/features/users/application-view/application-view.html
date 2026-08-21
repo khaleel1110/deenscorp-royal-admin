@@ -71,6 +71,20 @@
                 <dt class="col-sm-3 text-muted">Email</dt><dd class="col-sm-9">{{ application()?.email }}</dd>
                 <dt class="col-sm-3 text-muted">Phone</dt><dd class="col-sm-9">{{ application()?.phone }}</dd>
                 <dt class="col-sm-3 text-muted">Organization</dt><dd class="col-sm-9">{{ application()?.organization || '—' }}</dd>
+                @if (application()?.jobTitle) {
+                  <dt class="col-sm-3 text-muted">Job Title</dt><dd class="col-sm-9">{{ application()?.jobTitle }}</dd>
+                }
+                @if (application()?.purpose) {
+                  <dt class="col-sm-3 text-muted">Purpose</dt><dd class="col-sm-9">{{ application()?.purpose }}</dd>
+                }
+                @if (application()?.isSponsored) {
+                  <dt class="col-sm-3 text-muted">Sponsor</dt>
+                  <dd class="col-sm-9">
+                    {{ application()?.sponsorName }}
+                    @if (application()?.sponsorEmail) { · {{ application()?.sponsorEmail }} }
+                    @if (application()?.sponsorPhone) { · {{ application()?.sponsorPhone }} }
+                  </dd>
+                }
                 <dt class="col-sm-3 text-muted">Message</dt><dd class="col-sm-9">{{ application()?.message || '—' }}</dd>
                 <dt class="col-sm-3 text-muted">Admin Notes</dt><dd class="col-sm-9">{{ application()?.adminNotes || '—' }}</dd>
                 <dt class="col-sm-3 text-muted">Applied On</dt><dd class="col-sm-9">{{ formatDateTime(application()?.createdAt) }}</dd>
@@ -78,31 +92,7 @@
             </div>
           </div>
 
-          <div class="card mb-4">
-            <div class="card-header"><h5 class="mb-0">Access Details</h5></div>
-            <div class="card-body">
-              @if (isVirtual()) {
-                <p class="mb-2"><strong>Delivery:</strong> {{ application()?.deliveryMode }}</p>
-                <p class="mb-2"><strong>Meeting Link:</strong>
-                  @if (application()?.meetingLink) {
-                    <a [href]="application()?.meetingLink" target="_blank" rel="noopener">{{ application()?.meetingLink }}</a>
-                  } @else {
-                    <span class="text-muted">Not set yet — add it via Edit.</span>
-                  }
-                </p>
-              } @else {
-                <p class="mb-2"><strong>Venue:</strong> {{ application()?.venueName || '—' }}</p>
-              }
-              @if (application()?.accessNotes) {
-                <p class="mb-0"><strong>Notes:</strong> {{ application()?.accessNotes }}</p>
-              }
-              @if (application()?.accessDetailsSent) {
-                <span class="badge bg-success mt-2"><i class="bi bi-check-circle me-1"></i>Access email sent</span>
-              } @else if (application()?.paymentStatus === 'paid') {
-                <span class="badge bg-warning mt-2">Payment confirmed — waiting on meeting link/access notes</span>
-              }
-            </div>
-          </div>
+
 
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -133,6 +123,44 @@
                 </table>
               } @else {
                 <p class="text-muted mb-0">No payments recorded yet.</p>
+              }
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Access Details</h5>
+              @if (application()?.status === 'approved') {
+                <button class="btn btn-sm btn-outline-primary" (click)="openAccessModal()">
+                  <i class="bi bi-key me-1"></i>Manage Access
+                </button>
+              }
+            </div>
+            <div class="card-body">
+              @if (isVirtual()) {
+                <p class="mb-2"><strong>Delivery:</strong> {{ application()?.deliveryMode }}</p>
+                <p class="mb-2"><strong>Meeting Link:</strong>
+                  @if (application()?.meetingLink) {
+                    <a [href]="application()?.meetingLink" target="_blank" rel="noopener">{{ application()?.meetingLink }}</a>
+                    @if (application()?.usesSessionMeetingLink) {
+                      <span class="badge bg-light text-dark ms-1">Session link</span>
+                    } @else {
+                      <span class="badge bg-info text-dark ms-1">Custom for this applicant</span>
+                    }
+                  } @else {
+                    <span class="text-muted">Not set yet — add it via Edit, or set it on the session.</span>
+                  }
+                </p>
+              } @else {
+                <p class="mb-2"><strong>Venue:</strong> {{ application()?.venueName || '—' }}</p>
+              }
+              @if (application()?.accessNotes) {
+                <p class="mb-0"><strong>Notes:</strong> {{ application()?.accessNotes }}</p>
+              }
+              @if (application()?.accessDetailsSent) {
+                <span class="badge bg-success mt-2"><i class="bi bi-check-circle me-1"></i>Access email sent</span>
+              } @else if (application()?.paymentStatus === 'paid') {
+                <span class="badge bg-secondary mt-2">Payment confirmed — waiting on meeting link/access notes</span>
               }
             </div>
           </div>

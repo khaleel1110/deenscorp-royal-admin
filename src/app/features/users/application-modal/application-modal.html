@@ -12,29 +12,97 @@
 
     <div class="mb-3 p-3 bg-light rounded">
       <div class="small text-muted">COURSE</div>
-      <div class="fw-semibold">{{ application?.courseName }}</div>
-      @if (application?.session) {
-        <div class="small text-muted mt-1">{{ application?.session }}</div>
+      <div class="fw-semibold">{{ application.courseName }}</div>
+      @if (application.session) {
+        <div class="small text-muted mt-1">{{ application.session }}</div>
       }
     </div>
 
-    <div class="row g-3">
+    <h6 class="dr-modal-section-title">Applicant Details</h6>
+    <div class="row g-3 mb-4">
       <div class="col-md-6">
         <label class="form-label">Full Name *</label>
-        <input class="form-control" formControlName="fullName">
+        <input class="form-control" formControlName="fullName"
+               [class.is-invalid]="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+        @if (form.get('fullName')?.errors?.['required'] && form.get('fullName')?.touched) {
+          <div class="invalid-feedback">Full name is required.</div>
+        }
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Job Title</label>
+        <input class="form-control" formControlName="jobTitle">
       </div>
       <div class="col-md-6">
         <label class="form-label">Email *</label>
-        <input type="email" class="form-control" formControlName="email">
+        <input type="email" class="form-control" formControlName="email"
+               [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched">
+        @if (form.get('email')?.errors?.['required'] && form.get('email')?.touched) {
+          <div class="invalid-feedback">Email is required.</div>
+        }
+        @if (form.get('email')?.errors?.['email'] && form.get('email')?.touched) {
+          <div class="invalid-feedback">Enter a valid email address.</div>
+        }
       </div>
       <div class="col-md-6">
         <label class="form-label">Phone *</label>
-        <input class="form-control" formControlName="phone">
+        <input class="form-control" formControlName="phone"
+               [class.is-invalid]="form.get('phone')?.invalid && form.get('phone')?.touched">
+        @if (form.get('phone')?.errors?.['required'] && form.get('phone')?.touched) {
+          <div class="invalid-feedback">Phone is required.</div>
+        }
       </div>
-      <div class="col-md-6">
+      <div class="col-12">
         <label class="form-label">Organization</label>
         <input class="form-control" formControlName="organization">
       </div>
+    </div>
+
+    <h6 class="dr-modal-section-title">Purpose &amp; Sponsorship</h6>
+    <div class="row g-3 mb-2">
+      <div class="col-12">
+        <label class="form-label">Purpose of Attending</label>
+        <select class="form-select" formControlName="purpose">
+          @for (option of purposeOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" formControlName="isSponsored" id="edit-sponsored">
+          <label class="form-check-label" for="edit-sponsored">
+            Attendance is sponsored by an employer or third party
+          </label>
+        </div>
+      </div>
+    </div>
+
+    @if (form.get('isSponsored')?.value) {
+      <div class="dr-sponsor-block mb-4">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Sponsor Name *</label>
+            <input class="form-control" formControlName="sponsorName">
+            @if (form.get('sponsorName')?.errors?.['required'] && form.get('sponsorName')?.touched) {
+              <div class="invalid-feedback d-block">Sponsor name is required.</div>
+            }
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Sponsor Email</label>
+            <input type="email" class="form-control" formControlName="sponsorEmail">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Sponsor Phone</label>
+            <input class="form-control" formControlName="sponsorPhone">
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="mb-4"></div>
+    }
+
+    <h6 class="dr-modal-section-title">Notes</h6>
+    <div class="row g-3">
       <div class="col-12">
         <label class="form-label">Applicant Message</label>
         <textarea class="form-control" rows="2" formControlName="message"></textarea>
@@ -43,33 +111,12 @@
         <label class="form-label">Admin Notes <span class="text-muted small">(internal only)</span></label>
         <textarea class="form-control" rows="2" formControlName="adminNotes" placeholder="Internal notes about this application"></textarea>
       </div>
+    </div>
 
-      <div class="col-12">
-        <hr>
-        <h6 class="mb-2">Access Details</h6>
-
-        @if (isVirtual) {
-          <div class="alert alert-info py-2 small mb-3">
-            <i class="bi bi-camera-video me-1"></i>
-            This session is <strong>{{ application?.deliveryMode }}</strong>. Add the Google Meet
-            (or other) link below.
-            @if (!isPaid) {
-              The applicant hasn't paid yet — saving a link now is fine, but the access-details
-              email only sends automatically once payment is recorded.
-            } @else {
-              Payment is confirmed, so saving a new link here will trigger the access-details
-              email right away.
-            }
-          </div>
-        }
-
-        <label class="form-label">Meeting Link</label>
-        <input class="form-control mb-3" formControlName="meetingLink" placeholder="https://meet.google.com/...">
-
-        <label class="form-label">Additional Access Notes</label>
-        <textarea class="form-control" rows="2" formControlName="accessNotes"
-                  placeholder="e.g. venue directions, dial-in number, dress code"></textarea>
-      </div>
+    <div class="alert alert-secondary py-2 small mt-3 mb-0">
+      <i class="bi bi-info-circle me-1"></i>
+      Meeting link and venue access notes are managed separately via
+      <strong>Manage Access</strong>.
     </div>
 
   </div>

@@ -8,17 +8,26 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Course, CourseFormInput, CourseService } from '../../../services/domain/course';
 import { CourseCategoryService } from '../../../services/domain/course-category';
-import { TrainingVenueService } from '../../../services/domain/program-venue';
-import { CourseSessionService } from '../../../services/domain/course-session-service';
-import { GoogleMeetService } from '../../../services/domain/google-meet-services';
+import { TrainingVenue, TrainingVenueService } from '../../../services/domain/program-venue';
+import {
+  CourseSessionService,
+  generateAutoMeetingLink,
+} from '../../../services/domain/course-session-service';
+import { TrainingVenueModal } from '../../training-venue/training-venue-modal/training-venue-modal';
+
 
 const DELIVERY_MODES = ['Classroom', 'Online', 'Virtual', 'Onsite'] as const;
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
+
+function isVirtualMode(mode: string): boolean {
+  const m = mode.toLowerCase();
+  return m.includes('virtual') || m.includes('online');
+}
 
 @Component({
   selector: 'app-course-modal',
@@ -116,7 +125,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               </div>
             </div>
 
-            <!-- Dynamic Tags (Step 1) -->
             <div class="col-md-6">
               <label class="form-label">Tags</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -137,7 +145,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               </div>
             </div>
 
-            <!-- Dynamic Industries (Step 1) -->
             <div class="col-md-6">
               <label class="form-label">Industries</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -169,7 +176,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               <textarea class="form-control" rows="3" formControlName="overview"></textarea>
             </div>
 
-            <!-- DYNAMIC ARRAY: Objectives -->
             <div class="col-md-6">
               <label class="form-label">Objectives</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -190,7 +196,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               </div>
             </div>
 
-            <!-- DYNAMIC ARRAY: Outcomes -->
             <div class="col-md-6">
               <label class="form-label">Outcomes</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -211,7 +216,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               </div>
             </div>
 
-            <!-- DYNAMIC ARRAY: Who Should Attend -->
             <div class="col-md-6">
               <label class="form-label">Who Should Attend</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -232,7 +236,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               </div>
             </div>
 
-            <!-- DYNAMIC ARRAY: Prerequisites -->
             <div class="col-md-6">
               <label class="form-label">Prerequisites</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -272,7 +275,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
               <input class="form-control" formControlName="brochureUrl">
             </div>
 
-            <!-- DYNAMIC ARRAY: Gallery -->
             <div class="col-12">
               <label class="form-label">Gallery Images</label>
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -332,7 +334,6 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
                     <textarea class="form-control" rows="2" formControlName="description"></textarea>
                   </div>
 
-                  <!-- DYNAMIC ARRAY: Learning Points inside topic -->
                   <div class="col-12">
                     <label class="form-label">Learning Points</label>
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -386,42 +387,24 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
                       <option [value]="venue.id">{{ venue.name }} — {{ venue.city }}</option>
                     }
                   </select>
+
+                  @if (venues().length === 0) {
+                    <div class="small text-danger mt-1">No venues yet — add one below to continue.</div>
+                  }
+
+                  <button type="button" class="btn btn-sm btn-outline-secondary mt-2" (click)="openAddVenueModal()">
+                    <i class="bi bi-plus-lg me-1"></i> Add New Venue
+                  </button>
                 </div>
+
                 <div class="col-md-6">
                   <label class="form-label">Delivery Mode</label>
-                  <select class="form-select" formControlName="sessionDeliveryMode">
+                  <select class="form-select" formControlName="sessionDeliveryMode" (change)="onSessionDeliveryModeChange()">
                     @for (mode of deliveryModes; track mode) {
                       <option [value]="mode">{{ mode }}</option>
                     }
                   </select>
                 </div>
-                @if (isOnlineOrVirtual) {
-                  <div class="col-12">
-                    <label class="form-label">Google Meet Link</label>
-
-                    @if (form.get('meetingLink')?.value) {
-                      <div class="input-group">
-                        <input class="form-control" formControlName="meetingLink" readonly>
-                        <button type="button" class="btn btn-outline-secondary" (click)="generateMeetLink()"
-                                [disabled]="isGeneratingMeet()">
-                          Regenerate
-                        </button>
-                      </div>
-                    } @else {
-                      <div>
-                        <button type="button" class="btn btn-outline-primary" (click)="generateMeetLink()"
-                                [disabled]="isGeneratingMeet()">
-                          <i class="bi bi-camera-video"></i>
-                          {{ isGeneratingMeet() ? 'Generating…' : 'Generate Google Meet Link' }}
-                        </button>
-                      </div>
-                    }
-
-                    @if (meetError()) {
-                      <div class="text-danger small mt-1">{{ meetError() }}</div>
-                    }
-                  </div>
-                }
 
                 <div class="col-md-4">
                   <label class="form-label">Start Date</label>
@@ -462,6 +445,25 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
                     <option>Full</option>
                   </select>
                 </div>
+
+                @if (isSessionVirtual()) {
+                  <div class="col-12">
+                    <div class="alert alert-light border py-3">
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <label class="form-label mb-0"><i class="bi bi-camera-video me-1"></i> Meeting Link</label>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="regenerateMeetingLink()">
+                          <i class="bi bi-arrow-repeat me-1"></i> Regenerate
+                        </button>
+                      </div>
+                      <input class="form-control" formControlName="meetingLink" placeholder="https://meet.google.com/...">
+                      <small class="text-muted d-block mt-1">
+                        Auto-generated as a free Jitsi room (no account needed) — every applicant for this
+                        session shares this same link. Paste a real Google Meet link here instead if you've
+                        created one manually.
+                      </small>
+                    </div>
+                  </div>
+                }
               }
             </div>
           }
@@ -492,6 +494,9 @@ const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
                 <dt>Initial Session</dt>
                 <dd>{{ form.get('createSession')?.value ? 'Will be created' : 'None' }}</dd>
               </div>
+              @if (form.get('createSession')?.value && isSessionVirtual()) {
+                <div class="detail-row"><dt>Meeting Link</dt><dd>{{ form.get('meetingLink')?.value || '—' }}</dd></div>
+              }
             }
           </dl>
 
@@ -533,11 +538,8 @@ export class CourseModal implements OnInit {
   private readonly categoryService = inject(CourseCategoryService);
   private readonly venueService = inject(TrainingVenueService);
   private readonly sessionService = inject(CourseSessionService);
-  private readonly meetService = inject(GoogleMeetService);
+  private readonly modalService = inject(NgbModal);
 
-
-  readonly isGeneratingMeet = signal(false);
-  readonly meetError = signal('');
   readonly steps = ['Basic Info', 'Details', 'Media', 'Topics', 'Session', 'Review'];
   readonly deliveryModes = DELIVERY_MODES;
   readonly levels = LEVELS;
@@ -547,7 +549,7 @@ export class CourseModal implements OnInit {
   readonly errorMessage = signal('');
 
   readonly categories = toSignal(this.categoryService.categories$, { initialValue: [] });
-  readonly venues = toSignal(this.venueService.venues$, { initialValue: [] });
+  readonly venues = toSignal(this.venueService.venues$, { initialValue: [] as TrainingVenue[] });
 
   selectedModes: string[] = [];
 
@@ -565,6 +567,10 @@ export class CourseModal implements OnInit {
     const id = this.form?.get('categoryId')?.value;
     return this.categories().find((c) => c.id === id)?.name ?? '—';
   });
+
+  isSessionVirtual(): boolean {
+    return isVirtualMode(this.form?.get('sessionDeliveryMode')?.value ?? '');
+  }
 
   ngOnInit(): void {
     this.selectedModes = [...(this.course?.deliveryModes ?? [])];
@@ -615,6 +621,7 @@ export class CourseModal implements OnInit {
       totalSeats: [20],
       instructor: [''],
       sessionStatus: ['Upcoming'],
+      meetingLink: [''],
     });
 
     // Populate arrays if editing
@@ -627,7 +634,6 @@ export class CourseModal implements OnInit {
       this.setArray('tags', this.course.tags ?? []);
       this.setArray('industries', this.course.industries ?? []);
 
-      // Load topics
       this.courseService.getTopics(this.course.id).subscribe((topics) => {
         for (const topic of topics) {
           this.topics.push(this.buildTopicGroup(topic));
@@ -636,36 +642,67 @@ export class CourseModal implements OnInit {
     }
   }
 
-  // Helper to get a FormArray by name
+  // ── Session helpers ──────────────────────────────────────
+
+  /** Fires when the session's delivery mode changes — auto-fills a meeting link for virtual sessions. */
+  onSessionDeliveryModeChange(): void {
+    if (this.isSessionVirtual() && !this.form.get('meetingLink')?.value) {
+      this.regenerateMeetingLink();
+    }
+  }
+
+  regenerateMeetingLink(): void {
+    const code = this.form.get('code')?.value || 'course';
+    const seed = Date.now().toString(36);
+    this.form.patchValue({ meetingLink: generateAutoMeetingLink(code, seed) });
+  }
+
+  openAddVenueModal(): void {
+    const ref = this.modalService.open(TrainingVenueModal, { size: 'lg', backdrop: 'static' });
+
+    ref.result.then(
+      (result) => {
+        // TrainingVenueModal's close() payload shape may vary by your
+        // implementation — this defensively picks up an id if given, and
+        // otherwise just leaves the (auto-updating) venues() list refreshed
+        // for the admin to pick from manually.
+        const newVenueId = typeof result === 'string' ? result : result?.id;
+        if (newVenueId) {
+          this.form.patchValue({ venueId: newVenueId });
+        }
+      },
+      () => {
+        // dismissed — no-op
+      },
+    );
+  }
+
+  // ── Generic array helpers ────────────────────────────────
+
   getFormArray(name: string): FormArray {
     return this.form.get(name) as FormArray;
   }
 
-  // Add an empty string to a FormArray
   addItem(name: string): void {
     const arr = this.getFormArray(name);
     arr.push(new FormControl(''));
   }
 
-  // Remove item at index from a FormArray
   removeItem(name: string, index: number): void {
     const arr = this.getFormArray(name);
     arr.removeAt(index);
   }
 
-  // Set array values from a string array
   setArray(name: string, values: string[]): void {
     const arr = this.getFormArray(name);
     arr.clear();
-    values.forEach(v => arr.push(new FormControl(v)));
+    values.forEach((v) => arr.push(new FormControl(v)));
   }
 
-  // Get values from a FormArray as string[]
   getArrayValues(name: string): string[] {
-    return this.getFormArray(name).controls.map(c => c.value).filter(v => v?.trim());
+    return this.getFormArray(name).controls.map((c) => c.value).filter((v) => v?.trim());
   }
 
-  // Build a topic FormGroup
   private buildTopicGroup(topic?: {
     title?: string;
     description?: string;
@@ -680,56 +717,22 @@ export class CourseModal implements OnInit {
     });
     if (topic?.learningPoints) {
       const lpArray = group.get('learningPoints') as FormArray;
-      topic.learningPoints.forEach(lp => lpArray.push(new FormControl(lp)));
+      topic.learningPoints.forEach((lp) => lpArray.push(new FormControl(lp)));
     }
     return group;
   }
 
-
-  get isOnlineOrVirtual(): boolean {
-    const mode = this.form.get('sessionDeliveryMode')?.value;
-    return mode === 'Online' || mode === 'Virtual';
-  }
-
-  async generateMeetLink(): Promise<void> {
-    const v = this.form.value;
-    if (!v.startDate || !v.endDate) {
-      this.meetError.set('Set a start and end date first.');
-      return;
-    }
-
-    this.isGeneratingMeet.set(true);
-    this.meetError.set('');
-
-    try {
-      const result = await this.meetService.generateMeetLink({
-        title: v.name || 'Course Session',
-        description: v.shortDescription,
-        startDate: new Date(v.startDate),
-        endDate: new Date(v.endDate),
-      });
-      this.form.get('meetingLink')?.setValue(result.meetingLink);
-    } catch (err: any) {
-      this.meetError.set(err?.message ?? 'Could not generate Google Meet link.');
-    } finally {
-      this.isGeneratingMeet.set(false);
-    }
-  }
-
-  // Get learningPoints FormArray for a specific topic
   getLearningPoints(topicIndex: number): FormArray {
     const topicGroup = this.topics.at(topicIndex) as FormGroup;
     return topicGroup.get('learningPoints') as FormArray;
   }
 
   addLearningPoint(topicIndex: number): void {
-    const lpArray = this.getLearningPoints(topicIndex);
-    lpArray.push(new FormControl(''));
+    this.getLearningPoints(topicIndex).push(new FormControl(''));
   }
 
   removeLearningPoint(topicIndex: number, pointIndex: number): void {
-    const lpArray = this.getLearningPoints(topicIndex);
-    lpArray.removeAt(pointIndex);
+    this.getLearningPoints(topicIndex).removeAt(pointIndex);
   }
 
   addTopic(): void {
@@ -804,9 +807,9 @@ export class CourseModal implements OnInit {
         prerequisites: this.getArrayValues('prerequisites'),
       },
       topics: this.topics.controls.map((group, i) => {
-        const formGroup = group as FormGroup;           // cast to FormGroup
+        const formGroup = group as FormGroup;
         const lpArray = formGroup.get('learningPoints') as FormArray;
-        const learningPoints = lpArray.controls.map(c => c.value).filter(v => v?.trim());
+        const learningPoints = lpArray.controls.map((c) => c.value).filter((v) => v?.trim());
         return {
           title: formGroup.get('title')?.value ?? '',
           description: formGroup.get('description')?.value ?? '',
@@ -838,6 +841,7 @@ export class CourseModal implements OnInit {
           const startDate = v.startDate ? new Date(v.startDate) : undefined;
           const endDate = v.endDate ? new Date(v.endDate) : undefined;
           const regDeadline = v.registrationDeadline ? new Date(v.registrationDeadline) : undefined;
+          const virtual = isVirtualMode(v.sessionDeliveryMode);
 
           if (v.venueId && startDate && endDate) {
             await this.sessionService.create(courseId, {
@@ -855,6 +859,7 @@ export class CourseModal implements OnInit {
               status: v.sessionStatus,
               notes: '',
               isFeatured: false,
+              meetingLink: virtual ? v.meetingLink || null : null,
             });
           } else {
             console.warn('Session creation skipped: missing venue or dates.');

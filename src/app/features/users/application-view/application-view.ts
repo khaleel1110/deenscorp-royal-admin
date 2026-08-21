@@ -7,10 +7,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   ApplicationPayment,
+  CourseApplication,
   CourseApplicationService,
 } from '../../../services/domain/course-application';
 import { ApplicationModal } from '../application-modal/application-modal';
 import { PaymentModal } from '../payment-modal/payment-modal';
+import { AccessModal } from '../access-modal/access-modal';
+import { ApproveApplicationModal } from '../approve-application-modal/approve-application-modal';
+import { RejectApplicationModal } from '../reject-application-modal/reject-application-modal';
 
 @Component({
   selector: 'app-application-view',
@@ -70,30 +74,45 @@ export class ApplicationView {
     ref.componentInstance.application = app;
   }
 
-  async approve(): Promise<void> {
+  openAccessModal(): void {
     const app = this.application();
     if (!app) return;
-
-    const amountStr = prompt(`Amount due for "${app.courseName}":`, app.amountDue?.toString() ?? '');
-    if (amountStr === null) return;
-
-    const amount = Number(amountStr);
-    if (isNaN(amount) || amount <= 0) {
-      alert('Enter a valid amount.');
-      return;
-    }
-
-    await this.applicationService.approve(app.id, amount, app.currency ?? 'USD');
+    const ref = this.modalService.open(AccessModal, { size: 'md' });
+    ref.componentInstance.application = app;
   }
 
-  async reject(): Promise<void> {
+  approve(): void {
     const app = this.application();
     if (!app) return;
 
-    const reason = prompt('Reason (optional):') ?? '';
-    if (!window.confirm(`Reject the application from ${app.fullName}?`)) return;
+    const ref = this.modalService.open(ApproveApplicationModal, { size: 'lg', backdrop: 'static' });
+    ref.componentInstance.application = app;
+  }
 
-    await this.applicationService.reject(app.id, reason || undefined);
+
+  reject(): void {
+    const app = this.application();
+
+    if (!app) return;
+
+    const ref = this.modalService.open(RejectApplicationModal, {
+      size: 'lg',
+      backdrop: 'static',
+      centered: true,
+    });
+
+    ref.componentInstance.application = app;
+
+    ref.result.then(
+      (result) => {
+        if (result === true) {
+          console.log('Application rejected successfully');
+        }
+      },
+      () => {
+        // Modal dismissed.
+      }
+    );
   }
 
   openRecordPaymentModal(): void {

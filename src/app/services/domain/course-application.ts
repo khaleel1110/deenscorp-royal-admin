@@ -8,6 +8,12 @@ import { map } from 'rxjs/operators';
 
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected';
 export type PaymentStatus = 'unpaid' | 'paid';
+export type ApplicationPurpose =
+  | 'Personal Development'
+  | 'Company Sponsored'
+  | 'Career Change'
+  | 'Academic / Research'
+  | 'Other';
 
 export interface CourseApplication {
   id: string;
@@ -17,6 +23,14 @@ export interface CourseApplication {
   email: string;
   phone: string;
   organization?: string | null;
+  jobTitle?: string | null;
+
+  // Purpose / sponsorship
+  purpose?: ApplicationPurpose | null;
+  isSponsored?: boolean;
+  sponsorName?: string | null;
+  sponsorEmail?: string | null;
+  sponsorPhone?: string | null;
 
   // Course / Session
   courseId: string;
@@ -28,16 +42,6 @@ export interface CourseApplication {
   venueId?: string | null;
   venueName?: string | null;
   message?: string | null;
-  isFeatured: boolean;
-  meetingLink?: string; // NEW — only populated for Online/Virtual sessions
-  meetingEventId?: string;
-
-  sessionPrice?: number | null;
-  sessionCurrency?: string | null;
-
-  // Payment fields (set during approval)
-  amountDue?: number | null;
-  currency?: string | null;
 
   // Application review
   status: ApplicationStatus;
@@ -47,12 +51,16 @@ export interface CourseApplication {
 
   // Payment
   paymentStatus: PaymentStatus;
+  amountDue?: number | null;
+  currency?: string | null;
   paymentReference?: string | null;
   paidAt?: any;
   totalPaid?: number;
 
   // Access (virtual meeting link / venue confirmation)
-
+  meetingLink?: string | null;
+  /** True when the applicant is using the session's shared link as-is (no per-applicant override). */
+  usesSessionMeetingLink?: boolean;
   accessNotes?: string | null;
   accessDetailsSent?: boolean;
 
@@ -85,9 +93,16 @@ export type ApplicationUpdateInput = Partial<
     | 'email'
     | 'phone'
     | 'organization'
+    | 'jobTitle'
+    | 'purpose'
+    | 'isSponsored'
+    | 'sponsorName'
+    | 'sponsorEmail'
+    | 'sponsorPhone'
     | 'message'
     | 'adminNotes'
     | 'meetingLink'
+    | 'usesSessionMeetingLink'
     | 'accessNotes'
   >
 >;
@@ -125,9 +140,7 @@ export class CourseApplicationService {
   }
 
   // ── Manual creation (e.g. phone/offline applications entered by admin) ──
-  async create(
-    input: Omit<CourseApplication, 'id' | 'status' | 'paymentStatus' | 'createdAt'>,
-  ): Promise<string> {
+  async create(input: Omit<CourseApplication, 'id' | 'status' | 'paymentStatus' | 'createdAt'>): Promise<string> {
     const ref = collection(this.firestore, this.collectionPath);
     const docRef = await addDoc(ref, {
       ...input,
@@ -147,46 +160,39 @@ export class CourseApplicationService {
   }
 
   /**
-   * Sets the Google Meet / joining link (or venue access notes).
-   * A Cloud Function watches this field: once it's set AND the
-   * application is already paid, it sends the final access-details
-   * email exactly once (guarded by accessDetailsSent).
+   * Sets the applicant's access details. `usesSessionMeetingLink: true`
+   * means "just use whatever link is on the session" (the common case —
+   * one shared room for the whole cohort); a value of `false` with a
+   * `meetingLink` means this specific applicant gets a different link.
+   * A Cloud Function watches these fields: once set AND the application
+   * is already paid, it sends the final access-details email exactly once
+   * (guarded by accessDetailsSent).
    */
-  async setMeetingLink(id: string, meetingLink: string, accessNotes?: string): Promise<void> {
+  async setAccessDetails(
+    id: string,
+    input: { meetingLink?: string | null; usesSessionMeetingLink?: boolean; accessNotes?: string | null },
+  ): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionPath}/${id}`);
-    await updateDoc(ref, {
-      meetingLink,
-      accessNotes: accessNotes ?? null,
-      updatedAt: serverTimestamp(),
-    });
+    await updateDoc(ref, { ...input, updatedAt: serverTimestamp() });
   }
 
   // ── Review actions ────────────────────────────────────────
   /**
    * Approves the application and stamps the amount due + a payment
-   * reference code. A Cloud Function watches `status` transitioning
-   * to 'approved' and sends the payment-instructions email using
-   * these two fields plus the bank details in settings/paymentInfo.
+   * reference code. Call this with the amount the admin confirmed in the
+   * approval-review modal (normally pulled straight from the session's
+   * price, occasionally overridden — e.g. discounts).
    */
-  async approve(
-    id: string,
-    amountDue: number,
-    currency = 'USD',
-    adminNotes?: string,
-  ): Promise<void> {
+  async approve(id: string, amountDue: number, currency = 'USD'): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionPath}/${id}`);
-    const updateData: any = {
+    await updateDoc(ref, {
       status: 'approved' as ApplicationStatus,
       amountDue,
       currency,
       paymentReference: generatePaymentReference(id),
       approvedAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    };
-    if (adminNotes !== undefined) {
-      updateData.adminNotes = adminNotes;
-    }
-    await updateDoc(ref, updateData);
+    });
   }
 
   async reject(id: string, reason?: string): Promise<void> {
@@ -199,18 +205,14 @@ export class CourseApplicationService {
     });
   }
 
-  /**
-   * Records a payment in the payments subcollection. A Cloud Function
-   * watches document creation there: it sums payments, flips the
-   * parent's paymentStatus to 'paid' once amountDue is covered, and
-   * sends the payment-confirmed email (including the meeting link if
-   * it's already set).
-   */
   async recordPayment(
     applicationId: string,
     payment: Omit<ApplicationPayment, 'id' | 'recordedAt'>,
   ): Promise<string> {
-    const ref = collection(this.firestore, `${this.collectionPath}/${applicationId}/payments`);
+    const ref = collection(
+      this.firestore,
+      `${this.collectionPath}/${applicationId}/payments`,
+    );
     const docRef = await addDoc(ref, {
       ...payment,
       recordedAt: serverTimestamp(),
@@ -221,7 +223,5 @@ export class CourseApplicationService {
   async delete(id: string): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionPath}/${id}`);
     await deleteDoc(ref);
-    // Note: the payments subcollection is NOT deleted automatically —
-    // clean it up via a Cloud Function trigger if you need hard deletes.
   }
 }

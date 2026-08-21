@@ -1,4 +1,7 @@
-<main class="venue-view">
+<main id="content" role="main" class="main">
+  <div class="container">
+
+<div class="venue-view">
 
   @if (loading()) {
     <div class="venue-view__loading">
@@ -10,7 +13,7 @@
     <header class="venue-hero" [class.venue-hero--has-image]="!!venue()?.image"
             [style.background-image]="venue()?.image ? 'url(' + venue()?.image + ')' : null">
       <div class="venue-hero__inner">
-        <a routerLink="/admin/venues" class="venue-hero__back">
+        <a routerLink="/deenscorp/venues" class="venue-hero__back">
           <i class="bi bi-arrow-left"></i> All venues
         </a>
 
@@ -143,4 +146,6 @@
 
     </div>
   }
+</div>
+  </div>
 </main>

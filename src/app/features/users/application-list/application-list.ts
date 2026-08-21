@@ -4,6 +4,10 @@ import { RouterLink } from '@angular/router';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { toSignal } from '@angular/core/rxjs-interop';
 
+
+// TODO: point this at wherever your ngTabs/ngTabList/ngTab directives
+// actually live — same ones used for e.g. "Staff profile sections".
+
 import { DashboardStat } from '../../dashboard/main-dashboard/dashboard-stat/dashboard-stat';
 import {
   CourseApplication,
@@ -11,12 +15,21 @@ import {
 } from '../../../services/domain/course-application';
 import { ApplicationModal } from '../application-modal/application-modal';
 import { PaymentModal } from '../payment-modal/payment-modal';
-import { ApprovalModal } from '../approval-modal';
+import { AccessModal } from '../access-modal/access-modal';
+import { ApproveApplicationModal } from '../approve-application-modal/approve-application-modal';
+import { Tab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
+import {RejectApplicationModal} from '../reject-application-modal/reject-application-modal';
+
+type ApplicationTab = 'all' | 'pending' | 'awaiting-payment' | 'paid' | 'rejected';
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, DashboardStat, NgbDropdownModule],
+  imports: [CommonModule, RouterLink, DashboardStat, NgbDropdownModule,  Tabs,
+    TabList,
+    Tab,
+
+    ],
   templateUrl: './application-list.html',
   styleUrl: './application-list.scss',
 })
@@ -29,13 +42,11 @@ export class ApplicationList {
   });
 
   readonly query = signal('');
-  readonly statusFilter = signal<string>('');
-  readonly paymentFilter = signal<string>('');
+  readonly selectedTab = signal<ApplicationTab>('all');
 
   readonly filtered = computed(() => {
     const q = this.query().trim().toLowerCase();
-    const status = this.statusFilter();
-    const payment = this.paymentFilter();
+    const tab = this.selectedTab();
 
     return this.applications().filter((app) => {
       const matchesQuery =
@@ -44,14 +55,25 @@ export class ApplicationList {
         app.email.toLowerCase().includes(q) ||
         app.courseName.toLowerCase().includes(q);
 
-      const matchesStatus = !status || app.status === status;
-      const matchesPayment = !payment || app.paymentStatus === payment;
+      if (!matchesQuery) return false;
 
-      return matchesQuery && matchesStatus && matchesPayment;
+      switch (tab) {
+        case 'pending':
+          return app.status === 'pending';
+        case 'awaiting-payment':
+          return app.status === 'approved' && app.paymentStatus === 'unpaid';
+        case 'paid':
+          return app.paymentStatus === 'paid';
+        case 'rejected':
+          return app.status === 'rejected';
+        case 'all':
+        default:
+          return true;
+      }
     });
   });
 
-  // ── Stats ────────────────────────────────────────────────
+  // ── Tab badge counts ─────────────────────────────────────
   readonly totalApplications = computed(() => this.applications().length);
   readonly pendingReview = computed(
     () => this.applications().filter((a) => a.status === 'pending').length,
@@ -64,6 +86,9 @@ export class ApplicationList {
   readonly paidCount = computed(
     () => this.applications().filter((a) => a.paymentStatus === 'paid').length,
   );
+  readonly rejectedCount = computed(
+    () => this.applications().filter((a) => a.status === 'rejected').length,
+  );
 
   updateSearch(event: Event): void {
     this.query.set((event.target as HTMLInputElement).value);
@@ -74,24 +99,38 @@ export class ApplicationList {
     const ref = this.modalService.open(ApplicationModal, { size: 'lg' });
     ref.componentInstance.application = app;
   }
-  async approve(app: CourseApplication): Promise<void> {
-    const ref = this.modalService.open(ApprovalModal, { size: 'lg' });
+
+  openAccessModal(app: CourseApplication): void {
+    const ref = this.modalService.open(AccessModal, { size: 'md' });
     ref.componentInstance.application = app;
-    await ref.result.catch(() => false);
-    // No manual refresh needed – Firestore real‑time updates will reflect changes
   }
 
-  async reject(app: CourseApplication): Promise<void> {
-    const reason = prompt(`Reason for rejecting "${app.fullName}"'s application (optional):`) ?? '';
-    const confirmed = window.confirm(`Reject the application from ${app.fullName}?`);
-    if (!confirmed) return;
+  approve(app: CourseApplication): void {
+    const ref = this.modalService.open(ApproveApplicationModal, { size: 'lg', backdrop: 'static' });
+    ref.componentInstance.application = app;
+  }
 
-    try {
-      await this.applicationService.reject(app.id, reason || undefined);
-    } catch (error) {
-      console.error('Failed to reject application:', error);
-      alert('Failed to reject. Please try again.');
-    }
+  reject(app: CourseApplication): void {
+    const ref = this.modalService.open(RejectApplicationModal, {
+      size: 'lg',
+      backdrop: 'static',
+      centered: true,
+    });
+
+    ref.componentInstance.application = app;
+
+    ref.result.then(
+      (result) => {
+        if (result === true) {
+          // Optional:
+          // refresh applications here if your list doesn't update automatically.
+          console.log('Application rejected successfully');
+        }
+      },
+      () => {
+        // Modal dismissed — nothing to do.
+      }
+    );
   }
 
   openRecordPaymentModal(app: CourseApplication): void {

@@ -1,0 +1,139 @@
+<div class="modal-header">
+  <h5 class="modal-title">Review &amp; Approve Application</h5>
+  <button type="button" class="btn-close" (click)="cancel()" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+
+  @if (error()) {
+    <div class="alert alert-danger py-2">{{ error() }}</div>
+  }
+
+  <!-- Applicant summary -->
+  <div class="review-card mb-3">
+    <div class="review-card__title"><i class="bi bi-person me-1"></i> Applicant</div>
+    <div class="row g-2 small">
+      <div class="col-6"><span class="text-muted">Name</span><div class="fw-semibold">{{ application.fullName }}</div></div>
+      <div class="col-6"><span class="text-muted">Email</span><div>{{ application.email }}</div></div>
+      <div class="col-6"><span class="text-muted">Phone</span><div>{{ application.phone }}</div></div>
+      <div class="col-6"><span class="text-muted">Organization</span><div>{{ application.organization || '—' }}</div></div>
+      @if (application.jobTitle) {
+        <div class="col-6"><span class="text-muted">Job Title</span><div>{{ application.jobTitle }}</div></div>
+      }
+      @if (application.purpose) {
+        <div class="col-6"><span class="text-muted">Purpose</span><div>{{ application.purpose }}</div></div>
+      }
+    </div>
+
+    @if (application.isSponsored) {
+      <div class="review-sponsor mt-2">
+        <i class="bi bi-briefcase me-1"></i>
+        <strong>Sponsored by:</strong> {{ application.sponsorName }}
+        @if (application.sponsorEmail) { · {{ application.sponsorEmail }} }
+        @if (application.sponsorPhone) { · {{ application.sponsorPhone }} }
+      </div>
+    }
+
+    @if (application.message) {
+      <div class="mt-2 small"><span class="text-muted">Message:</span> {{ application.message }}</div>
+    }
+  </div>
+
+  <!-- Session summary -->
+  <div class="review-card mb-3">
+    <div class="review-card__title"><i class="bi bi-calendar-event me-1"></i> Course &amp; Session</div>
+
+    @if (loadingSession()) {
+      <div class="text-muted small"><span class="spinner-border spinner-border-sm me-2"></span>Loading session details…</div>
+    } @else {
+      <div class="row g-2 small">
+        <div class="col-6"><span class="text-muted">Course</span><div class="fw-semibold">{{ application.courseName }}</div></div>
+        <div class="col-6"><span class="text-muted">Delivery Mode</span><div>{{ application.deliveryMode || '—' }}</div></div>
+
+        @if (session()) {
+          <div class="col-6"><span class="text-muted">Session Price (authoritative)</span><div class="fw-semibold">{{ session()!.currency }} {{ session()!.price | number:'1.2-2' }}</div></div>
+          <div class="col-6"><span class="text-muted">Seats Available</span><div>{{ session()!.availableSeats }} / {{ session()!.totalSeats }}</div></div>
+
+          @if (venue()) {
+            <div class="col-12"><span class="text-muted">Venue</span><div>{{ venue()!.name }} — {{ venue()!.city }}, {{ venue()!.country }}</div></div>
+          }
+          @if (isVirtual && session()!.meetingLink) {
+            <div class="col-12">
+              <span class="text-muted">Session Meeting Link</span>
+              <div class="text-truncate"><a [href]="session()!.meetingLink" target="_blank" rel="noopener">{{ session()!.meetingLink }}</a></div>
+            </div>
+          }
+        } @else {
+          <div class="col-12">
+            <div class="alert alert-warning py-2 small mb-0">
+              <i class="bi bi-exclamation-triangle me-1"></i>
+              No linked session found — enter the amount manually below.
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Amount review -->
+  <form [formGroup]="form">
+    <div class="review-card mb-3">
+      <div class="review-card__title"><i class="bi bi-cash-coin me-1"></i> Amount Due</div>
+
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" formControlName="overrideAmount" id="override-amount" (change)="toggleOverride()">
+        <label class="form-check-label small" for="override-amount">
+          Override the session's price for this applicant (e.g. discount)
+        </label>
+      </div>
+
+      <div class="row g-2">
+        <div class="col-7">
+          <label class="form-label small">Amount</label>
+          <input type="number" step="0.01" min="0" class="form-control"
+                 formControlName="amount" [readonly]="!form.get('overrideAmount')?.value">
+        </div>
+        <div class="col-5">
+          <label class="form-label small">Currency</label>
+          <input class="form-control" formControlName="currency" [readonly]="!form.get('overrideAmount')?.value">
+        </div>
+      </div>
+    </div>
+
+    @if (isVirtual) {
+      <div class="review-card mb-2">
+        <div class="review-card__title"><i class="bi bi-camera-video me-1"></i> Access Link for This Applicant</div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" formControlName="accessSource" value="session" id="access-session">
+          <label class="form-check-label small" for="access-session">
+            Use the session's shared link
+            @if (session()?.meetingLink) {
+              <span class="text-muted d-block">{{ session()!.meetingLink }}</span>
+            } @else {
+              <span class="text-danger d-block">No link set on this session yet — add one via the course's Session editor.</span>
+            }
+          </label>
+        </div>
+
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" formControlName="accessSource" value="custom" id="access-custom">
+          <label class="form-check-label small" for="access-custom">Give this applicant a different link</label>
+        </div>
+
+        @if (form.get('accessSource')?.value === 'custom') {
+          <input class="form-control form-control-sm mt-2" formControlName="customMeetingLink" placeholder="https://...">
+        }
+      </div>
+    }
+  </form>
+
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-success" [disabled]="saving() || loadingSession()" (click)="approve()">
+    @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+    <i class="bi bi-check-lg me-1"></i> Approve &amp; Send Payment Instructions
+  </button>
+</div>
